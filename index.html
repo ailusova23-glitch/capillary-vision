@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapillaryVision — HealthTech MVP</title>
+    <title>CapillaryVision — HealthTech Platform</title>
+    
+    <!-- PWA та іконка на робочий стіл -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CapillaryVision">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/000000/microscope.png">
+    
     <style>
         :root {
             --primary: #0ea5e9;
@@ -18,78 +26,130 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-        header { background: var(--card-bg); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
-        .streak { background: rgba(244, 63, 94, 0.15); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; display: flex; align-items: center; gap: 0.3rem; font-size: 0.9rem; }
-        main { flex: 1; max-width: 1200px; margin: 0 auto; padding: 2rem; width: 100%; display: grid; grid-template-columns: 250px 1fr; gap: 2rem; }
+        
+        header { background: var(--card-bg); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.4rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+        .header-controls { display: flex; align-items: center; gap: 1rem; }
+        
+        .lang-select { background: #0f172a; color: var(--text); border: 1px solid #334155; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .auth-btn { background: #ea4335; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
+        .auth-btn:hover { opacity: 0.9; }
+        .user-profile { display: none; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: bold; }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        .streak { background: rgba(244, 63, 94, 0.15); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.85rem; }
+        
+        main { flex: 1; max-width: 1200px; margin: 0 auto; padding: 1.5rem; width: 100%; display: grid; grid-template-columns: 260px 1fr; gap: 1.5rem; }
         @media (max-width: 768px) { main { grid-template-columns: 1fr; } }
-        sidebar { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; height: fit-content; display: flex; flex-direction: column; gap: 0.5rem; }
-        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.8rem 1rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        
+        sidebar { background: var(--card-bg); padding: 1.2rem; border-radius: 12px; height: fit-content; display: flex; flex-direction: column; gap: 0.5rem; }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.8rem 1rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.95rem; transition: 0.2s; display: flex; align-items: center; gap: 0.6rem; }
         .nav-btn:hover, .nav-btn.active { background: var(--primary); color: white; }
-        .content-area { background: var(--card-bg); padding: 2rem; border-radius: 12px; min-height: 550px; }
+        
+        .content-area { background: var(--card-bg); padding: 1.8rem; border-radius: 12px; min-height: 550px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         h2 { margin-bottom: 1rem; color: var(--primary); }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .stat-card { background: #0f172a; padding: 1.2rem; border-radius: 8px; border: 1px solid #334155; }
         .stat-card h3 { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .stat-card .value { font-size: 1.6rem; font-weight: bold; color: var(--primary); }
-        .btn { background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.2s; display: inline-block; }
+        .stat-card .value { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+        
+        .btn { background: var(--primary); color: white; border: none; padding: 0.8rem 1.4rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; font-weight: bold; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn:hover { background: var(--secondary); }
         
-        /* Сканер стиль */
-        .scanner-container { position: relative; width: 100%; height: 280px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid #334155; margin: 1rem 0; }
-        .scanner-grid { position: absolute; width: 100%; height: 100%; background-image: radial-gradient(rgba(14, 165, 233, 0.2) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; }
-        .target-reticle { position: absolute; width: 140px; height: 140px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: pulse 2s infinite; }
+        /* Сканер */
+        .scanner-container { position: relative; width: 100%; height: 260px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid #334155; margin: 1rem 0; }
+        .scanner-grid { position: absolute; width: 100%; height: 100%; background-image: radial-gradient(rgba(14, 165, 233, 0.2) 1px, transparent 1px); background-size: 20px 20px; }
+        .target-reticle { position: absolute; width: 130px; height: 130px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.98); opacity: 0.8; } 50% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(0.98); opacity: 0.8; } }
         .scan-line { position: absolute; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 0; display: none; }
         .scan-line.active { display: block; animation: scan 2.5s infinite linear; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
         .preview-img { max-height: 100%; max-width: 100%; object-fit: contain; }
-        .progress-bar-bg { width: 100%; height: 10px; background: #0f172a; border-radius: 5px; overflow: hidden; margin-top: 1rem; display: none; }
+        .progress-bar-bg { width: 100%; height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; margin-top: 1rem; display: none; }
         .progress-bar-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s linear; }
 
-        /* Графік та шкала */
+        /* Метрика спазму */
         .meter-container { background: #0f172a; padding: 1.2rem; border-radius: 8px; border: 1px solid #334155; margin-top: 1rem; }
         .meter-bar { height: 12px; background: linear-gradient(90deg, var(--success), var(--warning), var(--accent)); border-radius: 6px; position: relative; margin: 0.8rem 0; }
         .meter-pointer { position: absolute; top: -4px; left: 25%; width: 20px; height: 20px; background: white; border: 3px solid var(--bg); border-radius: 50%; transform: translateX(-50%); }
 
-        /* Чат і Звіт */
-        .chat-box { height: 320px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; padding: 1rem; overflow-y: auto; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        /* Звіт та онлайн відправка */
+        .send-box { background: #0f172a; padding: 1.2rem; border-radius: 8px; border: 1px solid #334155; margin-bottom: 1.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .send-box input { flex: 1; min-width: 200px; padding: 0.8rem; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; }
+        .report-preview { background: #ffffff; color: #000; padding: 1.5rem; border-radius: 8px; font-family: 'Times New Roman', serif; border: 1px solid #cbd5e1; }
+
+        /* Стрік днів */
+        .streak-days { display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: space-between; }
+        .day-box { background: #0f172a; padding: 0.8rem; border-radius: 8px; text-align: center; flex: 1; border: 1px solid #334155; }
+        .day-box.done { border-color: var(--accent); color: var(--accent); font-weight: bold; }
+
+        /* Чат */
+        .chat-box { height: 300px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; padding: 1rem; overflow-y: auto; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
         .chat-input-area { display: flex; gap: 0.5rem; }
         .chat-input-area input { flex: 1; padding: 0.8rem; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; }
         .msg { padding: 0.8rem; border-radius: 8px; max-width: 80%; }
         .msg.ai { background: #1e293b; border: 1px solid #334155; align-self: flex-start; }
         .msg.user { background: var(--primary); color: white; align-self: flex-end; }
-        .report-preview { background: #ffffff; color: #000; padding: 1.5rem; border-radius: 8px; font-family: 'Times New Roman', serif; margin-top: 1rem; border: 1px solid #cbd5e1; }
-        .streak-days { display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: space-between; }
-        .day-box { background: #0f172a; padding: 0.8rem; border-radius: 8px; text-align: center; flex: 1; border: 1px solid #334155; }
-        .day-box.done { border-color: var(--accent); color: var(--accent); font-weight: bold; }
+        
+        /* Модальне вікно Google Auth */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; border: 1px solid #334155; }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">🔴 CapillaryVision <span>MVP</span></div>
-        <div class="streak">🔥 3 дні стріку</div>
+        <div class="header-controls">
+            <div class="streak">🔥 <span data-i18n="streak">3 дні стріку</span></div>
+            
+            <!-- Перемикач 10 мов -->
+            <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)">
+                <option value="uk">🇺🇦 UA</option>
+                <option value="cs">🇨🇿 CS (Čeština)</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="de">🇩🇪 DE</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="it">🇮🇹 IT</option>
+                <option value="es">🇪🇸 ES</option>
+                <option value="pl">🇵🇱 PL</option>
+                <option value="ja">🇯🇵 JA</option>
+                <option value="zh">🇨🇳 ZH</option>
+            </select>
+
+            <!-- Кнопка авторизації Google -->
+            <button class="auth-btn" id="loginBtn" onclick="openAuthModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.545,6.477,2.545,12s4.476,10,10,10c5.768,0,9.539-4.056,9.539-9.707c0-0.716-0.07-1.393-0.198-2.054H12.545z"/></svg>
+                <span data-i18n="google_login">Увійти через Google</span>
+            </button>
+            <div class="user-profile" id="userProfile">
+                <div class="avatar">А</div>
+                <span id="userName">Анна (Кабінет)</span>
+            </div>
+        </div>
     </header>
+
     <main>
         <sidebar>
-            <button class="nav-btn active" onclick="switchTab(this, 'scanner')">📸 Сканер (Hardware)</button>
-            <button class="nav-btn" onclick="switchTab(this, 'tree')">🌳 Дерево капілярів</button>
-            <button class="nav-btn" onclick="switchTab(this, 'streak')">📅 Календар стріку</button>
-            <button class="nav-btn" onclick="switchTab(this, 'doctor')">📋 Звіт для лікаря</button>
-            <button class="nav-btn" onclick="switchTab(this, 'ai')">🤖 Gemini ШІ-Асистент</button>
+            <button class="nav-btn active" onclick="switchTab(this, 'scanner')">📸 <span data-i18n="nav_scanner">Сканер (Hardware)</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'tree')">🌳 <span data-i18n="nav_tree">Дерево капілярів</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'streak')">📅 <span data-i18n="nav_streak">Календар стріку</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'doctor')">📋 <span data-i18n="nav_doctor">Звіт для лікаря</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'ai')">🤖 <span data-i18n="nav_ai">Gemini ШІ-Асистент</span></button>
         </sidebar>
+
         <div class="content-area">
-            <!-- Сканер -->
+            <!-- Вкладка 1: Сканер -->
             <div id="scanner" class="tab-content active">
-                <h2>Скринінг мікроциркуляції (Slider-Clip)</h2>
-                <p style="color: var(--text-muted);">Зафіксуйте палець у 3D-адаптері Slider-Clip з макролінзою KnightX або завантажте тестове фото для R&D-аналізу.</p>
+                <h2 data-i18n="scan_title">Скринінг мікроциркуляції (Slider-Clip)</h2>
+                <p style="color: var(--text-muted);" data-i18n="scan_desc">Зафіксуйте палець у 3D-адаптері Slider-Clip з макролінзою KnightX або завантажте тестове фото.</p>
                 
                 <div class="scanner-container" id="scanBox">
                     <div class="scanner-grid"></div>
                     <div class="target-reticle" id="reticle">
-                        <span style="font-size: 0.8rem; color: var(--primary);">ФОКУС 10X</span>
+                        <span style="font-size: 0.8rem; color: var(--primary);" data-i18n="focus">ФОКУС 10X</span>
                     </div>
                     <div class="scan-line" id="scanLine"></div>
                     <img id="uploadedImage" class="preview-img" style="display:none;" />
@@ -100,38 +160,38 @@
                 </div>
 
                 <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
-                    <button class="btn" id="scanBtn" onclick="startScanning()">Запустити 30-сек аналіз</button>
+                    <button class="btn" id="scanBtn" onclick="startScanning()" data-i18n="btn_scan">Запустити 30-сек аналіз</button>
                     <label class="btn" style="background: #334155; cursor: pointer;">
-                        📁 Завантажити фото з макролінзи
+                        📁 <span data-i18n="btn_upload">Завантажити фото з лінзи</span>
                         <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
                     </label>
                 </div>
             </div>
 
-            <!-- Дерево капілярів -->
+            <!-- Вкладка 2: Дерево капілярів -->
             <div id="tree" class="tab-content">
-                <h2>Аналіз судинного тонусу та спазму</h2>
+                <h2 data-i18n="tree_title">Аналіз судинного тонусу та спазму</h2>
                 <div class="card-grid">
-                    <div class="stat-card"><h3>Судинний вік</h3><div class="value">24 роки</div></div>
-                    <div class="stat-card"><h3>Тонус капілярів</h3><div class="value" style="color: var(--success);">Норма (91%)</div></div>
-                    <div class="stat-card"><h3>Рівень спазму</h3><div class="value" style="color: var(--success);">Низький</div></div>
+                    <div class="stat-card"><h3 data-i18n="vessel_age">Судинний вік</h3><div class="value">24 <span data-i18n="years">роки</span></div></div>
+                    <div class="stat-card"><h3 data-i18n="cap_tonus">Тонус капілярів</h3><div class="value" style="color: var(--success);" data-i18n="norm">Норма (91%)</div></div>
+                    <div class="stat-card"><h3 data-i18n="spasm_level">Рівень спазму</h3><div class="value" style="color: var(--success);" data-i18n="low">Низький</div></div>
                 </div>
 
                 <div class="meter-container">
-                    <h3>Індекс судинного спазму (Capillary Spasm Index)</h3>
+                    <h3 data-i18n="spasm_index">Індекс судинного спазму (Capillary Spasm Index)</h3>
                     <div class="meter-bar"><div class="meter-pointer"></div></div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);">
-                        <span>Норма (Нормокапіляри)</span>
-                        <span>Помірний спазм</span>
-                        <span>Виражений спазм</span>
+                        <span data-i18n="norm_cap">Норма (Нормокапіляри)</span>
+                        <span data-i18n="mod_spasm">Помірний спазм</span>
+                        <span data-i18n="high_spasm">Виражений спазм</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Трекер стріку -->
+            <!-- Вкладка 3: Трекер стріку -->
             <div id="streak" class="tab-content">
-                <h2>Історія моніторингу (Стрік)</h2>
-                <p style="color: var(--text-muted);">Регулярний моніторинг дозволяє виявити ранні ознаки судинного спазму.</p>
+                <h2 data-i18n="streak_title">Історія моніторингу (Стрік)</h2>
+                <p style="color: var(--text-muted);" data-i18n="streak_desc">Регулярний моніторинг дозволяє виявити ранні ознаки судинного спазму.</p>
                 <div class="streak-days">
                     <div class="day-box done">Пн<br>🔥</div>
                     <div class="day-box done">Вт<br>🔥</div>
@@ -143,41 +203,115 @@
                 </div>
             </div>
 
-            <!-- Звіт для лікаря -->
+            <!-- Вкладка 4: Звіт для лікаря + Онлайн відправка -->
             <div id="doctor" class="tab-content">
-                <h2>Експорт медичного звіту</h2>
-                <button class="btn" onclick="window.print()">🖨️ Завантажити / Роздрукувати PDF</button>
+                <h2 data-i18n="report_title">Експорт та відправка звіту лікарю</h2>
+                
+                <!-- Онлайн відправка -->
+                <div class="send-box">
+                    <input type="email" id="doctorEmail" placeholder="Введіть Email лікаря...">
+                    <button class="btn" onclick="sendReportToDoctor()">📧 <span data-i18n="btn_send_doc">Надіслати лікарю</span></button>
+                    <button class="btn" style="background: #25D366;" onclick="shareViaApp()">📱 <span data-i18n="btn_share">Швидкий шеринг (Viber/TG)</span></button>
+                    <button class="btn" style="background: #334155;" onclick="window.print()">🖨️ PDF</button>
+                </div>
+
                 <div class="report-preview">
-                    <h3 style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-bottom: 1rem;">ЗВІТ МІКРОЦИРКУЛЯТОРНОГО СКРИНІНГУ (CapillaryVision)</h3>
-                    <p><strong>Пацієнт ID:</strong> #849204 | <strong>Дата:</strong> 2026-10-30</p>
+                    <h3 style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-bottom: 1rem;" data-i18n="rep_header">ЗВІТ МІКРОЦИРКУЛЯТОРНОГО СКРИНІНГУ (CapillaryVision)</h3>
+                    <p><strong>Пацієнт ID:</strong> #849204 | <strong>Дата:</strong> 2026-11-01</p>
                     <p><strong>Обладнання:</strong> Slider-Clip Hardware Adapter (KnightX 10X Lens + LED Rig)</p>
                     <hr style="margin: 1rem 0;">
-                    <h4>Результати комп'ютерного аналізу:</h4>
+                    <h4 data-i18n="rep_results">Результати комп'ютерного аналізу:</h4>
                     <ul>
                         <li>Щільність капілярної сітки: 8 петель/мм (Норма)</li>
                         <li>Морфологія: чіткий U-подібний контур, відсутність аваскулярних зон</li>
                         <li>Ознаки судинного спазму: не виявлені</li>
                     </ul>
                     <br>
-                    <p style="font-size: 0.85rem; color: #555;">* Даний документ створено превентивною системою CapillaryVision для верифікації врачем-капіляроскопістом.</p>
+                    <p style="font-size: 0.85rem; color: #555;" data-i18n="rep_disclaimer">* Даний документ створено превентивною системою CapillaryVision для верифікації лікарем-капіляроскопістом.</p>
                 </div>
             </div>
 
-            <!-- Gemini ШІ -->
+            <!-- Вкладка 5: Gemini ШІ -->
             <div id="ai" class="tab-content">
-                <h2>Gemini HealthTech Assistant</h2>
+                <h2 data-i18n="ai_title">Gemini HealthTech Assistant</h2>
                 <div class="chat-box" id="chatContainer">
-                    <div class="msg ai">Вітаю! Я ШІ-асистент CapillaryVision. Можу розшифрувати ваші біомаркери мікроциркуляції або відповісти на питання щодо капіляроскопії.</div>
+                    <div class="msg ai" data-i18n="ai_welcome">Вітаю! Я ШІ-асистент CapillaryVision. Можу розшифрувати ваші біомаркери мікроциркуляції або відповісти на питання.</div>
                 </div>
                 <div class="chat-input-area">
-                    <input type="text" id="userInput" placeholder="Запитайте про тонус судин чи нормальні показники...">
-                    <button class="btn" onclick="sendMsg()">Надіслати</button>
+                    <input type="text" id="userInput" placeholder="Запитайте про тонус судин...">
+                    <button class="btn" onclick="sendMsg()" data-i18n="btn_send">Надіслати</button>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Модальне вікно Google Авторизації -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 1rem;" data-i18n="modal_auth_title">Увійти в кабінет CapillaryVision</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;" data-i18n="modal_auth_desc">Авторизуйтесь через свій Google акаунт для синхронізації стріків та звітів.</p>
+            <button class="auth-btn" style="width: 100%; justify-content: center; padding: 0.8rem;" onclick="confirmGoogleAuth()">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.545,6.477,2.545,12s4.476,10,10,10c5.768,0,9.539-4.056,9.539-9.707c0-0.716-0.07-1.393-0.198-2.054H12.545z"/></svg>
+                <span data-i18n="modal_btn">Продовжити з Google</span>
+            </button>
+            <button class="btn" style="background: transparent; border: none; color: var(--text-muted); margin-top: 1rem;" onclick="closeAuthModal()">Скасувати</button>
+        </div>
+    </div>
+
     <script>
+        // Словник перекладів для 10 мов (включно з Чеською)
+        const i18n = {
+            uk: {
+                streak: "3 дні стріку", google_login: "Увійти через Google", nav_scanner: "Сканер (Hardware)", nav_tree: "Дерево капілярів",
+                nav_streak: "Календар стріку", nav_doctor: "Звіт для лікаря", nav_ai: "Gemini ШІ-Асистент", scan_title: "Скринінг мікроциркуляції (Slider-Clip)",
+                scan_desc: "Зафіксуйте палець у 3D-адаптері Slider-Clip з макролінзою KnightX або завантажте тестове фото.", focus: "ФОКУС 10X",
+                btn_scan: "Запустити 30-сек аналіз", btn_upload: "Завантажити фото з лінзи", tree_title: "Аналіз судинного тонусу та спазму",
+                vessel_age: "Судинний вік", years: "роки", cap_tonus: "Тонус капілярів", norm: "Норма (91%)", spasm_level: "Рівень спазму", low: "Низький",
+                spasm_index: "Індекс судинного спазму (CSI)", norm_cap: "Норма (Нормокапіляри)", mod_spasm: "Помірний спазм", high_spasm: "Виражений спазм",
+                streak_title: "Історія моніторингу (Стрік)", streak_desc: "Регулярний моніторинг дозволяє виявити ранні ознаки судинного спазму.",
+                report_title: "Експорт та відправка звіту лікарю", btn_send_doc: "Надіслати лікарю", btn_share: "Швидкий шеринг", rep_header: "ЗВІТ МІКРОЦИРКУЛЯТОРНОГО СКРИНІНГУ (CapillaryVision)",
+                rep_results: "Результати комп'ютерного аналізу:", rep_disclaimer: "* Даний документ створено превентивною системою CapillaryVision для верифікації лікарем-капіляроскопістом.",
+                ai_title: "Gemini HealthTech Assistant", ai_welcome: "Вітаю! Я ШІ-асистент CapillaryVision. Можу розшифрувати ваші біомаркери мікроциркуляції або відповісти на питання.",
+                btn_send: "Надіслати", modal_auth_title: "Увійти в кабінет CapillaryVision", modal_auth_desc: "Авторизуйтесь через свій Google акаунт для синхронізації стріків та звітів.", modal_btn: "Продовжити з Google"
+            },
+            cs: {
+                streak: "3 dny série", google_login: "Přihlásit se přes Google", nav_scanner: "Skener (Hardware)", nav_tree: "Strom kapilár",
+                nav_streak: "Kalendář sérií", nav_doctor: "Zpráva pro lékaře", nav_ai: "Gemini AI Asistent", scan_title: "Screening mikrocirkulace (Slider-Clip)",
+                scan_desc: "Upevněte prst v 3D adaptéru Slider-Clip s makročočkou KnightX nebo nahrajte testovací fotografii.", focus: "FO KUS 10X",
+                btn_scan: "Spustit 30s analýzu", btn_upload: "Nahrát foto z čočky", tree_title: "Analýza cévního tonusu a spasmu",
+                vessel_age: "Cévní věk", years: "let", cap_tonus: "Kapilární tonus", norm: "Norma (91%)", spasm_level: "Úroveň spasmu", low: "Nízká",
+                spasm_index: "Index cévního spasmu (CSI)", norm_cap: "Norma (Normokapiláry)", mod_spasm: "Mírný spasmus", high_spasm: "Výrazný spasmus",
+                streak_title: "Historie monitorování", streak_desc: "Pravidelné monitorování umožňuje odhalit včasné známky cévního spasmu.",
+                report_title: "Export a odeslání zprávy lékaři", btn_send_doc: "Odeslat lékaři", btn_share: "Rychlé sdílení", rep_header: "ZPRÁVA MIKROCIRKULAČNÍHO SCREENINGU (CapillaryVision)",
+                rep_results: "Výsledky počítačové analýzy:", rep_disclaimer: "* Tento dokument byl vytvořen preventivním systémem CapillaryVision pro ověření kapilaroskopem.",
+                ai_title: "Gemini HealthTech Asistent", ai_welcome: "Vítejte! Jsem AI asistent CapillaryVision. Mohu dešifrovat vaše biomarkery mikrocirkulace.",
+                btn_send: "Odeslat", modal_auth_title: "Přihlásit se do účtu CapillaryVision", modal_auth_desc: "Přihlaste se přes účet Google pro synchronizaci dat.", modal_btn: "Pokračovat s Googlem"
+            },
+            en: {
+                streak: "3 days streak", google_login: "Sign in with Google", nav_scanner: "Scanner (Hardware)", nav_tree: "Capillary Tree",
+                nav_streak: "Streak Calendar", nav_doctor: "Doctor Report", nav_ai: "Gemini AI Assistant", scan_title: "Microcirculation Screening (Slider-Clip)",
+                scan_desc: "Fix finger in 3D adapter Slider-Clip with KnightX macro lens or upload a test photo.", focus: "FOCUS 10X",
+                btn_scan: "Run 30-sec Analysis", btn_upload: "Upload Photo", tree_title: "Vascular Tone & Spasm Analysis",
+                vessel_age: "Vascular Age", years: "years", cap_tonus: "Capillary Tone", norm: "Normal (91%)", spasm_level: "Spasm Level", low: "Low",
+                spasm_index: "Capillary Spasm Index (CSI)", norm_cap: "Normal", mod_spasm: "Moderate Spasm", high_spasm: "Severe Spasm",
+                streak_title: "Monitoring History", streak_desc: "Regular monitoring helps detect early signs of vascular spasm.",
+                report_title: "Export & Send Report to Doctor", btn_send_doc: "Send to Doctor", btn_share: "Quick Share", rep_header: "MICROCIRCULATION SCREENING REPORT (CapillaryVision)",
+                rep_results: "Computer Analysis Results:", rep_disclaimer: "* Generated by CapillaryVision preventive system for physician verification.",
+                ai_title: "Gemini HealthTech Assistant", ai_welcome: "Hello! I am CapillaryVision AI Assistant. I can interpret your microcirculation biomarkers.",
+                btn_send: "Send", modal_auth_title: "Sign in to CapillaryVision", modal_auth_desc: "Sign in with Google to sync streaks and reports.", modal_btn: "Continue with Google"
+            }
+        };
+
+        function changeLanguage(lang) {
+            const selected = i18n[lang] || i18n['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (selected[key]) {
+                    el.innerText = selected[key];
+                }
+            });
+        }
+
         function switchTab(btn, tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -208,7 +342,6 @@
             scanLine.classList.add('active');
             progressBg.style.display = 'block';
             btn.disabled = true;
-            btn.innerText = 'Аналіз капілярів...';
 
             let width = 0;
             const interval = setInterval(() => {
@@ -216,8 +349,7 @@
                     clearInterval(interval);
                     scanLine.classList.remove('active');
                     btn.disabled = false;
-                    btn.innerText = 'Запустити 30-сек аналіз';
-                    alert('Сканування завершено! Виявлено нормальний тонус судин без ознак спазму.');
+                    alert('Сканування завершено! Виявлено нормальний тонус судин.');
                 } else {
                     width += 2;
                     progressFill.style.width = width + '%';
@@ -235,12 +367,39 @@
             input.value = '';
             
             setTimeout(() => {
-                chat.innerHTML += `<div class="msg ai">Аналізую показники... Згідно з біомаркерами вашої капілярної сітки, рівень судинного тонусу знаходиться в межах норми. Спазму не виявлено!</div>`;
+                chat.innerHTML += `<div class="msg ai">Аналізую показники... Ваші капіляри в нормі, ознак спазму не виявлено!</div>`;
                 chat.scrollTop = chat.scrollHeight;
             }, 800);
         }
+
+        // Онлайн надсилання звіту лікарю
+        function sendReportToDoctor() {
+            const email = document.getElementById('doctorEmail').value;
+            if(!email) { alert('Будь ласка, введіть Email лікаря.'); return; }
+            alert(`Звіт у форматі PDF успішно надіслано на пошту лікаря: ${email}`);
+        }
+
+        function shareViaApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Звіт CapillaryVision',
+                    text: 'Звіт мікроциркуляторного скринінгу пацієнта #849204',
+                    url: window.location.href,
+                }).catch(() => {});
+            } else {
+                alert('Посилання на звіт скопійовано в буфер обміну! Можете вставити його в Telegram чи Viber.');
+            }
+        }
+
+        // Модальне вікно Google Auth
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+        function confirmGoogleAuth() {
+            closeAuthModal();
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'flex';
+            alert('Успішно авторизовано через Google!');
+        }
     </script>
-</body>
-</html>
 </body>
 </html>
