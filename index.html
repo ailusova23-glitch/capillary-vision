@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CapillaryVision — HealthTech Platform</title>
     
+    <!-- Підключення файлу маніфесту для PWA та іконки -->
+    <link rel="manifest" href="manifest.json">
+    
     <meta name="theme-color" content="#0f172a">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/000000/microscope.png">
@@ -135,7 +138,7 @@
                 <option value="burgundy">🍷 Бордо</option>
             </select>
 
-            <!-- Перемикач мов (додано більше мов) -->
+            <!-- Перемикач мов -->
             <select class="select-box" id="langSelector" onchange="changeLanguage(this.value)">
                 <option value="uk">🇺🇦 UA</option>
                 <option value="cs">🇨🇿 Čeština</option>
@@ -150,7 +153,7 @@
             </select>
 
             <button class="auth-btn" id="loginBtn" onclick="openAuthModal()">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.545,6.477,2.545,12s4.476,10,10,10c5.768,0,9.539-4.056,9.539-9.707c0-0.716-0.07-1.393-0.198-2.054H12.545z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.545,6.477,2.545,12s4.476,10,10,10c5.768,0,9.539-4.056,9.539-9.707c0-0.716-0.07-1.393-0.198-2.054H12.545z"/></svg>
                 <span data-i18n="google_login">Google Auth</span>
             </button>
             <div class="user-profile" id="userProfile">
@@ -170,7 +173,6 @@
         </sidebar>
 
         <div class="content-area">
-            <!-- Сканер + Факт дня + Аудіо релакс -->
             <div id="scanner" class="tab-content active">
                 <h2 data-i18n="scan_title">Скринінг мікроциркуляції (Slider-Clip)</h2>
                 <p style="color: var(--text-muted);" data-i18n="scan_desc">Зафіксуйте палець у 3D-адаптері з макролінзою KnightX або завантажте фото.</p>
@@ -196,7 +198,6 @@
                     </label>
                 </div>
 
-                <!-- Аудіо для заспокоєння / Герци -->
                 <div class="audio-box">
                     <div>
                         <strong data-i18n="audio_title">🎵 Релакс-супровід (432 Гц)</strong>
@@ -205,14 +206,12 @@
                     <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="toggleAudio()" id="audioBtn">▶ Увімкнути</button>
                 </div>
 
-                <!-- Факт дня про судини -->
                 <div class="fact-card">
                     <h4 style="color: var(--primary); margin-bottom: 0.3rem;" data-i18n="fact_title">💡 Судинний факт дня</h4>
                     <p style="font-size: 0.9rem;" data-i18n="fact_text">Загальна довжина всіх капілярів у тілі людини перевищує 100 000 кілометрів — цього достатньо, щоб обігнути Землю понад 2 рази!</p>
                 </div>
             </div>
 
-            <!-- Дерево капілярів -->
             <div id="tree" class="tab-content">
                 <h2 data-i18n="tree_title">Аналіз судинного тонусу</h2>
                 <div class="card-grid">
@@ -222,7 +221,6 @@
                 </div>
             </div>
 
-            <!-- Нагороди -->
             <div id="rewards" class="tab-content">
                 <h2 data-i18n="rewards_title">Ваші нагороди та досягнення</h2>
                 <p style="color: var(--text-muted);" data-i18n="rewards_desc">Зберігайте регулярність моніторингу та відкривайте нові рівні здоров'я.</p>
@@ -245,7 +243,6 @@
                 </div>
             </div>
 
-            <!-- Звіт лікарю -->
             <div id="doctor" class="tab-content">
                 <h2 data-i18n="report_title">Експорт звіту лікарю</h2>
                 <div class="send-box">
@@ -267,7 +264,6 @@
                 </div>
             </div>
 
-            <!-- Gemini ШІ -->
             <div id="ai" class="tab-content">
                 <h2>Gemini HealthTech Assistant</h2>
                 <div class="chat-box" id="chatContainer">
@@ -281,7 +277,6 @@
         </div>
     </main>
 
-    <!-- Модалка Google Auth -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <h3 style="margin-bottom: 1rem;" data-i18n="modal_auth_title">Вхід у CapillaryVision</h3>
@@ -294,7 +289,6 @@
     </div>
 
     <script>
-        // Словник перекладів (UA, CS, EN тощо)
         const i18n = {
             uk: {
                 streak: "3 дні стріку", google_login: "Google Auth", nav_scanner: "Сканер", nav_tree: "Дерево",
