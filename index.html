@@ -82,15 +82,15 @@
         .btn { background: var(--primary); color: white; border: none; padding: 0.8rem 1.4rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn:hover { opacity: 0.9; }
 
-        /* Сканер */
-        .scanner-container { position: relative; width: 100%; height: 260px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin: 1rem 0; }
-        .scanner-grid { position: absolute; width: 100%; height: 100%; background-image: radial-gradient(rgba(14, 165, 233, 0.2) 1px, transparent 1px); background-size: 20px 20px; }
-        .target-reticle { position: absolute; width: 130px; height: 130px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: pulse 2s infinite; }
+        /* Відеокамера для сканування з лінзою */
+        .scanner-container { position: relative; width: 100%; height: 280px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin: 1rem 0; }
+        #cameraVideo { width: 100%; height: 100%; object-fit: cover; }
+        .target-reticle { position: absolute; width: 120px; height: 120px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.98); opacity: 0.8; } 50% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(0.98); opacity: 0.8; } }
-        .scan-line { position: absolute; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 0; display: none; }
+        .scan-line { position: absolute; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 0; display: none; pointer-events: none; }
         .scan-line.active { display: block; animation: scan 2.5s infinite linear; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        .preview-img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        
         .progress-bar-bg { width: 100%; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 1rem; display: none; border: 1px solid var(--border); }
         .progress-bar-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s linear; }
 
@@ -99,7 +99,12 @@
         .meter-bar { height: 12px; background: linear-gradient(90deg, var(--success), var(--warning), var(--accent)); border-radius: 6px; position: relative; margin: 0.8rem 0; }
         .meter-pointer { position: absolute; top: -4px; left: 15%; width: 20px; height: 20px; background: white; border: 3px solid var(--bg); border-radius: 50%; transform: translateX(-50%); transition: left 0.5s ease; }
 
-        /* Таблички історії */
+        /* Нагороди */
+        .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); }
+        .badge-item.unlocked { border-color: var(--success); }
+
+        /* Історія */
         .history-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
         .history-item { background: var(--bg); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
 
@@ -121,7 +126,7 @@
         .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; border: 1px solid var(--border); }
     </style>
 </head>
-<body>
+<body onload="initCamera()">
     <header>
         <div class="logo">🔴 CapillaryVision <span>MVP</span></div>
         <div class="header-controls">
@@ -137,15 +142,13 @@
                 <option value="uk">🇺🇦 UA</option>
                 <option value="cs">🇨🇿 Čeština</option>
                 <option value="en">🇬🇧 EN</option>
-                <option value="de">🇩🇪 DE</option>
             </select>
 
             <button class="auth-btn" id="loginBtn" onclick="openAuthModal()">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.545,6.477,2.545,12s4.476,10,10,10c5.768,0,9.539-4.056,9.539-9.707c0-0.716-0.07-1.393-0.198-2.054H12.545z"/></svg>
-                <span id="loginText">Google Auth</span>
+                <span>Google Auth</span>
             </button>
             <div class="user-profile" id="userProfile">
-                <div class="avatar" id="userAvatar">A</div>
+                <div class="avatar">A</div>
                 <span id="userName">Анна</span>
             </div>
         </div>
@@ -155,22 +158,25 @@
         <sidebar>
             <button class="nav-btn active" onclick="switchTab(this, 'scanner')">📸 <span>Сканер</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'tree')">🌳 <span>Дерево капілярів</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'rewards')">🏆 <span>Нагороди</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'history')">📜 <span>Історія замірів</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'doctor')">📋 <span>Звіт лікарю</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'ai')">🤖 <span>Gemini ШІ</span></button>
         </sidebar>
 
         <div class="content-area">
-            <!-- Сканер -->
+            <!-- Сканер із живим відео камери -->
             <div id="scanner" class="tab-content active">
                 <h2>Скринінг мікроциркуляції (Slider-Clip)</h2>
-                <p style="color: var(--text-muted);">Зафіксуйте палець у 3D-адаптері Slider-Clip або завантажте знімок.</p>
+                <p style="color: var(--text-muted);">Наведіть камеру з макролінзою на палець у 3D-адаптері.</p>
                 
                 <div class="scanner-container" id="scanBox">
-                    <div class="scanner-grid"></div>
-                    <div class="target-reticle" id="reticle"><span style="font-size: 0.8rem; color: var(--primary);">10X</span></div>
+                    <!-- Відеотрансляція з камери -->
+                    <video id="cameraVideo" autoplay playsinline muted></video>
+                    <div class="target-reticle" id="reticle">
+                        <span style="font-size: 0.8rem; color: var(--primary); background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;">10X</span>
+                    </div>
                     <div class="scan-line" id="scanLine"></div>
-                    <img id="uploadedImage" class="preview-img" style="display:none;" />
                 </div>
 
                 <div class="progress-bar-bg" id="progressBg">
@@ -179,10 +185,7 @@
 
                 <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
                     <button class="btn" id="scanBtn" onclick="startDynamicScanning()">Запустити 30-сек аналіз</button>
-                    <label class="btn" style="background: var(--card-bg); border: 1px solid var(--border); cursor: pointer; color: var(--text);">
-                        📁 <span>Завантажити фото</span>
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
-                    </label>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()">🔄 Увімкнути камеру</button>
                 </div>
 
                 <div class="audio-box">
@@ -195,11 +198,11 @@
 
                 <div class="fact-card">
                     <h4 style="color: var(--primary); margin-bottom: 0.3rem;">💡 Судинний факт дня</h4>
-                    <p style="font-size: 0.9rem;" id="dailyFactText">Довжина капілярної сітки людини перевищує 100 000 км!</p>
+                    <p style="font-size: 0.9rem;">Довжина капілярної сітки людини перевищує 100 000 км — цього достатньо, щоб обігнути Землю понад 2 рази!</p>
                 </div>
             </div>
 
-            <!-- Дерево капілярів (Динамічні показники) -->
+            <!-- Дерево капілярів -->
             <div id="tree" class="tab-content">
                 <h2>Аналіз тонусу та морфології</h2>
                 <div class="card-grid">
@@ -219,12 +222,35 @@
                 </div>
             </div>
 
-            <!-- Історія замірів (Збережені дані) -->
+            <!-- Нагороди -->
+            <div id="rewards" class="tab-content">
+                <h2>Ваші нагороди та досягнення</h2>
+                <p style="color: var(--text-muted);">Зберігайте регулярність моніторингу та відкривайте нові рівні здоров'я.</p>
+                <div class="badge-grid">
+                    <div class="badge-item unlocked">
+                        <div style="font-size: 2rem;">🔥</div>
+                        <h4 style="margin-top: 0.5rem;">Старт серії</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">3 дні поспіль</p>
+                    </div>
+                    <div class="badge-item unlocked">
+                        <div style="font-size: 2rem;">🔬</div>
+                        <h4 style="margin-top: 0.5rem;">Першопрохідець</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Перший R&D скрін</p>
+                    </div>
+                    <div class="badge-item" style="opacity: 0.5;">
+                        <div style="font-size: 2rem;">🛡️</div>
+                        <h4 style="margin-top: 0.5rem;">Захист судин</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">7 днів стріку</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Історія замірів -->
             <div id="history" class="tab-content">
                 <h2>Історія ваших збережених замірів</h2>
-                <p style="color: var(--text-muted);">Всі проведені скринінги автоматично зберігаються на вашому пристрої.</p>
+                <p style="color: var(--text-muted);">Всі проведені скринінги автоматично зберігаються на пристрої.</p>
                 <div class="history-list" id="historyContainer">
-                    <p style="color: var(--text-muted); font-style: italic;">Замірів поки немає. Проведіть свій перший аналіз у вкладці "Сканер".</p>
+                    <p style="color: var(--text-muted); font-style: italic;">Замірів поки немає. Проведіть свій перший аналіз.</p>
                 </div>
                 <button class="btn" style="background: var(--accent); margin-top: 1rem;" onclick="clearHistory()">Очистити історію</button>
             </div>
@@ -233,7 +259,7 @@
             <div id="doctor" class="tab-content">
                 <h2>Експорт та відправка звіту</h2>
                 <div class="send-box">
-                    <input type="text" id="patientNameInput" placeholder="Ваше ім'я та прізвище..." onchange="updateReportPreview()">
+                    <input type="text" id="patientNameInput" placeholder="Ваше ім'я..." onchange="updateReportPreview()">
                     <input type="email" id="doctorEmail" placeholder="Email лікаря...">
                     <button class="btn" onclick="sendReportToDoctor()">📧 Надіслати</button>
                     <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="window.print()">🖨️ PDF</button>
@@ -243,11 +269,11 @@
                     <p><strong>Пацієнт:</strong> <span id="repPatientName">Анна</span> | <strong>Дата:</strong> <span id="repDate">2026-11-02</span></p>
                     <p><strong>Обладнання:</strong> Slider-Clip Hardware Adapter (KnightX 10X Lens)</p>
                     <hr style="margin: 1rem 0;">
-                    <h4>Останні збережені показники:</h4>
+                    <h4>Показники:</h4>
                     <ul>
-                        <li>Тонус капілярів: <strong id="repTonus">Норма (92%)</strong></li>
-                        <li>Судинний вік: <strong id="repAge">24 роки</strong></li>
-                        <li>Стан спазму: <strong id="repSpasm">Низький</strong></li>
+                        <li>Тонус капілярів: <strong id="repTonus">--</strong></li>
+                        <li>Судинний вік: <strong id="repAge">--</strong></li>
+                        <li>Стан спазму: <strong id="repSpasm">--</strong></li>
                     </ul>
                 </div>
             </div>
@@ -256,10 +282,10 @@
             <div id="ai" class="tab-content">
                 <h2>Gemini HealthTech Assistant</h2>
                 <div class="chat-box" id="chatContainer">
-                    <div class="msg ai">Вітаю! Я ШІ-асистент CapillaryVision. Готовий відповісти на запитання щодо ваших показників судинного спазму.</div>
+                    <div class="msg ai">Вітаю! Я ШІ-асистент CapillaryVision. Чим можу допомогти?</div>
                 </div>
                 <div class="chat-input-area">
-                    <input type="text" id="userInput" placeholder="Напишіть запитання...">
+                    <input type="text" id="userInput" placeholder="Ваше питання...">
                     <button class="btn" onclick="sendMsg()">Надіслати</button>
                 </div>
             </div>
@@ -268,17 +294,16 @@
 
     <div class="modal" id="authModal">
         <div class="modal-content">
-            <h3>Авторизація через Google</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Синхронізуйте ваші дані замірів.</p>
+            <h3>Вхід у CapillaryVision</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Авторизуйтесь через Google.</p>
             <button class="auth-btn" style="width: 100%; justify-content: center; padding: 0.8rem;" onclick="confirmGoogleAuth()">
-                <span>Увійти з Google</span>
+                <span>Продовжити з Google</span>
             </button>
             <button class="btn" style="background: transparent; color: var(--text-muted); margin-top: 1rem;" onclick="closeAuthModal()">Скасувати</button>
         </div>
     </div>
 
     <script>
-        // Ініціалізація збережених даних із localStorage
         let scanHistory = JSON.parse(localStorage.getItem('cv_history')) || [];
         let userStreak = parseInt(localStorage.getItem('cv_streak')) || 0;
         let currentUser = localStorage.getItem('cv_user') || null;
@@ -286,13 +311,24 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateStreakUI();
             renderHistoryUI();
-            if(currentUser) {
-                showUserProfile(currentUser);
-            }
-            if(scanHistory.length > 0) {
-                updateMetricsUI(scanHistory[0]);
-            }
+            if(currentUser) showUserProfile(currentUser);
+            if(scanHistory.length > 0) updateMetricsUI(scanHistory[0]);
         });
+
+        // Підключення живої камери смартфона
+        async function initCamera() {
+            const videoElement = document.getElementById('cameraVideo');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }, // Використовувати задню камеру на телефоні
+                    audio: false
+                });
+                videoElement.srcObject = stream;
+            } catch (err) {
+                console.log("Помилка доступу до камери: ", err);
+                // Якщо камера недоступна на ПК, показуємо заглушку або повідомлення
+            }
+        }
 
         function startDynamicScanning() {
             const scanLine = document.getElementById('scanLine');
@@ -310,8 +346,6 @@
                     clearInterval(interval);
                     scanLine.classList.remove('active');
                     btn.disabled = false;
-                    
-                    // Генерація реалістичних динамічних даних
                     generateAndSaveScanResult();
                 } else {
                     width += 4;
@@ -321,12 +355,11 @@
         }
 
         function generateAndSaveScanResult() {
-            // Випадкова динаміка на основі алгоритму
-            const tonusVal = Math.floor(Math.random() * 18) + 82; // 82-99%
-            const ageVal = Math.floor(Math.random() * 4) + 22; // 22-25 років
-            const spasmLevels = ["Низький (Норма)", "Мінімальний", "Помірний"];
-            const spasmText = spasmLevels[Math.floor(Math.random() * spasmLevels.length)];
-            const pointerPos = Math.floor(Math.random() * 30) + 10; // % по шкалі
+            const tonusVal = Math.floor(Math.random() * 15) + 85;
+            const ageVal = Math.floor(Math.random() * 4) + 22;
+            const spasmTexts = ["Низький (Норма)", "Мінімальний", "Помірний"];
+            const spasmText = spasmTexts[Math.floor(Math.random() * spasmTexts.length)];
+            const pointerPos = Math.floor(Math.random() * 25) + 10;
 
             const newResult = {
                 id: Date.now(),
@@ -337,20 +370,16 @@
                 pointer: pointerPos
             };
 
-            // Збереження в масив та LocalStorage
             scanHistory.unshift(newResult);
             localStorage.setItem('cv_history', JSON.stringify(scanHistory));
-
-            // Оновлення стріку
             userStreak += 1;
             localStorage.setItem('cv_streak', userStreak);
 
-            // Оновлення інтерфейсу
             updateStreakUI();
             updateMetricsUI(newResult);
             renderHistoryUI();
 
-            alert(`Сканування завершено! Нові дані збережено.\nТонус капілярів: ${newResult.tonus}\nСудинний вік: ${newResult.age} років`);
+            alert(`Сканування завершено успішно!\nТонус капілярів: ${newResult.tonus}\nСудинний вік: ${newResult.age} років`);
         }
 
         function updateMetricsUI(data) {
@@ -359,7 +388,6 @@
             document.getElementById('valSpasmLevel').innerText = data.spasm;
             document.getElementById('meterPointer').style.left = data.pointer + '%';
 
-            // Оновлення звіту для лікаря
             document.getElementById('repTonus').innerText = data.tonus;
             document.getElementById('repAge').innerText = data.age + ' років';
             document.getElementById('repSpasm').innerText = data.spasm;
@@ -371,7 +399,6 @@
                 container.innerHTML = '<p style="color: var(--text-muted); font-style: italic;">Замірів поки немає.</p>';
                 return;
             }
-
             container.innerHTML = scanHistory.map(item => `
                 <div class="history-item">
                     <div>
@@ -384,7 +411,7 @@
         }
 
         function clearHistory() {
-            if(confirm('Ви впевнені, що хочете очистити всі збережені заміри?')) {
+            if(confirm('Очистити історію замірів?')) {
                 scanHistory = [];
                 localStorage.removeItem('cv_history');
                 renderHistoryUI();
@@ -430,7 +457,7 @@
         function sendReportToDoctor() {
             const email = document.getElementById('doctorEmail').value;
             if(!email) { alert('Введіть Email лікаря.'); return; }
-            alert(`Звіт збережено та надіслано на пошту: ${email}`);
+            alert(`Звіт надіслано на пошту: ${email}`);
         }
 
         function sendMsg() {
@@ -438,13 +465,12 @@
             const chat = document.getElementById('chatContainer');
             if(!input.value.trim()) return;
             chat.innerHTML += `<div class="msg user">${input.value}</div>`;
-            const userQ = input.value;
             input.value = '';
 
             setTimeout(() => {
-                let reply = "Ваші останні біомаркери мікроциркуляції перебувають у межах норми. Продовжуйте щоденний моніторинг!";
+                let reply = "Ваші показники мікроциркуляції в нормі!";
                 if(scanHistory.length > 0) {
-                    reply = `За результатами останнього заміру (${scanHistory[0].date}) ваш тонус капілярів становить ${scanHistory[0].tonus}. Стан спазму: ${scanHistory[0].spasm}.`;
+                    reply = `Останній замір від ${scanHistory[0].date}: тонус капілярів ${scanHistory[0].tonus}, спазм — ${scanHistory[0].spasm}.`;
                 }
                 chat.innerHTML += `<div class="msg ai">${reply}</div>`;
                 chat.scrollTop = chat.scrollHeight;
@@ -457,20 +483,6 @@
             isAudioPlaying = !isAudioPlaying;
             btn.innerText = isAudioPlaying ? '⏸ Зупинити' : '▶ Увімкнути';
             btn.style.background = isAudioPlaying ? 'var(--accent)' : 'var(--primary)';
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('uploadedImage');
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    document.getElementById('reticle').style.borderColor = 'var(--success)';
-                }
-                reader.readAsDataURL(file);
-            }
         }
     </script>
 </body>
