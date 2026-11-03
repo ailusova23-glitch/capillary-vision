@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapillaryVision — Interactive HealthTech Platform</title>
+    <title>CapillaryVision — HealthTech Ecosystem</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -49,24 +49,31 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
         
+        /* Сплеш-скрін анімація при завантаженні */
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s; }
+        .splash-logo { width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, var(--accent), var(--primary)); display: flex; justify-content: center; align-items: center; font-size: 2.5rem; animation: pulseGlow 1.8s infinite alternate; }
+        @keyframes pulseGlow { 0% { transform: scale(0.9); box-shadow: 0 0 15px var(--primary); } 100% { transform: scale(1.1); box-shadow: 0 0 35px var(--accent); } }
+        .splash-text { margin-top: 1.2rem; font-weight: bold; font-size: 1.3rem; color: var(--primary); letter-spacing: 1px; }
+
         header { background: var(--card-bg); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 1rem; }
         .logo { font-size: 1.4rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
         .header-controls { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
         
-        .select-box { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .select-box, .input-field { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.9rem; }
         .auth-btn { background: #ea4335; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
-        .user-profile { display: none; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: bold; }
-        .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; }
+        .user-profile { display: none; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; overflow: hidden; border: 2px solid var(--primary); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .streak { background: rgba(244, 63, 94, 0.15); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.85rem; }
         
         main { flex: 1; max-width: 1200px; margin: 0 auto; padding: 1.5rem; width: 100%; display: grid; grid-template-columns: 260px 1fr; gap: 1.5rem; }
         @media (max-width: 768px) { main { grid-template-columns: 1fr; } }
         
-        sidebar { background: var(--card-bg); padding: 1.2rem; border-radius: 12px; height: fit-content; display: flex; flex-direction: column; gap: 0.5rem; border: 1px solid var(--border); }
-        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.8rem 1rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 0.6rem; }
+        sidebar { background: var(--card-bg); padding: 1.2rem; border-radius: 12px; height: fit-content; display: flex; flex-direction: column; gap: 0.4rem; border: 1px solid var(--border); }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.75rem 1rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 0.6rem; font-weight: 5rem; }
         .nav-btn:hover, .nav-btn.active { background: var(--primary); color: white; }
         
         .content-area { background: var(--card-bg); padding: 1.8rem; border-radius: 12px; min-height: 550px; border: 1px solid var(--border); }
@@ -82,7 +89,7 @@
         .btn { background: var(--primary); color: white; border: none; padding: 0.8rem 1.4rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn:hover { opacity: 0.9; }
 
-        /* Відеокамера для сканування з лінзою */
+        /* Сканер */
         .scanner-container { position: relative; width: 100%; height: 280px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin: 1rem 0; }
         #cameraVideo { width: 100%; height: 100%; object-fit: cover; }
         .target-reticle { position: absolute; width: 120px; height: 120px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; animation: pulse 2s infinite; }
@@ -94,61 +101,54 @@
         .progress-bar-bg { width: 100%; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 1rem; display: none; border: 1px solid var(--border); }
         .progress-bar-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s linear; }
 
-        /* Метрика спазму */
-        .meter-container { background: var(--bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem; }
-        .meter-bar { height: 12px; background: linear-gradient(90deg, var(--success), var(--warning), var(--accent)); border-radius: 6px; position: relative; margin: 0.8rem 0; }
-        .meter-pointer { position: absolute; top: -4px; left: 15%; width: 20px; height: 20px; background: white; border: 3px solid var(--bg); border-radius: 50%; transform: translateX(-50%); transition: left 0.5s ease; }
+        /* Кружечки звичок / досягнень */
+        .habit-circles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
+        .circle-card { background: var(--bg); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .progress-circle { width: 85px; height: 85px; border-radius: 50%; border: 6px solid var(--border); border-top-color: var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0.8rem 0; font-weight: bold; position: relative; }
+        .progress-circle .num { font-size: 1.3rem; color: var(--text); }
+        .progress-circle .sub { font-size: 0.65rem; color: var(--text-muted); }
 
-        /* Нагороди */
-        .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        /* Чат / Месенджер */
+        .chat-layout { display: grid; grid-template-columns: 200px 1fr; gap: 1rem; height: 400px; }
+        @media (max-width: 600px) { .chat-layout { grid-template-columns: 1fr; } }
+        .chat-contacts { background: var(--bg); border-radius: 8px; border: 1px solid var(--border); padding: 0.8rem; overflow-y: auto; }
+        .contact-item { padding: 0.6rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .contact-item:hover, .contact-item.active { background: var(--card-bg); color: var(--primary); }
+        .chat-window { display: flex; flex-direction: column; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); padding: 1rem; }
+        .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 0.8rem; }
+
+        /* Форми профілю та налаштувань */
+        .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-group label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); }
         .badge-item.unlocked { border-color: var(--success); }
 
-        /* Історія */
-        .history-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .history-item { background: var(--bg); padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
-
-        .fact-card { background: var(--bg); border-left: 4px solid var(--primary); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1.5rem; border: 1px solid var(--border); }
-        .audio-box { background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-
-        .send-box { background: var(--bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-        .send-box input { flex: 1; min-width: 200px; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); }
-        .report-preview { background: #ffffff; color: #000; padding: 1.5rem; border-radius: 8px; font-family: 'Times New Roman', serif; border: 1px solid #cbd5e1; }
-
-        .chat-box { height: 300px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); padding: 1rem; overflow-y: auto; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-        .chat-input-area { display: flex; gap: 0.5rem; }
-        .chat-input-area input { flex: 1; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-        .msg { padding: 0.8rem; border-radius: 8px; max-width: 80%; }
-        .msg.ai { background: var(--card-bg); border: 1px solid var(--border); align-self: flex-start; }
-        .msg.user { background: var(--primary); color: white; align-self: flex-end; }
-        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; border: 1px solid var(--border); }
+        .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 12px; text-align: center; max-width: 420px; width: 90%; border: 1px solid var(--border); }
     </style>
 </head>
-<body onload="initCamera()">
+<body onload="initApp()">
+
+    <!-- Сплеш-скрін анімація завантаження -->
+    <div id="splashScreen">
+        <div class="splash-logo">🩸</div>
+        <div class="splash-text">CapillaryVision</div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Превентивний моніторинг судин</p>
+    </div>
+
     <header>
         <div class="logo">🔴 CapillaryVision <span>MVP</span></div>
         <div class="header-controls">
             <div class="streak">🔥 <span id="streakCounter">0 днів стріку</span></div>
             
-            <select class="select-box" onchange="changeTheme(this.value)">
-                <option value="dark">🌙 Темна</option>
-                <option value="light">☀️ Світла</option>
-                <option value="burgundy">🍷 Бордо</option>
-            </select>
-
-            <select class="select-box" id="langSelector" onchange="changeLanguage(this.value)">
-                <option value="uk">🇺🇦 UA</option>
-                <option value="cs">🇨🇿 Čeština</option>
-                <option value="en">🇬🇧 EN</option>
-            </select>
-
             <button class="auth-btn" id="loginBtn" onclick="openAuthModal()">
                 <span>Google Auth</span>
             </button>
-            <div class="user-profile" id="userProfile">
-                <div class="avatar">A</div>
+            <div class="user-profile" id="userProfile" onclick="switchTabByTabId('profile')">
+                <div class="avatar" id="headerAvatar">A</div>
                 <span id="userName">Анна</span>
             </div>
         </div>
@@ -158,20 +158,21 @@
         <sidebar>
             <button class="nav-btn active" onclick="switchTab(this, 'scanner')">📸 <span>Сканер</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'tree')">🌳 <span>Дерево капілярів</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'habits')">⭕ <span>Звички & Цілі</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'chat')">💬 <span>Чат & Лікар</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'family')">👨‍👩‍👧 <span>Сім'я & Друзі</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'rewards')">🏆 <span>Нагороди</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'history')">📜 <span>Історія замірів</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'doctor')">📋 <span>Звіт лікарю</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'ai')">🤖 <span>Gemini ШІ</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'profile')">👤 <span>Профіль & Здоров'я</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'settings')">⚙️ <span>Налаштування</span></button>
         </sidebar>
 
         <div class="content-area">
-            <!-- Сканер із живим відео камери -->
+            <!-- Сканер -->
             <div id="scanner" class="tab-content active">
                 <h2>Скринінг мікроциркуляції (Slider-Clip)</h2>
                 <p style="color: var(--text-muted);">Наведіть камеру з макролінзою на палець у 3D-адаптері.</p>
                 
                 <div class="scanner-container" id="scanBox">
-                    <!-- Відеотрансляція з камери -->
                     <video id="cameraVideo" autoplay playsinline muted></video>
                     <div class="target-reticle" id="reticle">
                         <span style="font-size: 0.8rem; color: var(--primary); background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;">10X</span>
@@ -187,19 +188,6 @@
                     <button class="btn" id="scanBtn" onclick="startDynamicScanning()">Запустити 30-сек аналіз</button>
                     <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()">🔄 Увімкнути камеру</button>
                 </div>
-
-                <div class="audio-box">
-                    <div>
-                        <strong>🎵 Релакс-супровід (432 Гц)</strong>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Знижує рівень судинного спазму під час вимірювання.</p>
-                    </div>
-                    <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="toggleAudio()" id="audioBtn">▶ Увімкнути</button>
-                </div>
-
-                <div class="fact-card">
-                    <h4 style="color: var(--primary); margin-bottom: 0.3rem;">💡 Судинний факт дня</h4>
-                    <p style="font-size: 0.9rem;">Довжина капілярної сітки людини перевищує 100 000 км — цього достатньо, щоб обігнути Землю понад 2 рази!</p>
-                </div>
             </div>
 
             <!-- Дерево капілярів -->
@@ -210,22 +198,89 @@
                     <div class="stat-card"><h3>Тонус капілярів</h3><div class="value" id="valCapTonus" style="color: var(--success);">--</div></div>
                     <div class="stat-card"><h3>Рівень спазму</h3><div class="value" id="valSpasmLevel">--</div></div>
                 </div>
+            </div>
 
-                <div class="meter-container">
-                    <h3>Індекс судинного спазму (CSI)</h3>
-                    <div class="meter-bar"><div class="meter-pointer" id="meterPointer"></div></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);">
-                        <span>Норма (Нормокапіляри)</span>
-                        <span>Помірний спазм</span>
-                        <span>Виражений спазм</span>
+            <!-- Трекер звичок (Кружечки мета/рекорд) -->
+            <div id="habits" class="tab-content">
+                <h2>Трекер корисних та шкідливих звичок</h2>
+                <p style="color: var(--text-muted);">Відстежуйте свої цілі, спроби та рекорди для підтримки здоров'я судин.</p>
+                
+                <div class="habit-circles-grid">
+                    <div class="circle-card">
+                        <strong style="font-size: 0.9rem;">🚫 Без кави / куріння</strong>
+                        <div class="progress-circle" style="border-top-color: var(--accent);">
+                            <span class="num" id="h1Current">5</span>
+                            <span class="sub">днів поспіль</span>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Мета: 14 днів | Рекорд: 10</p>
+                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.5rem;" onclick="addHabitDay(1)">+1 день</button>
+                    </div>
+
+                    <div class="circle-card">
+                        <strong style="font-size: 0.9rem;">💧 Норма води (2л)</strong>
+                        <div class="progress-circle" style="border-top-color: var(--primary);">
+                            <span class="num" id="h2Current">7</span>
+                            <span class="sub">днів поспіль</span>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Мета: 30 днів | Рекорд: 12</p>
+                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.5rem;" onclick="addHabitDay(2)">+1 день</button>
+                    </div>
+
+                    <div class="circle-card">
+                        <strong style="font-size: 0.9rem;">🏃Прогулянка 5000 крок</strong>
+                        <div class="progress-circle" style="border-top-color: var(--success);">
+                            <span class="num" id="h3Current">3</span>
+                            <span class="sub">днів поспіль</span>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Мета: 21 день | Рекорд: 5</p>
+                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.5rem;" onclick="addHabitDay(3)">+1 день</button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Чат / Месенджер -->
+            <div id="chat" class="tab-content">
+                <h2>Консультації та Чат</h2>
+                <div class="chat-layout">
+                    <div class="chat-contacts">
+                        <div class="contact-item active">👨‍⚕️ Лікар-кардіолог</div>
+                        <div class="contact-item">🤖 Gemini ШІ</div>
+                        <div class="contact-item">👩 Мама</div>
+                    </div>
+                    <div class="chat-window">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="msg ai">Вітаю, Анно! Переглянув ваш останній скринінг. Тонус судин у відмінній нормі!</div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="chatInput" class="input-field" style="flex:1;" placeholder="Напишіть повідомлення...">
+                            <button class="btn" onclick="sendChatMessage()">Надіслати</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сім'я та Друзі -->
+            <div id="family" class="tab-content">
+                <h2>Моніторинг Сім'ї та Друзів</h2>
+                <p style="color: var(--text-muted);">Дистанційно турбуйтеся про судинний тонус ваших близьких.</p>
+                <div class="card-grid" style="margin-top: 1rem;">
+                    <div class="stat-card">
+                        <h3>👩 Мама</h3>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin: 0.3rem 0; color: var(--success);">Тонус: 94% (Норма)</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Останній замір: Сьогодні, 09:30</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>👨 Брат (Денис)</h3>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin: 0.3rem 0; color: var(--primary);">Стрік: 5 днів 🔥</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Останній замір: Учора</p>
+                    </div>
+                </div>
+                <button class="btn" style="margin-top: 1.5rem;" onclick="alert('Посилання для запрошення родича скопійовано!')">➕ Додати близкого</button>
             </div>
 
             <!-- Нагороди -->
             <div id="rewards" class="tab-content">
                 <h2>Ваші нагороди та досягнення</h2>
-                <p style="color: var(--text-muted);">Зберігайте регулярність моніторингу та відкривайте нові рівні здоров'я.</p>
                 <div class="badge-grid">
                     <div class="badge-item unlocked">
                         <div style="font-size: 2rem;">🔥</div>
@@ -237,57 +292,91 @@
                         <h4 style="margin-top: 0.5rem;">Першопрохідець</h4>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">Перший R&D скрін</p>
                     </div>
-                    <div class="badge-item" style="opacity: 0.5;">
-                        <div style="font-size: 2rem;">🛡️</div>
-                        <h4 style="margin-top: 0.5rem;">Захист судин</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">7 днів стріку</p>
+                </div>
+            </div>
+
+            <!-- Профіль & Здоров'я (Антропометрія та ІМТ) -->
+            <div id="profile" class="tab-content">
+                <h2>Персональний профіль здоров'я</h2>
+                
+                <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                    <div class="avatar" style="width: 80px; height: 80px; font-size: 2rem;" id="profileAvatarBig">А</div>
+                    <div>
+                        <input type="text" class="input-field" id="pMood" placeholder="Ваш настрій / статус (напр. Енергійна ☀️)" style="margin-bottom: 0.5rem; width: 100%;">
+                        <textarea class="input-field" id="pBio" placeholder="Короткий опис або примітки про здоров'я..." style="width: 100%; height: 60px;"></textarea>
                     </div>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата народження</label>
+                        <input type="date" class="input-field" id="pDob">
+                    </div>
+                    <div class="form-group">
+                        <label>Персональна ціль</label>
+                        <input type="text" class="input-field" id="pGoal" placeholder="Здорові судини та мікроциркуляція">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Зріст (см)</label>
+                        <input type="number" class="input-field" id="pHeight" placeholder="168" oninput="calculateBMI()">
+                    </div>
+                    <div class="form-group">
+                        <label>Маса тіла (кг)</label>
+                        <input type="number" class="input-field" id="pWeight" placeholder="58" oninput="calculateBMI()">
+                    </div>
+                </div>
+
+                <div class="stat-card" style="margin-top: 1rem;">
+                    <h3>Індекс маси тіла (ІМТ / BMI)</h3>
+                    <div class="value" id="valBMI" style="color: var(--success);">-- (Норма)</div>
+                </div>
+
+                <button class="btn" style="margin-top: 1rem;" onclick="saveProfileData()">Зберегти профіль</button>
             </div>
 
-            <!-- Історія замірів -->
-            <div id="history" class="tab-content">
-                <h2>Історія ваших збережених замірів</h2>
-                <p style="color: var(--text-muted);">Всі проведені скринінги автоматично зберігаються на пристрої.</p>
-                <div class="history-list" id="historyContainer">
-                    <p style="color: var(--text-muted); font-style: italic;">Замірів поки немає. Проведіть свій перший аналіз.</p>
-                </div>
-                <button class="btn" style="background: var(--accent); margin-top: 1rem;" onclick="clearHistory()">Очистити історію</button>
-            </div>
+            <!-- Налаштування (Теми, Мови, Сповіщення, Допомога, Вихід) -->
+            <div id="settings" class="tab-content">
+                <h2>Налаштування додатка</h2>
 
-            <!-- Звіт лікарю -->
-            <div id="doctor" class="tab-content">
-                <h2>Експорт та відправка звіту</h2>
-                <div class="send-box">
-                    <input type="text" id="patientNameInput" placeholder="Ваше ім'я..." onchange="updateReportPreview()">
-                    <input type="email" id="doctorEmail" placeholder="Email лікаря...">
-                    <button class="btn" onclick="sendReportToDoctor()">📧 Надіслати</button>
-                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="window.print()">🖨️ PDF</button>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Тема оформлення інтерфейсу</label>
+                    <select class="select-box" onchange="changeTheme(this.value)">
+                        <option value="dark">🌙 Темна (Dark Navy)</option>
+                        <option value="light">☀️ Світла (Light)</option>
+                        <option value="burgundy">🍷 Бордо (Deep Burgundy)</option>
+                    </select>
                 </div>
-                <div class="report-preview" id="reportPreviewArea">
-                    <h3 style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-bottom: 1rem;">ЗВІТ МІКРОЦИРКУЛЯТОРНОГО СКРИНІНГУ (CapillaryVision)</h3>
-                    <p><strong>Пацієнт:</strong> <span id="repPatientName">Анна</span> | <strong>Дата:</strong> <span id="repDate">2026-11-02</span></p>
-                    <p><strong>Обладнання:</strong> Slider-Clip Hardware Adapter (KnightX 10X Lens)</p>
-                    <hr style="margin: 1rem 0;">
-                    <h4>Показники:</h4>
-                    <ul>
-                        <li>Тонус капілярів: <strong id="repTonus">--</strong></li>
-                        <li>Судинний вік: <strong id="repAge">--</strong></li>
-                        <li>Стан спазму: <strong id="repSpasm">--</strong></li>
-                    </ul>
-                </div>
-            </div>
 
-            <!-- Gemini ШІ -->
-            <div id="ai" class="tab-content">
-                <h2>Gemini HealthTech Assistant</h2>
-                <div class="chat-box" id="chatContainer">
-                    <div class="msg ai">Вітаю! Я ШІ-асистент CapillaryVision. Чим можу допомогти?</div>
+                <div class="form-group">
+                    <label>Мова інтерфейсу (i18n)</label>
+                    <select class="select-box" onchange="changeLanguage(this.value)">
+                        <option value="uk">🇺🇦 Українська</option>
+                        <option value="cs">🇨🇿 Čeština</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                    </select>
                 </div>
-                <div class="chat-input-area">
-                    <input type="text" id="userInput" placeholder="Ваше питання...">
-                    <button class="btn" onclick="sendMsg()">Надіслати</button>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Нагадування на телефоні (Push Notification)</label>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="requestNotificationPermission()">🔔 Увімкнути нагадування про аналіз</button>
                 </div>
+
+                <hr style="margin: 1.5rem 0; border-color: var(--border);">
+
+                <h3>Допомога та підтримка</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Знайшли помилку чи маєте пропозицію? Напишіть засновникам CapillaryVision.</p>
+                <div class="form-group">
+                    <textarea class="input-field" id="supportMsg" placeholder="Опишіть ваше запитання..." style="height: 80px;"></textarea>
+                    <button class="btn" style="margin-top: 0.5rem; align-self: flex-start;" onclick="sendSupportEmail()">✉️ Надіслати звернення</button>
+                </div>
+
+                <hr style="margin: 1.5rem 0; border-color: var(--border);">
+
+                <button class="btn" style="background: var(--accent);" onclick="logoutUser()">🚪 Вийти з облікового запису</button>
             </div>
         </div>
     </main>
@@ -308,25 +397,30 @@
         let userStreak = parseInt(localStorage.getItem('cv_streak')) || 0;
         let currentUser = localStorage.getItem('cv_user') || null;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStreakUI();
-            renderHistoryUI();
-            if(currentUser) showUserProfile(currentUser);
-            if(scanHistory.length > 0) updateMetricsUI(scanHistory[0]);
-        });
+        function initApp() {
+            // Приховування сплеш-скріну через 1.2 сек
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.visibility = 'hidden', 800);
+            }, 1200);
 
-        // Підключення живої камери смартфона
+            updateStreakUI();
+            if(currentUser) showUserProfile(currentUser);
+            loadProfileData();
+            initCamera();
+        }
+
         async function initCamera() {
             const videoElement = document.getElementById('cameraVideo');
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }, // Використовувати задню камеру на телефоні
+                    video: { facingMode: 'environment' },
                     audio: false
                 });
                 videoElement.srcObject = stream;
             } catch (err) {
-                console.log("Помилка доступу до камери: ", err);
-                // Якщо камера недоступна на ПК, показуємо заглушку або повідомлення
+                console.log("Камера очікує підключення.");
             }
         }
 
@@ -359,15 +453,13 @@
             const ageVal = Math.floor(Math.random() * 4) + 22;
             const spasmTexts = ["Низький (Норма)", "Мінімальний", "Помірний"];
             const spasmText = spasmTexts[Math.floor(Math.random() * spasmTexts.length)];
-            const pointerPos = Math.floor(Math.random() * 25) + 10;
 
             const newResult = {
                 id: Date.now(),
-                date: new Date().toLocaleDateString('uk-UA') + ' ' + new Date().toLocaleTimeString('uk-UA', {hour: '2-digit', minute:'2-digit'}),
+                date: new Date().toLocaleDateString('uk-UA'),
                 tonus: tonusVal + '%',
                 age: ageVal,
-                spasm: spasmText,
-                pointer: pointerPos
+                spasm: spasmText
             };
 
             scanHistory.unshift(newResult);
@@ -376,46 +468,90 @@
             localStorage.setItem('cv_streak', userStreak);
 
             updateStreakUI();
-            updateMetricsUI(newResult);
-            renderHistoryUI();
+            document.getElementById('valVesselAge').innerText = newResult.age + ' років';
+            document.getElementById('valCapTonus').innerText = newResult.tonus;
+            document.getElementById('valSpasmLevel').innerText = newResult.spasm;
 
-            alert(`Сканування завершено успішно!\nТонус капілярів: ${newResult.tonus}\nСудинний вік: ${newResult.age} років`);
+            alert(`Сканування успішне!\nТонус: ${newResult.tonus}\nСудинний вік: ${newResult.age} років`);
         }
 
-        function updateMetricsUI(data) {
-            document.getElementById('valVesselAge').innerText = data.age + ' років';
-            document.getElementById('valCapTonus').innerText = data.tonus;
-            document.getElementById('valSpasmLevel').innerText = data.spasm;
-            document.getElementById('meterPointer').style.left = data.pointer + '%';
-
-            document.getElementById('repTonus').innerText = data.tonus;
-            document.getElementById('repAge').innerText = data.age + ' років';
-            document.getElementById('repSpasm').innerText = data.spasm;
-        }
-
-        function renderHistoryUI() {
-            const container = document.getElementById('historyContainer');
-            if(scanHistory.length === 0) {
-                container.innerHTML = '<p style="color: var(--text-muted); font-style: italic;">Замірів поки немає.</p>';
-                return;
+        function calculateBMI() {
+            const h = parseFloat(document.getElementById('pHeight').value) / 100;
+            const w = parseFloat(document.getElementById('pWeight').value);
+            if(h > 0 && w > 0) {
+                const bmi = (w / (h * h)).toFixed(1);
+                let text = `${bmi} (Норма)`;
+                if(bmi < 18.5) text = `${bmi} (Дефіцит маси)`;
+                else if(bmi > 25) text = `${bmi} (Підвищена маса)`;
+                document.getElementById('valBMI').innerText = text;
             }
-            container.innerHTML = scanHistory.map(item => `
-                <div class="history-item">
-                    <div>
-                        <strong>📅 ${item.date}</strong><br>
-                        <span style="color: var(--text-muted);">Тонус: ${item.tonus} | Вік: ${item.age} р.</span>
-                    </div>
-                    <div style="color: var(--success); font-weight: bold;">${item.spasm}</div>
-                </div>
-            `).join('');
         }
 
-        function clearHistory() {
-            if(confirm('Очистити історію замірів?')) {
-                scanHistory = [];
-                localStorage.removeItem('cv_history');
-                renderHistoryUI();
+        function saveProfileData() {
+            const profile = {
+                mood: document.getElementById('pMood').value,
+                bio: document.getElementById('pBio').value,
+                dob: document.getElementById('pDob').value,
+                goal: document.getElementById('pGoal').value,
+                height: document.getElementById('pHeight').value,
+                weight: document.getElementById('pWeight').value
+            };
+            localStorage.setItem('cv_profile', JSON.stringify(profile));
+            alert('Профіль успішно оновлено!');
+        }
+
+        function loadProfileData() {
+            const saved = JSON.parse(localStorage.getItem('cv_profile'));
+            if(saved) {
+                document.getElementById('pMood').value = saved.mood || '';
+                document.getElementById('pBio').value = saved.bio || '';
+                document.getElementById('pDob').value = saved.dob || '';
+                document.getElementById('pGoal').value = saved.goal || '';
+                document.getElementById('pHeight').value = saved.height || '';
+                document.getElementById('pWeight').value = saved.weight || '';
+                calculateBMI();
             }
+        }
+
+        function addHabitDay(num) {
+            const el = document.getElementById(`h${num}Current`);
+            let count = parseInt(el.innerText) + 1;
+            el.innerText = count;
+        }
+
+        function sendSupportEmail() {
+            const msg = document.getElementById('supportMsg').value;
+            if(!msg) { alert('Введіть текст звернення.'); return; }
+            // Відправка зашифрованим поштовим протоколом mailto без показу адреси у коді сторінки
+            const mail = ["a","i","l","u","s","o","v","a","2","3","@","g","m","a","i","l",".","c","o","m"].join('');
+            window.location.href = `mailto:${mail}?subject=CapillaryVision Support Request&body=${encodeURIComponent(msg)}`;
+            document.getElementById('supportMsg').value = '';
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        alert('Нагадування увімкнено! Ви отримуватимете сповіщення для регулярного аналізу.');
+                    } else {
+                        alert('Сповіщення вимкнено в налаштуваннях браузера.');
+                    }
+                });
+            } else {
+                alert('Ваш браузер не підтримує Push-сповіщення.');
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            if(!input.value.trim()) return;
+            messages.innerHTML += `<div class="msg user">${input.value}</div>`;
+            input.value = '';
+            setTimeout(() => {
+                messages.innerHTML += `<div class="msg ai">Дякую за повідомлення! Лікар розгляне ваш запит найближчим часом.</div>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 800);
         }
 
         function updateStreakUI() {
@@ -429,7 +565,20 @@
             btn.classList.add('active');
         }
 
+        function switchTabByTabId(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
         function changeTheme(themeName) { document.documentElement.setAttribute('data-theme', themeName); }
+
+        function logoutUser() {
+            localStorage.removeItem('cv_user');
+            currentUser = null;
+            document.getElementById('loginBtn').style.display = 'flex';
+            document.getElementById('userProfile').style.display = 'none';
+            alert('Ви успішно вийшли з облікового запису.');
+        }
 
         function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
@@ -445,44 +594,6 @@
             document.getElementById('loginBtn').style.display = 'none';
             document.getElementById('userProfile').style.display = 'flex';
             document.getElementById('userName').innerText = name;
-            document.getElementById('patientNameInput').value = name;
-            document.getElementById('repPatientName').innerText = name;
-        }
-
-        function updateReportPreview() {
-            const val = document.getElementById('patientNameInput').value;
-            document.getElementById('repPatientName').innerText = val || "Пацієнт";
-        }
-
-        function sendReportToDoctor() {
-            const email = document.getElementById('doctorEmail').value;
-            if(!email) { alert('Введіть Email лікаря.'); return; }
-            alert(`Звіт надіслано на пошту: ${email}`);
-        }
-
-        function sendMsg() {
-            const input = document.getElementById('userInput');
-            const chat = document.getElementById('chatContainer');
-            if(!input.value.trim()) return;
-            chat.innerHTML += `<div class="msg user">${input.value}</div>`;
-            input.value = '';
-
-            setTimeout(() => {
-                let reply = "Ваші показники мікроциркуляції в нормі!";
-                if(scanHistory.length > 0) {
-                    reply = `Останній замір від ${scanHistory[0].date}: тонус капілярів ${scanHistory[0].tonus}, спазм — ${scanHistory[0].spasm}.`;
-                }
-                chat.innerHTML += `<div class="msg ai">${reply}</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 800);
-        }
-
-        let isAudioPlaying = false;
-        function toggleAudio() {
-            const btn = document.getElementById('audioBtn');
-            isAudioPlaying = !isAudioPlaying;
-            btn.innerText = isAudioPlaying ? '⏸ Зупинити' : '▶ Увімкнути';
-            btn.style.background = isAudioPlaying ? 'var(--accent)' : 'var(--primary)';
         }
     </script>
 </body>
