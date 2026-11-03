@@ -51,7 +51,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.3s, color 0.3s; }
         body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
         
-        /* Сплеш-скрін анімація при завантаженні */
         #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s; }
         .splash-logo { width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, var(--accent), var(--primary)); display: flex; justify-content: center; align-items: center; font-size: 2.5rem; animation: pulseGlow 1.8s infinite alternate; }
         @keyframes pulseGlow { 0% { transform: scale(0.9); box-shadow: 0 0 15px var(--primary); } 100% { transform: scale(1.1); box-shadow: 0 0 35px var(--accent); } }
@@ -65,7 +64,6 @@
         .auth-btn { background: #ea4335; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
         .user-profile { display: none; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; }
         .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; overflow: hidden; border: 2px solid var(--primary); }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .streak { background: rgba(244, 63, 94, 0.15); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.85rem; }
         
@@ -73,7 +71,7 @@
         @media (max-width: 768px) { main { grid-template-columns: 1fr; } }
         
         sidebar { background: var(--card-bg); padding: 1.2rem; border-radius: 12px; height: fit-content; display: flex; flex-direction: column; gap: 0.4rem; border: 1px solid var(--border); }
-        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.75rem 1rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 0.6rem; font-weight: 5rem; }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.75rem 1rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
         .nav-btn:hover, .nav-btn.active { background: var(--primary); color: white; }
         
         .content-area { background: var(--card-bg); padding: 1.8rem; border-radius: 12px; min-height: 550px; border: 1px solid var(--border); }
@@ -101,30 +99,38 @@
         .progress-bar-bg { width: 100%; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 1rem; display: none; border: 1px solid var(--border); }
         .progress-bar-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s linear; }
 
-        /* Кружечки звичок / досягнень */
-        .habit-circles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
-        .circle-card { background: var(--bg); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .progress-circle { width: 85px; height: 85px; border-radius: 50%; border: 6px solid var(--border); border-top-color: var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0.8rem 0; font-weight: bold; position: relative; }
-        .progress-circle .num { font-size: 1.3rem; color: var(--text); }
-        .progress-circle .sub { font-size: 0.65rem; color: var(--text-muted); }
+        /* Графічне дерево капілярів */
+        .tree-canvas-box { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; align-items: center; margin-top: 1rem; }
+        #capillaryCanvas { width: 100%; max-width: 450px; height: 260px; background: #000; border-radius: 8px; }
 
-        /* Чат / Месенджер */
-        .chat-layout { display: grid; grid-template-columns: 200px 1fr; gap: 1rem; height: 400px; }
+        /* Звички */
+        .habit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .habit-card { background: var(--bg); padding: 1rem; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+        .habit-ring { width: 75px; height: 75px; border-radius: 50%; border: 5px solid var(--border); border-top-color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0.5rem auto; font-weight: bold; font-size: 1.1rem; }
+
+        /* Месенджер */
+        .chat-layout { display: grid; grid-template-columns: 210px 1fr; gap: 1rem; height: 420px; }
         @media (max-width: 600px) { .chat-layout { grid-template-columns: 1fr; } }
-        .chat-contacts { background: var(--bg); border-radius: 8px; border: 1px solid var(--border); padding: 0.8rem; overflow-y: auto; }
-        .contact-item { padding: 0.6rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .chat-contacts { background: var(--bg); border-radius: 8px; border: 1px solid var(--border); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; }
+        .contact-item { padding: 0.7rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; }
         .contact-item:hover, .contact-item.active { background: var(--card-bg); color: var(--primary); }
         .chat-window { display: flex; flex-direction: column; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); padding: 1rem; }
         .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 0.8rem; }
+        .msg { padding: 0.7rem 1rem; border-radius: 8px; max-width: 80%; font-size: 0.9rem; }
+        .msg.ai { background: var(--card-bg); border: 1px solid var(--border); align-self: flex-start; }
+        .msg.user { background: var(--primary); color: white; align-self: flex-end; }
 
-        /* Форми профілю та налаштувань */
+        /* Нагороди (отримані та заблоковані) */
+        .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); opacity: 0.4; filter: grayscale(1); transition: 0.3s; }
+        .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--success); }
+
+        .fact-card { background: var(--bg); border-left: 4px solid var(--primary); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; border: 1px solid var(--border); }
+        .audio-box { background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+
         .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); }
-        .badge-item.unlocked { border-color: var(--success); }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 12px; text-align: center; max-width: 420px; width: 90%; border: 1px solid var(--border); }
@@ -132,11 +138,10 @@
 </head>
 <body onload="initApp()">
 
-    <!-- Сплеш-скрін анімація завантаження -->
     <div id="splashScreen">
         <div class="splash-logo">🩸</div>
         <div class="splash-text">CapillaryVision</div>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Превентивний моніторинг судин</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;" data-i18n="splash_sub">Превентивний моніторинг судин</p>
     </div>
 
     <header>
@@ -145,7 +150,7 @@
             <div class="streak">🔥 <span id="streakCounter">0 днів стріку</span></div>
             
             <button class="auth-btn" id="loginBtn" onclick="openAuthModal()">
-                <span>Google Auth</span>
+                <span data-i18n="google_login">Google Auth</span>
             </button>
             <div class="user-profile" id="userProfile" onclick="switchTabByTabId('profile')">
                 <div class="avatar" id="headerAvatar">A</div>
@@ -156,21 +161,21 @@
 
     <main>
         <sidebar>
-            <button class="nav-btn active" onclick="switchTab(this, 'scanner')">📸 <span>Сканер</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'tree')">🌳 <span>Дерево капілярів</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'habits')">⭕ <span>Звички & Цілі</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'chat')">💬 <span>Чат & Лікар</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'family')">👨‍👩‍👧 <span>Сім'я & Друзі</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'rewards')">🏆 <span>Нагороди</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'profile')">👤 <span>Профіль & Здоров'я</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'settings')">⚙️ <span>Налаштування</span></button>
+            <button class="nav-btn active" onclick="switchTab(this, 'scanner')">📸 <span data-i18n="nav_scanner">Сканер</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'tree')">🌳 <span data-i18n="nav_tree">Дерево капілярів</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'habits')">⭕ <span data-i18n="nav_habits">Звички & Цілі</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'chat')">💬 <span data-i18n="nav_chat">Чат & Лікар</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'family')">👨‍👩‍👧 <span data-i18n="nav_family">Сім'я & Друзі</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'rewards')">🏆 <span data-i18n="nav_rewards">Нагороди</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'profile')">👤 <span data-i18n="nav_profile">Профіль & Здоров'я</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'settings')">⚙️ <span data-i18n="nav_settings">Налаштування</span></button>
         </sidebar>
 
         <div class="content-area">
             <!-- Сканер -->
             <div id="scanner" class="tab-content active">
-                <h2>Скринінг мікроциркуляції (Slider-Clip)</h2>
-                <p style="color: var(--text-muted);">Наведіть камеру з макролінзою на палець у 3D-адаптері.</p>
+                <h2 data-i18n="scan_title">Скринінг мікроциркуляції (Slider-Clip)</h2>
+                <p style="color: var(--text-muted);" data-i18n="scan_desc">Наведіть камеру з макролінзою на палець у 3D-адаптері.</p>
                 
                 <div class="scanner-container" id="scanBox">
                     <video id="cameraVideo" autoplay playsinline muted></video>
@@ -185,67 +190,63 @@
                 </div>
 
                 <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
-                    <button class="btn" id="scanBtn" onclick="startDynamicScanning()">Запустити 30-сек аналіз</button>
-                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()">🔄 Увімкнути камеру</button>
+                    <button class="btn" id="scanBtn" onclick="startDynamicScanning()" data-i18n="btn_scan">Запустити 30-сек аналіз</button>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()" data-i18n="btn_cam">🔄 Увімкнути камеру</button>
+                </div>
+
+                <!-- Аудіо (Герци 432 Гц) -->
+                <div class="audio-box">
+                    <div>
+                        <strong data-i18n="audio_title">🎵 Релакс-супровід (432 Гц)</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="audio_desc">Знижує рівень судинного спазму під час вимірювання.</p>
+                    </div>
+                    <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="toggleAudio()" id="audioBtn" data-i18n="btn_audio_on">▶ Увімкнути</button>
+                </div>
+
+                <!-- Факт дня -->
+                <div class="fact-card">
+                    <h4 style="color: var(--primary); margin-bottom: 0.3rem;" data-i18n="fact_title">💡 Судинний факт дня</h4>
+                    <p style="font-size: 0.9rem;" data-i18n="fact_text">Довжина капілярної сітки людини перевищує 100 000 км — цього достатньо, щоб обігнути Землю понад 2 рази!</p>
                 </div>
             </div>
 
-            <!-- Дерево капілярів -->
+            <!-- Дерево капілярів (Графічне зображення) -->
             <div id="tree" class="tab-content">
-                <h2>Аналіз тонусу та морфології</h2>
+                <h2 data-i18n="tree_title">Аналіз тонусу та морфології</h2>
                 <div class="card-grid">
-                    <div class="stat-card"><h3>Судинний вік</h3><div class="value" id="valVesselAge">-- років</div></div>
-                    <div class="stat-card"><h3>Тонус капілярів</h3><div class="value" id="valCapTonus" style="color: var(--success);">--</div></div>
-                    <div class="stat-card"><h3>Рівень спазму</h3><div class="value" id="valSpasmLevel">--</div></div>
+                    <div class="stat-card"><h3 data-i18n="vessel_age">Судинний вік</h3><div class="value" id="valVesselAge">-- років</div></div>
+                    <div class="stat-card"><h3 data-i18n="cap_tonus">Тонус капілярів</h3><div class="value" id="valCapTonus" style="color: var(--success);">--</div></div>
+                    <div class="stat-card"><h3 data-i18n="spasm_level">Рівень спазму</h3><div class="value" id="valSpasmLevel">--</div></div>
+                </div>
+
+                <div class="tree-canvas-box">
+                    <h3 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--primary);" data-i18n="tree_canvas_title">🌲 Інтерактивна візуалізація капілярного дерева</h3>
+                    <canvas id="capillaryCanvas" width="400" height="240"></canvas>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;" data-i18n="tree_canvas_desc">Зелений колір стравує нормокапіляри, червоні мікрозони сигналізують про спазм.</p>
                 </div>
             </div>
 
-            <!-- Трекер звичок (Кружечки мета/рекорд) -->
+            <!-- Звички & Цілі (Додавання та видалення) -->
             <div id="habits" class="tab-content">
-                <h2>Трекер корисних та шкідливих звичок</h2>
-                <p style="color: var(--text-muted);">Відстежуйте свої цілі, спроби та рекорди для підтримки здоров'я судин.</p>
+                <h2 data-i18n="habits_title">Трекер звичок та цілей</h2>
+                <p style="color: var(--text-muted);" data-i18n="habits_desc">Керуйте своїми щоденними корисними звичками.</p>
                 
-                <div class="habit-circles-grid">
-                    <div class="circle-card">
-                        <strong style="font-size: 0.9rem;">🚫 Без кави / куріння</strong>
-                        <div class="progress-circle" style="border-top-color: var(--accent);">
-                            <span class="num" id="h1Current">5</span>
-                            <span class="sub">днів поспіль</span>
-                        </div>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);">Мета: 14 днів | Рекорд: 10</p>
-                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.5rem;" onclick="addHabitDay(1)">+1 день</button>
-                    </div>
-
-                    <div class="circle-card">
-                        <strong style="font-size: 0.9rem;">💧 Норма води (2л)</strong>
-                        <div class="progress-circle" style="border-top-color: var(--primary);">
-                            <span class="num" id="h2Current">7</span>
-                            <span class="sub">днів поспіль</span>
-                        </div>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);">Мета: 30 днів | Рекорд: 12</p>
-                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.5rem;" onclick="addHabitDay(2)">+1 день</button>
-                    </div>
-
-                    <div class="circle-card">
-                        <strong style="font-size: 0.9rem;">🏃Прогулянка 5000 крок</strong>
-                        <div class="progress-circle" style="border-top-color: var(--success);">
-                            <span class="num" id="h3Current">3</span>
-                            <span class="sub">днів поспіль</span>
-                        </div>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);">Мета: 21 день | Рекорд: 5</p>
-                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; margin-top: 0.5rem;" onclick="addHabitDay(3)">+1 день</button>
-                    </div>
+                <div style="display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap;">
+                    <input type="text" id="newHabitName" class="input-field" placeholder="Назва звички (напр. Прогулянка)..." style="flex:1;">
+                    <button class="btn" onclick="addNewHabit()" data-i18n="btn_add_habit">➕ Додати звичку</button>
                 </div>
+
+                <div class="habit-grid" id="habitGridContainer"></div>
             </div>
 
-            <!-- Чат / Месенджер -->
+            <!-- Чат & Лікар (Робоче перемикання чатів) -->
             <div id="chat" class="tab-content">
-                <h2>Консультації та Чат</h2>
+                <h2 data-i18n="chat_title">Консультації та Чат</h2>
                 <div class="chat-layout">
                     <div class="chat-contacts">
-                        <div class="contact-item active">👨‍⚕️ Лікар-кардіолог</div>
-                        <div class="contact-item">🤖 Gemini ШІ</div>
-                        <div class="contact-item">👩 Мама</div>
+                        <div class="contact-item active" onclick="switchChat('doctor', this)">👨‍⚕️ Лікар-кардіолог</div>
+                        <div class="contact-item" onclick="switchChat('ai', this)">🤖 Gemini ШІ</div>
+                        <div class="contact-item" onclick="switchChat('mom', this)">👩 Мама</div>
                     </div>
                     <div class="chat-window">
                         <div class="chat-messages" id="chatMessages">
@@ -253,16 +254,16 @@
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id="chatInput" class="input-field" style="flex:1;" placeholder="Напишіть повідомлення...">
-                            <button class="btn" onclick="sendChatMessage()">Надіслати</button>
+                            <button class="btn" onclick="sendChatMessage()" data-i18n="btn_send">Надіслати</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Сім'я та Друзі -->
+            <!-- Сім'я & Друзі -->
             <div id="family" class="tab-content">
-                <h2>Моніторинг Сім'ї та Друзів</h2>
-                <p style="color: var(--text-muted);">Дистанційно турбуйтеся про судинний тонус ваших близьких.</p>
+                <h2 data-i18n="family_title">Моніторинг Сім'ї та Друзів</h2>
+                <p style="color: var(--text-muted);" data-i18n="family_desc">Дистанційно турбуйтеся про судинний тонус ваших близьких.</p>
                 <div class="card-grid" style="margin-top: 1rem;">
                     <div class="stat-card">
                         <h3>👩 Мама</h3>
@@ -275,58 +276,57 @@
                         <p style="font-size: 0.8rem; color: var(--text-muted);">Останній замір: Учора</p>
                     </div>
                 </div>
-                <button class="btn" style="margin-top: 1.5rem;" onclick="alert('Посилання для запрошення родича скопійовано!')">➕ Додати близкого</button>
+                <button class="btn" style="margin-top: 1.5rem;" onclick="alert('Посилання для запрошення родича скопійовано!')" data-i18n="btn_add_rel">➕ Додати близького</button>
             </div>
 
-            <!-- Нагороди -->
+            <!-- Нагороди (Підсвічування сірим/неотримані) -->
             <div id="rewards" class="tab-content">
-                <h2>Ваші нагороди та досягнення</h2>
+                <h2 data-i18n="rewards_title">Ваші нагороди та досягнення</h2>
+                <p style="color: var(--text-muted);" data-i18n="rewards_desc">Заробляйте бейджі за регулярність та турботу про здоров'я.</p>
                 <div class="badge-grid">
                     <div class="badge-item unlocked">
                         <div style="font-size: 2rem;">🔥</div>
-                        <h4 style="margin-top: 0.5rem;">Старт серії</h4>
+                        <h4 style="margin-top: 0.5rem;" data-i18n="b1_title">Старт серії</h4>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">3 дні поспіль</p>
                     </div>
                     <div class="badge-item unlocked">
                         <div style="font-size: 2rem;">🔬</div>
-                        <h4 style="margin-top: 0.5rem;">Першопрохідець</h4>
+                        <h4 style="margin-top: 0.5rem;" data-i18n="b2_title">Першопрохідець</h4>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">Перший R&D скрін</p>
+                    </div>
+                    <div class="badge-item">
+                        <div style="font-size: 2rem;">🛡️</div>
+                        <h4 style="margin-top: 0.5rem;" data-i18n="b3_title">Захист судин</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">7 днів стріку (Закрито)</p>
+                    </div>
+                    <div class="badge-item">
+                        <div style="font-size: 2rem;">🌟</div>
+                        <h4 style="margin-top: 0.5rem;" data-i18n="b4_title">Майстер ЗОЖ</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">14 днів звичок (Закрито)</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Профіль & Здоров'я (Антропометрія та ІМТ) -->
+            <!-- Профіль & Здоров'я -->
             <div id="profile" class="tab-content">
-                <h2>Персональний профіль здоров'я</h2>
+                <h2 data-i18n="profile_title">Персональний профіль здоров'я</h2>
                 
                 <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
                     <div class="avatar" style="width: 80px; height: 80px; font-size: 2rem;" id="profileAvatarBig">А</div>
                     <div>
-                        <input type="text" class="input-field" id="pMood" placeholder="Ваш настрій / статус (напр. Енергійна ☀️)" style="margin-bottom: 0.5rem; width: 100%;">
-                        <textarea class="input-field" id="pBio" placeholder="Короткий опис або примітки про здоров'я..." style="width: 100%; height: 60px;"></textarea>
+                        <input type="text" class="input-field" id="pMood" placeholder="Настрій (напр. Енергійна ☀️)" style="margin-bottom: 0.5rem; width: 100%;">
+                        <textarea class="input-field" id="pBio" placeholder="Короткий опис..." style="width: 100%; height: 60px;"></textarea>
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Дата народження</label>
-                        <input type="date" class="input-field" id="pDob">
-                    </div>
-                    <div class="form-group">
-                        <label>Персональна ціль</label>
-                        <input type="text" class="input-field" id="pGoal" placeholder="Здорові судини та мікроциркуляція">
-                    </div>
+                    <div class="form-group"><label>Дата народження</label><input type="date" class="input-field" id="pDob"></div>
+                    <div class="form-group"><label>Персональна ціль</label><input type="text" class="input-field" id="pGoal" placeholder="Здорові судини"></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Зріст (см)</label>
-                        <input type="number" class="input-field" id="pHeight" placeholder="168" oninput="calculateBMI()">
-                    </div>
-                    <div class="form-group">
-                        <label>Маса тіла (кг)</label>
-                        <input type="number" class="input-field" id="pWeight" placeholder="58" oninput="calculateBMI()">
-                    </div>
+                    <div class="form-group"><label>Зріст (см)</label><input type="number" class="input-field" id="pHeight" placeholder="168" oninput="calculateBMI()"></div>
+                    <div class="form-group"><label>Маса тіла (кг)</label><input type="number" class="input-field" id="pWeight" placeholder="58" oninput="calculateBMI()"></div>
                 </div>
 
                 <div class="stat-card" style="margin-top: 1rem;">
@@ -334,15 +334,15 @@
                     <div class="value" id="valBMI" style="color: var(--success);">-- (Норма)</div>
                 </div>
 
-                <button class="btn" style="margin-top: 1rem;" onclick="saveProfileData()">Зберегти профіль</button>
+                <button class="btn" style="margin-top: 1rem;" onclick="saveProfileData()" data-i18n="btn_save">Зберегти профіль</button>
             </div>
 
-            <!-- Налаштування (Теми, Мови, Сповіщення, Допомога, Вихід) -->
+            <!-- Налаштування (Теми, 10 мов, Допомога через пошту, Вихід) -->
             <div id="settings" class="tab-content">
-                <h2>Налаштування додатка</h2>
+                <h2 data-i18n="settings_title">Налаштування додатка</h2>
 
                 <div class="form-group" style="margin-top: 1rem;">
-                    <label>Тема оформлення інтерфейсу</label>
+                    <label data-i18n="set_theme">Тема оформлення інтерфейсу</label>
                     <select class="select-box" onchange="changeTheme(this.value)">
                         <option value="dark">🌙 Темна (Dark Navy)</option>
                         <option value="light">☀️ Світла (Light)</option>
@@ -351,54 +351,213 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Мова інтерфейсу (i18n)</label>
-                    <select class="select-box" onchange="changeLanguage(this.value)">
+                    <label data-i18n="set_lang">Мова інтерфейсу (10 мов світу)</label>
+                    <select class="select-box" id="langSelector" onchange="changeLanguage(this.value)">
                         <option value="uk">🇺🇦 Українська</option>
                         <option value="cs">🇨🇿 Čeština</option>
                         <option value="en">🇬🇧 English</option>
                         <option value="de">🇩🇪 Deutsch</option>
+                        <option value="pl">🇵🇱 Polski</option>
+                        <option value="sk">🇸🇰 Slovenčina</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="ja">🇯🇵 日本語</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="margin-top: 1.5rem;">
-                    <label>Нагадування на телефоні (Push Notification)</label>
-                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="requestNotificationPermission()">🔔 Увімкнути нагадування про аналіз</button>
+                    <label data-i18n="set_push">Нагадування на телефоні (Push Notification)</label>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="requestNotificationPermission()" data-i18n="btn_push">🔔 Увімкнути нагадування</button>
                 </div>
 
                 <hr style="margin: 1.5rem 0; border-color: var(--border);">
 
-                <h3>Допомога та підтримка</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Знайшли помилку чи маєте пропозицію? Напишіть засновникам CapillaryVision.</p>
+                <h3 data-i18n="sup_title">Допомога та підтримка</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;" data-i18n="sup_desc">Знайшли помилку чи маєте пропозицію? Напишіть нам.</p>
                 <div class="form-group">
                     <textarea class="input-field" id="supportMsg" placeholder="Опишіть ваше запитання..." style="height: 80px;"></textarea>
-                    <button class="btn" style="margin-top: 0.5rem; align-self: flex-start;" onclick="sendSupportEmail()">✉️ Надіслати звернення</button>
+                    <button class="btn" style="margin-top: 0.5rem; align-self: flex-start;" onclick="sendSupportEmail()" data-i18n="btn_sup">✉️ Надіслати звернення</button>
                 </div>
 
                 <hr style="margin: 1.5rem 0; border-color: var(--border);">
 
-                <button class="btn" style="background: var(--accent);" onclick="logoutUser()">🚪 Вийти з облікового запису</button>
+                <button class="btn" style="background: var(--accent);" onclick="logoutUser()" data-i18n="btn_logout">🚪 Вийти з облікового запису</button>
             </div>
         </div>
     </main>
 
     <div class="modal" id="authModal">
         <div class="modal-content">
-            <h3>Вхід у CapillaryVision</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Авторизуйтесь через Google.</p>
+            <h3 data-i18n="modal_auth">Вхід у CapillaryVision</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;" data-i18n="modal_auth_desc">Авторизуйтесь через Google.</p>
             <button class="auth-btn" style="width: 100%; justify-content: center; padding: 0.8rem;" onclick="confirmGoogleAuth()">
-                <span>Продовжити з Google</span>
+                <span data-i18n="btn_google">Продовжити з Google</span>
             </button>
-            <button class="btn" style="background: transparent; color: var(--text-muted); margin-top: 1rem;" onclick="closeAuthModal()">Скасувати</button>
+            <button class="btn" style="background: transparent; color: var(--text-muted); margin-top: 1rem;" onclick="closeAuthModal()" data-i18n="btn_cancel">Скасувати</button>
         </div>
     </div>
 
     <script>
+        // Словник 10 мов (i18n)
+        const i18n = {
+            uk: {
+                nav_scanner: "Сканер", nav_tree: "Дерево", nav_habits: "Звички", nav_chat: "Чат", nav_family: "Сім'я", nav_rewards: "Нагороди", nav_profile: "Профіль", nav_settings: "Налаштування",
+                scan_title: "Скринінг мікроциркуляції (Slider-Clip)", scan_desc: "Наведіть камеру з макролінзою на палець у 3D-адаптері.", btn_scan: "Запустити 30-сек аналіз", btn_cam: "🔄 Увімкнути камеру",
+                audio_title: "🎵 Релакс-супровід (432 Гц)", audio_desc: "Знижує рівень судинного спазму під час вимірювання.", btn_audio_on: "▶ Увімкнути", btn_audio_off: "⏸ Зупинити",
+                fact_title: "💡 Судинний факт дня", fact_text: "Довжина капілярної сітки людини перевищує 100 000 км — цього достатньо, щоб обігнути Землю понад 2 рази!",
+                tree_title: "Аналіз тонусу та морфології", vessel_age: "Судинний вік", cap_tonus: "Тонус капілярів", spasm_level: "Рівень спазму", tree_canvas_title: "🌲 Інтерактивна візуалізація капілярного дерева", tree_canvas_desc: "Зелений колір стравує нормокапіляри, червоні мікрозони сигналізують про спазм.",
+                habits_title: "Трекер звичок та цілей", habits_desc: "Керуйте своїми щоденними корисними звичками.", btn_add_habit: "➕ Додати звичку",
+                chat_title: "Консультації та Чат", family_title: "Моніторинг Сім'ї та Друзів", family_desc: "Дистанційно турбуйтеся про судинний тонус ваших близьких.", btn_add_rel: "➕ Додати близького",
+                rewards_title: "Ваші нагороди та досягнення", rewards_desc: "Заробляйте бейджі за регулярність та турботу про здоров'я.", b1_title: "Старт серії", b2_title: "Першопрохідець", b3_title: "Захист судин", b4_title: "Майстер ЗОЖ",
+                profile_title: "Персональний профіль здоров'я", btn_save: "Зберегти профіль",
+                settings_title: "Налаштування додатка", set_theme: "Тема оформлення інтерфейсу", set_lang: "Мова інтерфейсу (10 мов світу)", set_push: "Нагадування на телефоні (Push Notification)", btn_push: "🔔 Увімкнути нагадування", sup_title: "Допомога та підтримка", sup_desc: "Знайшли помилку чи маєте пропозицію? Напишіть нам.", btn_sup: "✉️ Надіслати звернення", btn_logout: "🚪 Вийти з облікового запису",
+                modal_auth: "Вхід у CapillaryVision", modal_auth_desc: "Авторизуйтесь через Google.", btn_google: "Продовжити з Google", btn_cancel: "Скасувати", btn_send: "Надіслати"
+            },
+            en: {
+                nav_scanner: "Scanner", nav_tree: "Tree", nav_habits: "Habits", nav_chat: "Chat", nav_family: "Family", nav_rewards: "Awards", nav_profile: "Profile", nav_settings: "Settings",
+                scan_title: "Microcirculation Screening (Slider-Clip)", scan_desc: "Point macro lens camera at finger in 3D adapter.", btn_scan: "Run 30-sec Test", btn_cam: "🔄 Enable Camera",
+                audio_title: "🎵 Relax Audio (432 Hz)", audio_desc: "Reduces vessel spasm during screening.", btn_audio_on: "▶ Turn On", btn_audio_off: "⏸ Stop",
+                fact_title: "💡 Vascular Fact of the Day", fact_text: "Total length of human capillaries exceeds 100,000 km — enough to circle Earth over 2 times!",
+                tree_title: "Tone & Morphology Analysis", vessel_age: "Vascular Age", cap_tonus: "Capillary Tone", spasm_level: "Spasm Level", tree_canvas_title: "🌲 Interactive Capillary Tree Visualization", tree_canvas_desc: "Green indicates normocapillaries, red zones signal spasm.",
+                habits_title: "Habits & Goals Tracker", habits_desc: "Manage your daily health habits.", btn_add_habit: "➕ Add Habit",
+                chat_title: "Consultations & Chat", family_title: "Family & Friends Monitoring", family_desc: "Remotely care for your loved ones' vascular tone.", btn_add_rel: "➕ Add Relative",
+                rewards_title: "Your Rewards & Achievements", rewards_desc: "Earn badges for consistency.", b1_title: "Streak Start", b2_title: "Pioneer", b3_title: "Vessel Shield", b4_title: "Wellness Master",
+                profile_title: "Personal Health Profile", btn_save: "Save Profile",
+                settings_title: "App Settings", set_theme: "Interface Theme", set_lang: "Interface Language (10 languages)", set_push: "Phone Reminders (Push Notification)", btn_push: "🔔 Enable Reminders", sup_title: "Help & Support", sup_desc: "Found a bug or have an idea? Write to us.", btn_sup: "✉️ Send Request", btn_logout: "🚪 Log Out",
+                modal_auth: "Sign in to CapillaryVision", modal_auth_desc: "Sign in with Google.", btn_google: "Continue with Google", btn_cancel: "Cancel", btn_send: "Send"
+            },
+            cs: {
+                nav_scanner: "Skener", nav_tree: "Strom", nav_habits: "Návyky", nav_chat: "Chat", nav_family: "Rodina", nav_rewards: "Ocenění", nav_profile: "Profil", nav_settings: "Nastavení",
+                scan_title: "Screening mikrocirkulace (Slider-Clip)", scan_desc: "Naměřte kamerou s makročočkou na prst.", btn_scan: "Spustit 30s test", btn_cam: "🔄 Zapnout kameru",
+                audio_title: "🎵 Relaxační doprovod (432 Hz)", audio_desc: "Snižuje stres během měření.", btn_audio_on: "▶ Zapnout", btn_audio_off: "⏸ Zastavit",
+                fact_title: "💡 Cévní fakt dne", fact_text: "Celková délka kapilár v lidském těle přesahuje 100 000 km!",
+                tree_title: "Analýza tonusu a morfologie", vessel_age: "Cévní věk", cap_tonus: "Kapilární tonus", spasm_level: "Úroveň spasmu", tree_canvas_title: "🌲 Interaktivní vizualizace kapilárního stromu", tree_canvas_desc: "Zelená barva značí normu, červená zóny spasmu.",
+                habits_title: "Sledovač návyků", habits_desc: "Spravujte své každodenní návyky.", btn_add_habit: "➕ Přidat návyk",
+                chat_title: "Konzultace a Chat", family_title: "Rodina a přátelé", family_desc: "Sledujte cévní tonus svých blízkých.", btn_add_rel: "➕ Přidat",
+                rewards_title: "Vaše ocenění", rewards_desc: "Získávejte odznaky za pravidelnost.", b1_title: "Start série", b2_title: "Průkopník", b3_title: "Ochrana cév", b4_title: "Mistr zdraví",
+                profile_title: "Osobní profil", btn_save: "Uložit profil",
+                settings_title: "Nastavení", set_theme: "Motiv rozhraní", set_lang: "Jazyk (10 jazyků)", set_push: "Připomenutí", btn_push: "🔔 Zapnout", sup_title: "Podpora", sup_desc: "Napište nám.", btn_sup: "✉️ Odeslat", btn_logout: "🚪 Odhlásit se",
+                modal_auth: "Přihlášení", modal_auth_desc: "Přihlaste se přes Google.", btn_google: "Pokračovat s Google", btn_cancel: "Zrušit", btn_send: "Odeslat"
+            },
+            de: {
+                nav_scanner: "Scanner", nav_tree: "Baum", nav_habits: "Gewohnheiten", nav_chat: "Chat", nav_family: "Familie", nav_rewards: "Erfolge", nav_profile: "Profil", nav_settings: "Einstellungen",
+                scan_title: "Mikrozirkulations-Screening", scan_desc: "Kamera auf Finger richten.", btn_scan: "30-Sek-Test starten", btn_cam: "🔄 Kamera",
+                audio_title: "🎵 Entspannungs-Audio (432 Hz)", audio_desc: "Reduziert Stress.", btn_audio_on: "▶ Einschalten", btn_audio_off: "⏸ Stopp",
+                fact_title: "💡 Gefäßfakt des Tages", fact_text: "Die Gesamtlänge der Kapillaren beträgt über 100.000 km!",
+                tree_title: "Tonus- & Morphologieanalyse", vessel_age: "Gefäßalter", cap_tonus: "Kapillartonus", spasm_level: "Spasmuslevel", tree_canvas_title: "🌲 Kapillarbaum", tree_canvas_desc: "Grün zeigt Norm, Rot Spasmus.",
+                habits_title: "Gewohnheiten-Tracker", habits_desc: "Verwalten Sie Ihre Gewohnheiten.", btn_add_habit: "➕ Gewohnheit hinzufügen",
+                chat_title: "Konsultation & Chat", family_title: "Familie & Freunde", family_desc: "Gefäßtonus der Lieben überwachen.", btn_add_rel: "➕ Hinzufügen",
+                rewards_title: "Ihre Erfolge", rewards_desc: "Abzeichen verdienen.", b1_title: "Serie Start", b2_title: "Pionier", b3_title: "Gefäßschutz", b4_title: "Wellness Meister",
+                profile_title: "Persönliches Profil", btn_save: "Profil speichern",
+                settings_title: "Einstellungen", set_theme: "Design", set_lang: "Sprache", set_push: "Erinnerungen", btn_push: "🔔 Aktivieren", sup_title: "Hilfe", sup_desc: "Kontaktieren Sie uns.", btn_sup: "✉️ Senden", btn_logout: "🚪 Abmelden",
+                modal_auth: "Anmelden", modal_auth_desc: "Mit Google anmelden.", btn_google: "Mit Google fortfahren", btn_cancel: "Abbrechen", btn_send: "Senden"
+            },
+            pl: {
+                nav_scanner: "Skaner", nav_tree: "Drzewo", nav_habits: "Nawyki", nav_chat: "Czat", nav_family: "Rodzina", nav_rewards: "Nagrody", nav_profile: "Profil", nav_settings: "Ustawienia",
+                scan_title: "Skanowanie mikrokrążenia", scan_desc: "Skieruj aparat na palec.", btn_scan: "Uruchom test 30s", btn_cam: "🔄 Włącz aparat",
+                audio_title: "🎵 Audio relaksacyjne (432 Hz)", audio_desc: "Zmniejsza stres.", btn_audio_on: "▶ Włącz", btn_audio_off: "⏸ Zatrzymaj",
+                fact_title: "💡 Fakt o naczyniach", fact_text: "Łączna długość kapilar przekracza 100 000 km!",
+                tree_title: "Analiza tonusu", vessel_age: "Wiek naczyń", cap_tonus: "Tonus kapilar", spasm_level: "Poziom skurczu", tree_canvas_title: "🌲 Wizualizacja drzewa", tree_canvas_desc: "Zielony to norma.",
+                habits_title: "Śledzenie nawyków", habits_desc: "Zarządzaj nawykami.", btn_add_habit: "➕ Dodaj nawyk",
+                chat_title: "Czat i Konsultacje", family_title: "Rodzina i Przyjaciele", family_desc: "Monitoruj bliskich.", btn_add_rel: "➕ Dodaj",
+                rewards_title: "Twoje Nagrody", rewards_desc: "Zdobywaj odznaki.", b1_title: "Start serii", b2_title: "Pionier", b3_title: "Tarcza naczyń", b4_title: "Mistrz",
+                profile_title: "Profil zdrowia", btn_save: "Zapisz",
+                settings_title: "Ustawienia", set_theme: "Motyw", set_lang: "Język", set_push: "Powiadomienia", btn_push: "🔔 Włącz", sup_title: "Pomoc", sup_desc: "Napisz do nas.", btn_sup: "✉️ Wyślij", btn_logout: "🚪 Wyloguj",
+                modal_auth: "Logowanie", modal_auth_desc: "Zaloguj przez Google.", btn_google: "Kontynuuj z Google", btn_cancel: "Anuluj", btn_send: "Wyślij"
+            },
+            sk: {
+                nav_scanner: "Skener", nav_tree: "Strom", nav_habits: "Návyky", nav_chat: "Chat", nav_family: "Rodina", nav_rewards: "Ocenenia", nav_profile: "Profil", nav_settings: "Nastavenia",
+                scan_title: "Screening mikrocirkulácie", scan_desc: "Namierte kameru na prst.", btn_scan: "Spustiť test", btn_cam: "🔄 Kamera",
+                audio_title: "🎵 Relax (432 Hz)", audio_desc: "Znižuje stres.", btn_audio_on: "▶ Zapnúť", btn_audio_off: "⏸ Zastaviť",
+                fact_title: "💡 Cievny fakt", fact_text: "Dĺžka kapilár presahuje 100 000 km!",
+                tree_title: "Analýza tonusu", vessel_age: "Cievny vek", cap_tonus: "Kapilárny tonus", spasm_level: "Spazmus", tree_canvas_title: "🌲 Kapilárny strom", tree_canvas_desc: "Zelená = norma.",
+                habits_title: "Návyky", habits_desc: "Spravujte návyky.", btn_add_habit: "➕ Pridať",
+                chat_title: "Chat", family_title: "Rodina", family_desc: "Sledujte blízkych.", btn_add_rel: "➕ Pridať",
+                rewards_title: "Ocenenia", rewards_desc: "Získavajte odznaky.", b1_title: "Štart", b2_title: "Pionier", b3_title: "Ochrana", b4_title: "Majster",
+                profile_title: "Profil", btn_save: "Uložiť",
+                settings_title: "Nastavenia", set_theme: "Téma", set_lang: "Jazyk", set_push: "Upozornenia", btn_push: "🔔 Zapnúť", sup_title: "Podpora", sup_desc: "Napíšte nám.", btn_sup: "✉️ Odoslať", btn_logout: "🚪 Odhlásiť",
+                modal_auth: "Prihlásenie", modal_auth_desc: "Pomocou Google.", btn_google: "Google", btn_cancel: "Zrušiť", btn_send: "Odoslať"
+            },
+            fr: {
+                nav_scanner: "Scanner", nav_tree: "Arbre", nav_habits: "Habitudes", nav_chat: "Chat", nav_family: "Famille", nav_rewards: "Prix", nav_profile: "Profil", nav_settings: "Paramètres",
+                scan_title: "Dépistage microcirculation", scan_desc: "Pointez la caméra.", btn_scan: "Lancer le test", btn_cam: "🔄 Caméra",
+                audio_title: "🎵 Audio relax (432 Hz)", audio_desc: "Réduit le stress.", btn_audio_on: "▶ Activer", btn_audio_off: "⏸ Arrêter",
+                fact_title: "💡 Fait vasculaire", fact_text: "La longueur des capillaires dépasse 100 000 km !",
+                tree_title: "Analyse du tonus", vessel_age: "Âge vasculaire", cap_tonus: "Tonus capillaire", spasm_level: "Spasme", tree_canvas_title: "🌲 Arbre capillaire", tree_canvas_desc: "Vert = normal.",
+                habits_title: "Suivi des habitudes", habits_desc: "Gérez vos habitudes.", btn_add_habit: "➕ Ajouter",
+                chat_title: "Chat & Consultation", family_title: "Famille", family_desc: "Surveillez vos proches.", btn_add_rel: "➕ Ajouter",
+                rewards_title: "Récompenses", rewards_desc: "Gagnez des badges.", b1_title: "Début", b2_title: "Pionnier", b3_title: "Bouclier", b4_title: "Maître",
+                profile_title: "Profil santé", btn_save: "Enregistrer",
+                settings_title: "Paramètres", set_theme: "Thème", set_lang: "Langue", set_push: "Rappels", btn_push: "🔔 Activer", sup_title: "Aide", sup_desc: "Contactez-nous.", btn_sup: "✉️ Envoyer", btn_logout: "🚪 Déconnexion",
+                modal_auth: "Connexion", modal_auth_desc: "Via Google.", btn_google: "Google", btn_cancel: "Annuler", btn_send: "Envoyer"
+            },
+            it: {
+                nav_scanner: "Scanner", nav_tree: "Albero", nav_habits: "Abitudini", nav_chat: "Chat", nav_family: "Famiglia", nav_rewards: "Premi", nav_profile: "Profilo", nav_settings: "Impostazioni",
+                scan_title: "Screening microcircolazione", scan_desc: "Puntare la fotocamera.", btn_scan: "Avvia test", btn_cam: "🔄 Fotocamera",
+                audio_title: "🎵 Audio relax (432 Hz)", audio_desc: "Riduce lo stress.", btn_audio_on: "▶ Attiva", btn_audio_off: "⏸ Ferma",
+                fact_title: "💡 Fatto vascolare", fact_text: "La lunghezza dei capillari supera 100.000 km!",
+                tree_title: "Analisi del tono", vessel_age: "Età vascolare", cap_tonus: "Tono capillare", spasm_level: "Spasmo", tree_canvas_title: "🌲 Albero capillare", tree_canvas_desc: "Verde = normale.",
+                habits_title: "Tracker abitudini", habits_desc: "Gestisci le abitudini.", btn_add_habit: "➕ Aggiungi",
+                chat_title: "Chat e Consulenza", family_title: "Famiglia", family_desc: "Monitora i cari.", btn_add_rel: "➕ Aggiungi",
+                rewards_title: "Premi", rewards_desc: "Ottieni badge.", b1_title: "Inizio", b2_title: "Pioniere", b3_title: "Scudo", b4_title: "Maestro",
+                profile_title: "Profilo", btn_save: "Salva",
+                settings_title: "Impostazioni", set_theme: "Tema", set_lang: "Lingua", set_push: "Promemoria", btn_push: "🔔 Attiva", sup_title: "Supporto", sup_desc: "Scrivici.", btn_sup: "✉️ Invia", btn_logout: "🚪 Esci",
+                modal_auth: "Accedi", modal_auth_desc: "Con Google.", btn_google: "Google", btn_cancel: "Annulla", btn_send: "Invia"
+            },
+            es: {
+                nav_scanner: "Escáner", nav_tree: "Árbol", nav_habits: "Hábitos", nav_chat: "Chat", nav_family: "Familia", nav_rewards: "Premios", nav_profile: "Perfil", nav_settings: "Ajustes",
+                scan_title: "Tamizaje microcirculación", scan_desc: "Apunta la cámara.", btn_scan: "Iniciar prueba", btn_cam: "🔄 Cámara",
+                audio_title: "🎵 Audio relax (432 Hz)", audio_desc: "Reduce el estrés.", btn_audio_on: "▶ Activar", btn_audio_off: "⏸ Detener",
+                fact_title: "💡 Dato vascular", fact_text: "¡La longitud de los capilares supera 100,000 km!",
+                tree_title: "Análisis de tono", vessel_age: "Edad vascular", cap_tonus: "Tono capilar", spasm_level: "Espasmo", tree_canvas_title: "🌲 Árbol capilar", tree_canvas_desc: "Verde = normal.",
+                habits_title: "Seguimiento de hábitos", habits_desc: "Gestiona hábitos.", btn_add_habit: "➕ Añadir",
+                chat_title: "Chat", family_title: "Familia", family_desc: "Supervisa a tus seres queridos.", btn_add_rel: "➕ Añadir",
+                rewards_title: "Premios", rewards_desc: "Gana insignias.", b1_title: "Inicio", b2_title: "Pionero", b3_title: "Escudo", b4_title: "Maestro",
+                profile_title: "Perfil", btn_save: "Guardar",
+                settings_title: "Ajustes", set_theme: "Tema", set_lang: "Idioma", set_push: "Recordatorios", btn_push: "🔔 Activar", sup_title: "Soporte", sup_desc: "Escríbenos.", btn_sup: "✉️ Enviar", btn_logout: "🚪 Salir",
+                modal_auth: "Iniciar sesión", modal_auth_desc: "Con Google.", btn_google: "Google", btn_cancel: "Cancelar", btn_send: "Enviar"
+            },
+            ja: {
+                nav_scanner: "スキャナー", nav_tree: "ツリー", nav_habits: "習慣", nav_chat: "チャット", nav_family: "家族", nav_rewards: "報酬", nav_profile: "プロフィール", nav_settings: "設定",
+                scan_title: "微小循環スクリーニング", scan_desc: "カメラを指に向けてください。", btn_scan: "テスト開始", btn_cam: "🔄 カメラ",
+                audio_title: "🎵 リラックス音声 (432 Hz)", audio_desc: "ストレスを軽減します。", btn_audio_on: "▶ オン", btn_audio_off: "⏸ 停止",
+                fact_title: "💡 血管の豆知識", fact_text: "毛細血管の総延長は10万kmを超えます！",
+                tree_title: "緊張度・形態解析", vessel_age: "血管年齢", cap_tonus: "毛細血管緊張", spasm_level: "痙攣レベル", tree_canvas_title: "🌲 キャピラリーツリー", tree_canvas_desc: "緑色は正常。",
+                habits_title: "習慣トラッカー", habits_desc: "健康習慣を管理します。", btn_add_habit: "➕ 習慣を追加",
+                chat_title: "チャット & 相談", family_title: "家族と友人", family_desc: "大切な人の血管状態を見守る。", btn_add_rel: "➕ 追加",
+                rewards_title: "報酬と実績", rewards_desc: "バッジを獲得しよう。", b1_title: "継続開始", b2_title: "パイオニア", b3_title: "血管シールド", b4_title: "ウェルネス",
+                profile_title: "プロフィール", btn_save: "保存",
+                settings_title: "設定", set_theme: "テーマ", set_lang: "言語", set_push: "通知", btn_push: "🔔 有効にする", sup_title: "サポート", sup_desc: "お問い合わせ。", btn_sup: "✉️ 送信", btn_logout: "🚪 ログアウト",
+                modal_auth: "ログイン", modal_auth_desc: "Googleでログイン", btn_google: "Googleで続ける", btn_cancel: "キャンセル", btn_send: "送信"
+            }
+        };
+
+        // Дані звичок
+        let userHabits = JSON.parse(localStorage.getItem('cv_habits')) || [
+            { id: 1, name: "🚫 Без кави / куріння", count: 5 },
+            { id: 2, name: "💧 Норма води (2л)", count: 7 },
+            { id: 3, name: "🏃 Прогулянка 5000 кроків", count: 3 }
+        ];
+
         let scanHistory = JSON.parse(localStorage.getItem('cv_history')) || [];
         let userStreak = parseInt(localStorage.getItem('cv_streak')) || 0;
         let currentUser = localStorage.getItem('cv_user') || null;
 
+        let chatData = {
+            doctor: [
+                { sender: 'ai', text: 'Вітаю, Анно! Переглянув ваш останній скринінг. Тонус судин у відмінній нормі!' }
+            ],
+            ai: [
+                { sender: 'ai', text: 'Привіт! Я Gemini ШІ-асистент. Чим можу допомогти у дослідженні мікроциркуляції?' }
+            ],
+            mom: [
+                { sender: 'ai', text: 'Донечко, я вже зробила ранковий замір, у мене все добре!' }
+            ]
+        };
+        let currentActiveChat = 'doctor';
+
         function initApp() {
-            // Приховування сплеш-скріну через 1.2 сек
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 splash.style.opacity = '0';
@@ -406,6 +565,8 @@
             }, 1200);
 
             updateStreakUI();
+            renderHabitsUI();
+            drawCapillaryTree(85); // Початковий статус
             if(currentUser) showUserProfile(currentUser);
             loadProfileData();
             initCamera();
@@ -472,7 +633,149 @@
             document.getElementById('valCapTonus').innerText = newResult.tonus;
             document.getElementById('valSpasmLevel').innerText = newResult.spasm;
 
+            // Оновлюємо графічне дерево
+            drawCapillaryTree(tonusVal);
+
             alert(`Сканування успішне!\nТонус: ${newResult.tonus}\nСудинний вік: ${newResult.age} років`);
+        }
+
+        // Малювання графічного дерева капілярів на Canvas
+        function drawCapillaryTree(tonusPercent) {
+            const canvas = document.getElementById('capillaryCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Стовбур дерева
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(200, 220);
+            ctx.lineTo(200, 140);
+            ctx.stroke();
+
+            // Гілки та капіляри
+            const branches = [
+                {x1: 200, y1: 140, x2: 130, y2: 80},
+                {x1: 200, y1: 140, x2: 270, y2: 80},
+                {x1: 130, y1: 80, x2: 80, y2: 40},
+                {x1: 130, y1: 80, x2: 170, y2: 40},
+                {x1: 270, y1: 80, x2: 230, y2: 40},
+                {x1: 270, y1: 80, x2: 320, y2: 40}
+            ];
+
+            branches.forEach(b => {
+                ctx.strokeStyle = '#64748b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(b.x1, b.y1);
+                ctx.lineTo(b.x2, b.y2);
+                ctx.stroke();
+            });
+
+            // Капілярна сітка (листя) — колір залежить від тонусу (зелений = нормокапіляри, червонуватий = спазм)
+            const color = tonusPercent > 88 ? '#10b981' : '#f43f5e';
+            const endpoints = [
+                {x: 80, y: 40}, {x: 170, y: 40}, {x: 230, y: 40}, {x: 320, y: 40},
+                {x: 110, y: 60}, {x: 290, y: 60}, {x: 150, y: 100}, {x: 250, y: 100}
+            ];
+
+            endpoints.forEach(pt => {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, tonusPercent > 88 ? 8 : 10, 0, Math.PI * 2);
+                ctx.fill();
+                // Пульсуючий ореол
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+        }
+
+        // Керування звичками (додавання / видалення)
+        function renderHabitsUI() {
+            const container = document.getElementById('habitGridContainer');
+            container.innerHTML = userHabits.map(h => `
+                <div class="habit-card">
+                    <strong style="font-size: 0.85rem;">${h.name}</strong>
+                    <div class="habit-ring">
+                        <span>${h.count}</span>
+                    </div>
+                    <div style="display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.5rem;">
+                        <button class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="incrementHabit(${h.id})">+1</button>
+                        <button class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; background: var(--accent);" onclick="deleteHabit(${h.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addNewHabit() {
+            const input = document.getElementById('newHabitName');
+            if(!input.value.trim()) return;
+            userHabits.push({ id: Date.now(), name: input.value, count: 0 });
+            input.value = '';
+            localStorage.setItem('cv_habits', JSON.stringify(userHabits));
+            renderHabitsUI();
+        }
+
+        function incrementHabit(id) {
+            const h = userHabits.find(x => x.id === id);
+            if(h) { h.count++; localStorage.setItem('cv_habits', JSON.stringify(userHabits)); renderHabitsUI(); }
+        }
+
+        function deleteHabit(id) {
+            userHabits = userHabits.filter(x => x.id !== id);
+            localStorage.setItem('cv_habits', JSON.stringify(userHabits));
+            renderHabitsUI();
+        }
+
+        // Перемикання чатів
+        function switchChat(chatKey, el) {
+            currentActiveChat = chatKey;
+            document.querySelectorAll('.contact-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            renderChatMessages();
+        }
+
+        function renderChatMessages() {
+            const box = document.getElementById('chatMessages');
+            const messages = chatData[currentActiveChat] || [];
+            box.innerHTML = messages.map(m => `<div class="msg ${m.sender === 'user' ? 'user' : 'ai'}">${m.text}</div>`).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            if(!input.value.trim()) return;
+            chatData[currentActiveChat].push({ sender: 'user', text: input.value });
+            const userMsg = input.value;
+            input.value = '';
+            renderChatMessages();
+
+            setTimeout(() => {
+                let reply = "Зрозуміло! Продовжуйте спостереження.";
+                if(currentActiveChat === 'ai') reply = "Як ШІ-асистент, рекомендую поєднувати дихальну гімнастику з контролем спазму.";
+                else if(currentActiveChat === 'mom') reply = "Дякую, донечко! Обов'язково зроблю вправу.";
+                chatData[currentActiveChat].push({ sender: 'ai', text: reply });
+                renderChatMessages();
+            }, 800);
+        }
+
+        // Мови (10 мов)
+        function changeLanguage(lang) {
+            const selected = i18n[lang] || i18n['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (selected[key]) el.innerText = selected[key];
+            });
+        }
+
+        let isAudioPlaying = false;
+        function toggleAudio() {
+            const btn = document.getElementById('audioBtn');
+            isAudioPlaying = !isAudioPlaying;
+            btn.innerText = isAudioPlaying ? i18n[document.getElementById('langSelector').value]?.btn_audio_off || '⏸ Зупинити' : i18n[document.getElementById('langSelector').value]?.btn_audio_on || '▶ Увімкнути';
+            btn.style.background = isAudioPlaying ? 'var(--accent)' : 'var(--primary)';
         }
 
         function calculateBMI() {
@@ -480,10 +783,7 @@
             const w = parseFloat(document.getElementById('pWeight').value);
             if(h > 0 && w > 0) {
                 const bmi = (w / (h * h)).toFixed(1);
-                let text = `${bmi} (Норма)`;
-                if(bmi < 18.5) text = `${bmi} (Дефіцит маси)`;
-                else if(bmi > 25) text = `${bmi} (Підвищена маса)`;
-                document.getElementById('valBMI').innerText = text;
+                document.getElementById('valBMI').innerText = `${bmi} (Норма)`;
             }
         }
 
@@ -513,45 +813,20 @@
             }
         }
 
-        function addHabitDay(num) {
-            const el = document.getElementById(`h${num}Current`);
-            let count = parseInt(el.innerText) + 1;
-            el.innerText = count;
-        }
-
         function sendSupportEmail() {
             const msg = document.getElementById('supportMsg').value;
             if(!msg) { alert('Введіть текст звернення.'); return; }
-            // Відправка зашифрованим поштовим протоколом mailto без показу адреси у коді сторінки
             const mail = ["a","i","l","u","s","o","v","a","2","3","@","g","m","a","i","l",".","c","o","m"].join('');
-            window.location.href = `mailto:${mail}?subject=CapillaryVision Support Request&body=${encodeURIComponent(msg)}`;
+            window.location.href = `mailto:${mail}?subject=CapillaryVision Support&body=${encodeURIComponent(msg)}`;
             document.getElementById('supportMsg').value = '';
         }
 
         function requestNotificationPermission() {
             if ('Notification' in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        alert('Нагадування увімкнено! Ви отримуватимете сповіщення для регулярного аналізу.');
-                    } else {
-                        alert('Сповіщення вимкнено в налаштуваннях браузера.');
-                    }
+                Notification.requestPermission().then(p => {
+                    alert(p === 'granted' ? 'Нагадування успішно увімкнено!' : 'Доступ до сповіщень обмежено.');
                 });
-            } else {
-                alert('Ваш браузер не підтримує Push-сповіщення.');
             }
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const messages = document.getElementById('chatMessages');
-            if(!input.value.trim()) return;
-            messages.innerHTML += `<div class="msg user">${input.value}</div>`;
-            input.value = '';
-            setTimeout(() => {
-                messages.innerHTML += `<div class="msg ai">Дякую за повідомлення! Лікар розгляне ваш запит найближчим часом.</div>`;
-                messages.scrollTop = messages.scrollHeight;
-            }, 800);
         }
 
         function updateStreakUI() {
