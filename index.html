@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapillaryVision — HealthTech Ecosystem</title>
+    <title>CapillaryVision — DeepTech Microcirculation Ecosystem</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/000000/microscope.png">
     
     <style>
         :root {
@@ -49,15 +48,18 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; position: relative; }
         
+        /* Біофлуїдний фоновий Canvas */
+        #fluidCanvas { position: fixed; top:0; left:0; width:100vw; height:100vh; pointer-events: none; z-index: 0; opacity: 0.15; }
+
         #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s; }
         .splash-logo { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--accent), var(--primary)); display: flex; justify-content: center; align-items: center; font-size: 2rem; animation: pulseGlow 1.8s infinite alternate; }
         @keyframes pulseGlow { 0% { transform: scale(0.9); box-shadow: 0 0 15px var(--primary); } 100% { transform: scale(1.1); box-shadow: 0 0 30px var(--accent); } }
         .splash-text { margin-top: 1rem; font-weight: 600; font-size: 1.2rem; color: var(--primary); letter-spacing: 1px; }
 
-        header { background: var(--card-bg); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 1rem; }
-        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; letter-spacing: -0.5px; }
+        header { position: relative; z-index: 10; background: var(--card-bg); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
         .header-controls { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
         
         .select-box, .input-field { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.9rem; }
@@ -67,11 +69,11 @@
 
         .streak { background: rgba(244, 63, 94, 0.15); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
         
-        main { flex: 1; max-width: 1200px; margin: 0 auto; padding: 1.5rem; width: 100%; display: grid; grid-template-columns: 240px 1fr; gap: 1.5rem; }
+        main { position: relative; z-index: 10; flex: 1; max-width: 1200px; margin: 0 auto; padding: 1.5rem; width: 100%; display: grid; grid-template-columns: 240px 1fr; gap: 1.5rem; }
         @media (max-width: 768px) { main { grid-template-columns: 1fr; } }
         
         sidebar { background: var(--card-bg); padding: 1rem; border-radius: 12px; height: fit-content; display: flex; flex-direction: column; gap: 0.3rem; border: 1px solid var(--border); }
-        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.7rem 0.9rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.7rem 0.9rem; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
         .nav-btn:hover, .nav-btn.active { background: var(--primary); color: white; }
         
         .content-area { background: var(--card-bg); padding: 1.8rem; border-radius: 12px; min-height: 550px; border: 1px solid var(--border); }
@@ -82,7 +84,7 @@
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .stat-card { background: var(--bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
         .stat-card h3 { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-card .value { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .stat-card .value { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
         
         .btn { background: var(--primary); color: white; border: none; padding: 0.75rem 1.2rem; border-radius: 8px; font-size: 0.9rem; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn:hover { opacity: 0.9; }
@@ -91,43 +93,36 @@
         .gdpr-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 2px solid var(--primary); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 9000; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); flex-wrap: wrap; gap: 1rem; }
         .gdpr-banner p { font-size: 0.85rem; color: var(--text-muted); max-width: 800px; }
 
-        /* Сканер та міні-гра */
-        .scanner-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
-        @media (max-width: 768px) { .scanner-layout { grid-template-columns: 1fr; } }
-        
-        .scanner-container { position: relative; width: 100%; height: 220px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin-bottom: 1rem; }
+        /* Контейнер сканера з шарами */
+        .scanner-container { position: relative; width: 100%; height: 260px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin: 1rem 0; }
         #cameraVideo { width: 100%; height: 100%; object-fit: cover; }
-        .target-reticle { position: absolute; width: 90px; height: 90px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-        .scan-line { position: absolute; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 0; display: none; pointer-events: none; }
-        .scan-line.active { display: block; animation: scan 2s infinite linear; }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        .layer-canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+        
+        /* AR-Сітка калібрування */
+        .ar-grid { position: absolute; width: 100%; height: 100%; pointer-events: none; border: 2px dashed rgba(14, 165, 233, 0.4); display: flex; justify-content: center; align-items: center; }
+        .ar-lock-indicator { position: absolute; top: 10px; right: 10px; background: rgba(16,185,129,0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: none; }
 
-        /* Міні-гра Хрестики-нолики для однієї руки */
-        .minigame-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+        .mode-selector { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+        .mode-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .mode-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* 3D-Цифровий Двійник Нігтьового Ложа */
+        .twin-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; margin-top: 1rem; }
+        .twin-canvas-wrap { width: 100%; height: 200px; display: flex; justify-content: center; align-items: center; }
+
+        /* Міні-гра Хрестики-нолики */
+        .minigame-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; margin-top: 1rem; }
         .tic-tac-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 150px; margin: 0.5rem auto; }
         .tic-cell { width: 45px; height: 45px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary); }
-        .tic-cell:hover { background: var(--border); }
 
-        /* Емоційний вибір («Любов у додатку») */
+        /* Емоційний вибір */
         .mood-picker { background: var(--bg); border: 1px solid var(--border); padding: 1rem; border-radius: 10px; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
         .mood-emojis { display: flex; gap: 0.6rem; font-size: 1.5rem; cursor: pointer; }
         .mood-emoji { padding: 4px 8px; border-radius: 8px; border: 1px solid transparent; }
         .mood-emoji:hover, .mood-emoji.selected { background: var(--card-bg); border-color: var(--primary); transform: scale(1.1); }
 
-        /* Екосистема дерева та Календар */
         .tree-container { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; margin-top: 1rem; }
         .tree-svg-wrap { width: 100%; max-width: 280px; height: 220px; display: flex; justify-content: center; align-items: center; }
-
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 1rem; text-align: center; }
-        .cal-day { background: var(--bg); border: 1px solid var(--border); padding: 0.6rem 0.2rem; border-radius: 6px; font-size: 0.8rem; }
-        .cal-day.scanned { background: rgba(16, 185, 129, 0.2); border-color: var(--success); color: var(--success); font-weight: bold; }
-
-        /* Щоденні завдання (Чек-лист) */
-        .task-item { display: flex; align-items: center; gap: 0.8rem; background: var(--bg); padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.6rem; font-size: 0.9rem; }
-        .task-item input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
-
-        /* Кейси трансформації / прогресу */
-        .case-card { background: var(--bg); border-left: 4px solid var(--success); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
         .chat-layout { display: grid; grid-template-columns: 200px 1fr; gap: 1rem; height: 380px; }
         @media (max-width: 600px) { .chat-layout { grid-template-columns: 1fr; } }
@@ -147,33 +142,32 @@
         .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; border: 1px solid var(--border); }
+        
+        .weather-banner { background: rgba(14, 165, 233, 0.1); border: 1px solid var(--primary); padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body onload="initApp()">
 
+    <!-- ФоновийCanvas динамічного капілярного кровотоку -->
+    <canvas id="fluidCanvas"></canvas>
+
     <div id="splashScreen">
         <div class="splash-logo">⚡</div>
         <div class="splash-text">CapillaryVision</div>
-        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;" data-i18n="splash_sub">Medical Microcirculation Analytics</p>
+        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;">Medical Microcirculation DeepTech Ecosystem</p>
     </div>
 
-    <!-- GDPR Банер Згоди -->
+    <!-- GDPR Банер -->
     <div class="gdpr-banner" id="gdprBanner" style="display: none;">
-        <p>🛡️ <strong data-i18n="gdpr_title">Захист даних (GDPR / Cookies):</strong> <span data-i18n="gdpr_text">Додаток використовує локальне сховище (localStorage) для анонімного збереження метрик у зашифрованому вигляді.</span></p>
-        <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="acceptGDPR()" data-i18n="gdpr_btn">Прийняти</button>
+        <p>🛡️ <strong>Захист даних (GDPR Compliance):</strong> CapillaryVision обробляє відеопоток локально на пристрої без збереження зображень облич чи біометричних імен.</p>
+        <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="acceptGDPR()">Прийняти</button>
     </div>
 
     <header>
-        <div class="logo">CapillaryVision <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">DeepTech MVP</span></div>
+        <div class="logo">CapillaryVision <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">DeepTech MVP v5.0</span></div>
         <div class="header-controls">
             <div class="streak">🔥 <span id="streakCounter">0 days</span></div>
-            
-            <button class="auth-btn" id="loginBtn" onclick="openAuthModal()">
-                <span data-i18n="google_login">Google Auth</span>
-            </button>
+            <button class="auth-btn" id="loginBtn" onclick="confirmGoogleAuth()">Google Auth</button>
             <div class="user-profile" id="userProfile" onclick="switchTabByTabId('profile')">
                 <div class="avatar" id="headerAvatar">A</div>
                 <span id="userName">Анна</span>
@@ -183,101 +177,129 @@
 
     <main>
         <sidebar>
-            <button class="nav-btn active" onclick="switchTab(this, 'scanner')"><span>📸 Сканування & Гра</span></button>
+            <button class="nav-btn active" onclick="switchTab(this, 'scanner')"><span>📸 Спектральний сканер</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'twin')"><span>🧬 3D-Цифровий двійник</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'tree')"><span>🌳 Живе дерево & Прогноз</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'tasks')"><span>✅ Завдання та Звички</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'calendar')"><span>📅 Календар сканувань</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'audio')"><span>🎧 Аудіорелакс & Музика</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'quests')"><span>⚡ Судинні челенджі</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'audio')"><span>🎧 Біоакустичний фідбек</span></button>
             <button class="nav-btn" onclick="switchTab(this, 'chat')"><span>💬 Клінічний чат</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'impact')"><span>🌟 Кейси & Бонуси</span></button>
-            <button class="nav-btn" onclick="switchTab(this, 'profile')"><span>👤 Профіль та GDPR</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'clinician')"><span>📊 Клінічний звіт (PDF)</span></button>
+            <button class="nav-btn" onclick="switchTab(this, 'profile')"><span>👤 Профіль & GDPR</span></button>
         </sidebar>
 
         <div class="content-area">
-            <div class="disclaimer-banner" data-i18n="disclaimer_text">
-                ⚠️ <strong>Медичне застереження:</strong> Платформа призначена для превентивного самоконтролю мікроциркуляції та не замінює діагностику лікаря.
+            <!-- Сезонна та екологічна кореляція -->
+            <div class="weather-banner">
+                <div>🌤️ <strong>Екологічна кореляція:</strong> <span id="weatherText">Харків: +14°C, 755 мм рт.ст. (Умови сприятливі для сканування)</span></div>
+                <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="recheckWeather()">Оновити</button>
             </div>
 
-            <!-- 1. Сканування та міні-гра однією рукою -->
+            <div class="disclaimer-banner">
+                ⚠️ <strong>Медичне застереження:</strong> Платформа призначена для превентивного самоконтролю тонусу мікроциркуляції. Результати не є остаточним медичним діагнозом.
+            </div>
+
+            <!-- 1. Спектральний сканер із шарами -->
             <div id="scanner" class="tab-content active">
-                <h2 data-i18n="scan_title">Мікроциркуляторний скринінг</h2>
-                <p style="color: var(--text-muted);" data-i18n="scan_desc">Поки палець зафіксований на камері, пограйте в хрестики-нолики однією рукою!</p>
+                <h2>Спектральний мікроскопічний сканер</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Оберіть режим аналізу та використовуйте AR-підказки:</p>
                 
-                <div class="scanner-layout">
-                    <div>
-                        <div class="scanner-container" id="scanBox">
-                            <video id="cameraVideo" autoplay playsinline muted></video>
-                            <div class="target-reticle" id="reticle">
-                                <span style="font-size: 0.7rem; color: var(--primary); background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">10X OPTIC</span>
-                            </div>
-                            <div class="scan-line" id="scanLine"></div>
-                        </div>
+                <div class="mode-selector">
+                    <button class="mode-btn active" onclick="setLayerMode('normal', this)">Оптичний (10X)</button>
+                    <button class="mode-btn" onclick="setLayerMode('heatmap', this)">🔥 Heatmap (Спазми)</button>
+                    <button class="mode-btn" onclick="setLayerMode('vector', this)">📐 Векторна сітка (μm)</button>
+                    <button class="mode-btn" onclick="setLayerMode('overlay', this)">⏳ Chronological Overlay</button>
+                </div>
 
-                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem;">Валідація: Лінза зафіксована ✅ | Фокус стабільний ✅</div>
-
-                        <div class="progress-bar-bg" id="progressBg" style="width: 100%; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-bottom: 0.8rem; display:none; border: 1px solid var(--border);">
-                            <div class="progress-bar-fill" id="progressFill" style="width: 0%; height: 100%; background: var(--primary);"></div>
-                        </div>
-
-                        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-                            <button class="btn" id="scanBtn" onclick="startDynamicScanning()">Запустити 30-с аналіз</button>
-                            <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()">Камера</button>
-                        </div>
+                <div class="scanner-container" id="scanBox">
+                    <video id="cameraVideo" autoplay playsinline muted></video>
+                    <canvas id="layerCanvas" class="layer-canvas"></canvas>
+                    
+                    <div class="ar-grid">
+                        <div style="width: 100px; height: 100px; border: 2px dashed var(--primary); border-radius: 50%;"></div>
                     </div>
+                    <div class="ar-lock-indicator" id="arLock">🔒 ANTI-SHAKE LOCK (Кадр зафіксовано)</div>
+                </div>
 
-                    <!-- Міні-гра однією рукою -->
-                    <div class="minigame-box">
-                        <h4 style="color: var(--primary); font-size: 0.9rem; margin-bottom: 0.3rem;">🎮 Міні-гра під час скану</h4>
-                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" id="ticStatus">Ваш хід (X)</p>
-                        <div class="tic-tac-grid" id="ticGrid">
-                            <div class="tic-cell" onclick="ticClick(0)"></div>
-                            <div class="tic-cell" onclick="ticClick(1)"></div>
-                            <div class="tic-cell" onclick="ticClick(2)"></div>
-                            <div class="tic-cell" onclick="ticClick(3)"></div>
-                            <div class="tic-cell" onclick="ticClick(4)"></div>
-                            <div class="tic-cell" onclick="ticCell(5)"></div>
-                            <div class="tic-cell" onclick="ticCell(6)"></div>
-                            <div class="tic-cell" onclick="ticCell(7)"></div>
-                            <div class="tic-cell" onclick="ticCell(8)"></div>
-                        </div>
-                        <button class="btn" style="padding: 0.3rem 0.7rem; font-size: 0.75rem; margin-top: 0.6rem;" onclick="resetTicTac()">Нова гра</button>
+                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                    <button class="btn" id="scanBtn" onclick="startDynamicScanning()">Запустити 30-с аналіз</button>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()">Камера</button>
+                </div>
+
+                <!-- Міні-гра для однієї руки -->
+                <div class="minigame-box">
+                    <h4 style="color: var(--primary); font-size: 0.85rem;">🎮 Міні-гра під час сканування (Хрестики-нолики)</h4>
+                    <div class="tic-tac-grid" id="ticGrid">
+                        <div class="tic-cell" onclick="ticClick(0)"></div>
+                        <div class="tic-cell" onclick="ticClick(1)"></div>
+                        <div class="tic-cell" onclick="ticClick(2)"></div>
+                        <div class="tic-cell" onclick="ticClick(3)"></div>
+                        <div class="tic-cell" onclick="ticClick(4)"></div>
+                        <div class="tic-cell" onclick="ticClick(5)"></div>
+                        <div class="tic-cell" onclick="ticClick(6)"></div>
+                        <div class="tic-cell" onclick="ticClick(7)"></div>
+                        <div class="tic-cell" onclick="ticClick(8)"></div>
                     </div>
                 </div>
 
                 <!-- Емоційний вибір («Любов у додатку») -->
                 <div class="mood-picker">
                     <div>
-                        <strong style="font-size: 0.9rem; color: var(--primary);">💖 Любов та емпатія у додатку</strong>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">Як ви почуваєтесь емоційно зараз?</p>
+                        <strong style="font-size: 0.85rem; color: var(--primary);">💖 Ваші відчуття зараз:</strong>
                     </div>
                     <div class="mood-emojis">
-                        <span class="mood-emoji" onclick="selectMood('😌', 'Спокійно і гармонійно')">😌</span>
-                        <span class="mood-emoji" onclick="selectMood('⚡', 'Енергійно та продуктивно')">⚡</span>
-                        <span class="mood-emoji" onclick="selectMood('🌪️', 'Стрес / Втома')">🌪️</span>
+                        <span class="mood-emoji" onclick="selectMood('😌', 'Спокій')">😌</span>
+                        <span class="mood-emoji" onclick="selectMood('⚡', 'Продуктивність')">⚡</span>
+                        <span class="mood-emoji" onclick="selectMood('🌪️', 'Стрес')">🌪️</span>
                         <span class="mood-emoji" onclick="selectMood('🌧️', 'Метеозалежність')">🌧️</span>
                     </div>
                 </div>
-                <p id="moodResponse" style="font-size: 0.82rem; color: var(--success); margin-top: 0.5rem; font-style: italic;"></p>
+                <p id="moodResponse" style="font-size: 0.8rem; color: var(--success); margin-top: 0.4rem; font-style: italic;"></p>
             </div>
 
-            <!-- 2. Живе дерево капілярів та прогноз -->
+            <!-- 2. 3D-Цифровий двійник нігтьового ложа -->
+            <div id="twin" class="tab-content">
+                <h2>🧬 3D-Цифровий двійник фаланги пальця</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Клацніть по зонах капілярних петель для перегляду діаметрів у мікронах ($\mu m$):</p>
+
+                <div class="twin-box">
+                    <div class="twin-canvas-wrap">
+                        <svg viewBox="0 0 300 180" width="100%" height="100%">
+                            <path d="M50,40 C120,20 200,20 250,40 C270,90 270,120 250,150 C200,165 120,165 50,150 Z" fill="#2d121c" stroke="#fb7185" stroke-width="2"/>
+                            <!-- Капілярні петлі -->
+                            <g cursor="pointer" onclick="inspectCapillary('Артеріальне коліно: 12.4 μm', '#10b981')">
+                                <path d="M100,80 Q100,50 110,80" fill="none" stroke="#f43f5e" stroke-width="3"/>
+                                <circle cx="105" cy="50" r="4" fill="#10b981"/>
+                            </g>
+                            <g cursor="pointer" onclick="inspectCapillary('Венозне коліно: 16.8 μm', '#0ea5e9')">
+                                <path d="M150,85 Q150,55 160,85" fill="none" stroke="#0ea5e9" stroke-width="3"/>
+                                <circle cx="155" cy="55" r="4" fill="#0ea5e9"/>
+                            </g>
+                            <g cursor="pointer" onclick="inspectCapillary('Верхівкова верхівка: 14.1 μm', '#f59e0b')">
+                                <path d="M200,80 Q200,50 210,80" fill="none" stroke="#f59e0b" stroke-width="3"/>
+                                <circle cx="205" cy="50" r="4" fill="#f59e0b"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div style="margin-top: 0.8rem; font-size: 0.9rem; font-weight: bold; color: var(--primary);" id="twinMetricText">Натисніть на зелену, синю або жовту точку для метрики</div>
+                </div>
+            </div>
+
+            <!-- 3. Живе дерево капілярів та Прогноз -->
             <div id="tree" class="tab-content">
-                <h2>🌳 Живий біо-оракул капілярів</h2>
+                <h2>🌳 Динамічний біо-оракул & Predictive Bio-Age</h2>
                 <div class="card-grid">
-                    <div class="stat-card"><h3>Судинний біо-вік</h3><div class="value" id="valVesselAge">24 роки</div></div>
+                    <div class="stat-card"><h3>Поточний біо-вік</h3><div class="value" id="valVesselAge">24 роки</div></div>
                     <div class="stat-card"><h3>Тонус капілярів</h3><div class="value" id="valCapTonus" style="color: var(--success);">94% (Норма)</div></div>
-                    <div class="stat-card"><h3>Прогноз (Predictive Shift)</h3><div class="value" style="color: var(--primary);">22 роки (-2)</div></div>
                 </div>
 
                 <div class="tree-container">
-                    <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--primary);">Динамічна крона мікроциркуляції</h3>
+                    <h3 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--primary);">Реакція екосистеми судин на ваш рівень стресу</h3>
                     <div class="tree-svg-wrap">
-                        <svg viewBox="0 0 300 300" width="100%" height="100%">
-                            <path d="M150,210 L150,260 M150,230 L110,250 M150,230 L190,250 M150,245 L130,280 M150,245 L170,280" stroke="#10b981" stroke-width="3" fill="none"/>
-                            <circle cx="150" cy="260" r="4" fill="#10b981"/><circle cx="110" cy="250" r="4" fill="#10b981"/><circle cx="190" cy="250" r="4" fill="#10b981"/>
+                        <svg viewBox="0 0 300 300" width="100%" height="100%" id="treeSvg">
+                            <path d="M150,210 L150,260 M150,230 L110,250 M150,230 L190,250" stroke="#10b981" stroke-width="3" fill="none"/>
                             <path d="M147,100 L147,210 M153,100 L153,210" stroke="#10b981" stroke-width="4" fill="none"/>
-                            <path d="M150,140 L90,90 M150,140 L210,90 M150,110 L110,60 M150,110 L190,60 M150,80 L70,120 M150,80 L230,120" stroke="#10b981" stroke-width="2.5" fill="none"/>
-                            <g fill="#10b981">
+                            <path d="M150,140 L90,90 M150,140 L210,90 M150,110 L110,60 M150,110 L190,60" stroke="#10b981" stroke-width="2.5" fill="none"/>
+                            <g fill="#10b981" id="treeLeaves">
                                 <ellipse cx="55" cy="55" rx="7" ry="3.5" transform="rotate(-30 55 55)"/>
                                 <ellipse cx="100" cy="30" rx="7" ry="3.5" transform="rotate(15 100 30)"/>
                                 <ellipse cx="245" cy="55" rx="7" ry="3.5" transform="rotate(30 245 55)"/>
@@ -285,74 +307,61 @@
                             </g>
                         </svg>
                     </div>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align:center;">Крона розквітає новими мікропетлями при регулярному відпочинку та гідратації.</p>
+                </div>
+
+                <!-- Прогнозування біологічного віку (Predictive Shift) -->
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+                    <h4 style="color: var(--primary); font-size: 0.9rem; margin-bottom: 0.5rem;">🔮 Інтерактивний прогноз біологічного віку (Predictive Bio-Age Shift)</h4>
+                    <label style="font-size: 0.8rem; color: var(--text-muted);">Період дотримання питного режиму та відпочинку:</label>
+                    <input type="range" min="0" max="12" value="6" style="width: 100%; margin: 0.5rem 0;" oninput="updatePredictiveAge(this.value)">
+                    <p style="font-size: 0.85rem;" id="predictiveText">Прогноз через <strong>6 місяців</strong>: зниження судинного віку до <strong>21.5 років</strong> (-2.5 н.)</p>
                 </div>
             </div>
 
-            <!-- 3. Щоденні завдання та звички -->
-            <div id="tasks" class="tab-content">
-                <h2>✅ Щоденні завдання для здоров'я судин</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Виконайте мікро-квести та відмітьте прогрес:</p>
-                
-                <div class="task-item"><input type="checkbox" checked> <span>💧 Випито 2 літри води (норма гідратації)</span></div>
-                <div class="task-item"><input type="checkbox"> <span>🧘 3 хвилини глибокого дихання (вправа для судинного тонусу)</span></div>
-                <div class="task-item"><input type="checkbox" checked> <span>🚶 Контрастна розминка або 10 присідань</span></div>
-                <div class="task-item"><input type="checkbox"> <span>☕ Обмеження кави після 16:00</span></div>
+            <!-- 4. Судинні челенджі До та Після -->
+            <div id="quests" class="tab-content">
+                <h2>⚡ Судинні челенджі «До та Після»</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Виконайте мікро-вправу та перевірте миттєву реакцію судинної стінки:</p>
 
-                <div style="margin-top: 1.5rem;">
-                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 0.5rem;">➕ Додати власну корисну звичку</h3>
-                    <div style="display: flex; gap: 0.8rem;">
-                        <input type="text" id="newTaskName" class="input-field" placeholder="Наприклад: Прогулянка 30 хв..." style="flex:1;">
-                        <button class="btn" onclick="addNewTask()">Додати</button>
+                <div class="card-grid">
+                    <div class="stat-card">
+                        <h3>🧘 3 хв Дихання</h3>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0.4rem 0;">Зняття спазму капілярів</p>
+                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="runQuest('Дихальна вправа')">Тест До/Після</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3>💧 Склянка води</h3>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0.4rem 0;">Зниження в'язкості крові</p>
+                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="runQuest('Гідратація')">Тест До/Після</button>
                     </div>
                 </div>
+                <div id="questResultBox" style="margin-top: 1rem; font-size: 0.85rem; color: var(--success); font-weight: bold;"></div>
             </div>
 
-            <!-- 4. Календар сканувань -->
-            <div id="calendar" class="tab-content">
-                <h2>📅 Календар активності та біометрії</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Дні успішних сканувань підсвічені зеленим кольором.</p>
-                
-                <div class="calendar-grid" id="calendarGridContainer">
-                    <!-- Буде згенеровано JS -->
-                </div>
-            </div>
-
-            <!-- 5. Аудіо та Музика -->
+            <!-- 5. Акустичний біофідбек -->
             <div id="audio" class="tab-content">
-                <h2>🎧 Аудіорелаксація & Біонаука хвиль</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Оберіть частоту для розслаблення стінок судин або завантажте улюблений трек з телефону.</p>
-                
-                <div class="card-grid" style="margin-top: 1rem;">
-                    <div class="stat-card" style="cursor: pointer;" onclick="playFrequency('432 Гц (Частота гармонії)')">
-                        <h3>Частота 432 Гц</h3>
-                        <div class="value" style="font-size: 1rem; color: var(--success);">Релакс судин</div>
-                    </div>
-                    <div class="stat-card" style="cursor: pointer;" onclick="playFrequency('528 Гц (Частота відновлення)')">
-                        <h3>Частота 528 Гц</h3>
-                        <div class="value" style="font-size: 1rem; color: var(--primary);">Біо-регенерація</div>
-                    </div>
-                </div>
+                <h2>🎧 Акустична судинна біофідбек-система</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Генерація частот у реальному часі для розслаблення гладенької мускулатури судин:</p>
 
-                <div class="form-group" style="margin-top: 1.5rem;">
-                    <label>📥 Завантажити аудіо з пристрою (.mp3 / .wav)</label>
-                    <input type="file" class="input-field" accept="audio/*" onchange="loadCustomAudio(event)">
+                <div style="display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap;">
+                    <button class="btn" onclick="startBioSynth(432)">Частота 432 Гц (Гармонія)</button>
+                    <button class="btn" onclick="startBioSynth(528)">Частота 528 Гц (Регенерація)</button>
+                    <button class="btn" style="background: var(--accent);" onclick="stopBioSynth()">Зупинити</button>
                 </div>
-                <p id="audioPlayerStatus" style="font-size: 0.85rem; color: var(--success); margin-top: 0.5rem;"></p>
+                <p id="audioSynthStatus" style="font-size: 0.85rem; color: var(--success); margin-top: 0.8rem;"></p>
             </div>
 
             <!-- 6. Клінічний чат -->
             <div id="chat" class="tab-content">
-                <h2>💬 Клінічний месенджер & Підтримка</h2>
+                <h2>💬 Клінічний месенджер</h2>
                 <div class="chat-layout">
                     <div class="chat-contacts">
                         <div class="contact-item active" onclick="switchChat('doctor', this)">👨‍⚕️ Лікар-кардіолог</div>
-                        <div class="contact-item" onclick="switchChat('ai', this)">🤖 Gemini ШІ Асистент</div>
-                        <div class="contact-item" onclick="switchChat('mom', this)">❤️ Мама</div>
+                        <div class="contact-item" onclick="switchChat('ai', this)">🤖 Gemini ШІ</div>
                     </div>
                     <div class="chat-window">
                         <div class="chat-messages" id="chatMessages">
-                            <div class="msg ai">Вітаю, Анно! Ваші показники судинного тонусу чудові. Продовжуйте в тому ж дусі!</div>
+                            <div class="msg ai">Вітаю, Анно! Ваші показники капілярного тонусу стабільні.</div>
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id="chatInput" class="input-field" style="flex:1;" placeholder="Введіть повідомлення...">
@@ -362,183 +371,220 @@
                 </div>
             </div>
 
-            <!-- 7. Кейси трансформації та Бонусы -->
-            <div id="impact" class="tab-content">
-                <h2>🌟 Вплив на прогрес та Бонуси</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Історія успіху та нагороди за регулярність.</p>
-                
-                <div class="case-card">
-                    <h4 style="color: var(--success); margin-bottom: 0.3rem;">💡 Реальний кейс трансформації (HealthTech Impact)</h4>
-                    <p style="font-size: 0.85rem;">Користувач (28 років) із хронічним стресом та наслідками гіподинамії (маса тіла 98 кг, судинний вік +8 років від паспортного) завдяки щоденним 30-секундним скринінгам, дихальним квестам та гідратації знизив вагу до 74 кг та повернув судинний біо-вік до норми за 6 місяців.</p>
-                </div>
+            <!-- 7. Науковий та клінічний звіт (Clinician Pass) -->
+            <div id="clinician" class="tab-content">
+                <h2>📊 Науковий та клінічний звіт (Clinician Pass)</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Генерація уніфікованого пакета сирих метрик мікроциркуляції для лікаря:</p>
 
-                <div style="margin-top: 1.5rem;">
-                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 0.5rem;">🎁 Бонусна програма за стрік (30 днів)</h3>
-                    <div class="badge-grid">
-                        <div class="badge-item unlocked">
-                            <div style="font-size: 1.5rem;">🔥</div>
-                            <h4 style="font-size: 0.8rem;">Старт (3 дні)</h4>
-                        </div>
-                        <div class="badge-item unlocked">
-                            <div style="font-size: 1.5rem;">🛡️</div>
-                            <h4 style="font-size: 0.8rem;">Захист (7 днів)</h4>
-                        </div>
-                        <div class="badge-item" id="bonusBadge30">
-                            <div style="font-size: 1.5rem;">🧠</div>
-                            <h4 style="font-size: 0.8rem;">30 днів стріку</h4>
-                            <p style="font-size: 0.7rem; color: var(--success);">🎁 Консультація психолога</p>
-                        </div>
-                    </div>
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 1rem; border-radius: 8px; margin-top: 1rem; font-family: monospace; font-size: 0.8rem;">
+                    <div>[RAW DATA METRICS]</div>
+                    <div>Capillary Density: 14 loops/mm²</div>
+                    <div>Arterial Limb Dia: 12.4 μm</div>
+                    <div>Venular Limb Dia: 16.8 μm</div>
+                    <div>Perivascular Edema: Absent</div>
+                    <div>Flow Velocity (Est): 780 μm/s</div>
                 </div>
+                <button class="btn" style="margin-top: 1rem;" onclick="generateClinicianPDF()">📥 Завантажити Data-пакет (JSON/PDF)</button>
             </div>
 
             <!-- 8. Профіль та GDPR -->
             <div id="profile" class="tab-content">
-                <h2>👤 Профіль та управління даними (GDPR)</h2>
+                <h2>👤 Профіль та Управління Даними (GDPR)</h2>
                 <div class="form-row">
                     <div class="form-group"><label>Зріст (см)</label><input type="number" class="input-field" id="pHeight" placeholder="168"></div>
                     <div class="form-group"><label>Маса (кг)</label><input type="number" class="input-field" id="pWeight" placeholder="58"></div>
                 </div>
-                <button class="btn" onclick="alert('Профіль збережено!')">Зберегти</button>
+                <button class="btn" onclick="alert('Дані збережено!')">Зберегти</button>
 
                 <hr style="margin: 1.5rem 0; border-color: var(--border);">
-                <h3>🔒 Експорт та видалення даних (GDPR)</h3>
+                <h3>🔒 Права користувача GDPR</h3>
                 <div style="display: flex; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap;">
-                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="exportData()">📥 Завантажити JSON</button>
-                    <button class="btn" style="background: var(--accent);" onclick="clearAllData()">🗑️ Видалити все</button>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="exportGDPRData()">📥 Завантажити мої дані (JSON)</button>
+                    <button class="btn" style="background: var(--accent);" onclick="deleteAllGDPRData()">🗑️ Видалити всі дані (Right to be Forgotten)</button>
                 </div>
             </div>
         </div>
     </main>
 
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <h3>Авторизація</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Увійдіть через Google профіль.</p>
-            <button class="auth-btn" style="width: 100%; justify-content: center; padding: 0.8rem;" onclick="confirmGoogleAuth()">Google Account</button>
-            <button class="btn" style="background: transparent; color: var(--text-muted); margin-top: 1rem;" onclick="closeAuthModal()">Скасувати</button>
-        </div>
-    </div>
-
     <script>
-        // Ініціалізація додатку
+        // Dynamic Fluid Canvas (Біофлуїдність фону)
+        const fCanvas = document.getElementById('fluidCanvas');
+        const fCtx = fCanvas.getContext('2d');
+        let fParticles = [];
+
+        function resizeFluid() { fCanvas.width = window.innerWidth; fCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeFluid);
+        resizeFluid();
+
+        for(let i=0; i<35; i++) {
+            fParticles.push({
+                x: Math.random() * fCanvas.width,
+                y: Math.random() * fCanvas.height,
+                r: Math.random() * 3 + 1,
+                dx: Math.random() * 1.5 + 0.5,
+                dy: Math.random() * 0.5 - 0.25
+            });
+        }
+
+        function drawFluid() {
+            fCtx.clearRect(0,0,fCanvas.width, fCanvas.height);
+            fCtx.fillStyle = '#f43f5e';
+            fParticles.forEach(p => {
+                fCtx.beginPath();
+                fCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                fCtx.fill();
+                p.x += p.dx;
+                p.y += p.dy;
+                if(p.x > fCanvas.width) p.x = 0;
+            });
+            requestAnimationFrame(drawFluid);
+        }
+        drawFluid();
+
+        // Спектральні шари сканера
+        let currentLayer = 'normal';
+        function setLayerMode(mode, btn) {
+            currentLayer = mode;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderLayerCanvas();
+        }
+
+        function renderLayerCanvas() {
+            const lCanvas = document.getElementById('layerCanvas');
+            const ctx = lCanvas.getContext('2d');
+            lCanvas.width = lCanvas.clientWidth;
+            lCanvas.height = lCanvas.clientHeight;
+            ctx.clearRect(0,0,lCanvas.width, lCanvas.height);
+
+            if(currentLayer === 'heatmap') {
+                const grad = ctx.createRadialGradient(lCanvas.width/2, lCanvas.height/2, 10, lCanvas.width/2, lCanvas.height/2, 80);
+                grad.addColorStop(0, 'rgba(244, 63, 94, 0.6)');
+                grad.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0,0,lCanvas.width, lCanvas.height);
+            } else if(currentLayer === 'vector') {
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 1;
+                for(let x=20; x<lCanvas.width; x+=30) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, lCanvas.height); ctx.stroke();
+                }
+                ctx.fillStyle = '#10b981'; ctx.font = '10px monospace';
+                ctx.fillText('Loop Dia: 14.2 μm', 20, 30);
+            }
+        }
+
+        // 3D-Двійник інспектування
+        function inspectCapillary(text, color) {
+            const el = document.getElementById('twinMetricText');
+            el.innerText = text;
+            el.style.color = color;
+        }
+
+        // Web Audio API Synth (Біоакустика)
+        let audioCtx = null;
+        let osc = null;
+        function startBioSynth(freq) {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if(osc) osc.stop();
+            osc = audioCtx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.connect(audioCtx.destination);
+            osc.start();
+            document.getElementById('audioSynthStatus').innerText = `🎶 Генерація частоти ${freq} Гц включена. Судинна стінка релаксує.`;
+        }
+        function stopBioSynth() {
+            if(osc) { osc.stop(); osc = null; }
+            document.getElementById('audioSynthStatus').innerText = 'Зупинено.';
+        }
+
+        // Прогноз біо-віку
+        function updatePredictiveAge(months) {
+            const calculatedAge = (24 - (months * 0.45)).toFixed(1);
+            document.getElementById('predictiveText').innerHTML = `Прогноз через <strong>${months} місяців</strong>: зниження судинного віку до <strong>${calculatedAge} років</strong>`;
+        }
+
+        // Челенджі
+        function runQuest(title) {
+            document.getElementById('questResultBox').innerText = `✅ Вправу "${title}" виконано! Тонус покращився на +6%.`;
+        }
+
+        // Клінічний експорт
+        function generateClinicianPDF() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+                patient: "Анна Ілюшова",
+                density_loops_mm2: 14,
+                arterial_limb_um: 12.4,
+                venular_limb_um: 16.8,
+                spasm_index: "Low"
+            }));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "capillaryvision_clinician_pass.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        // Решта логіки додатку
         function initApp() {
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 splash.style.opacity = '0';
                 setTimeout(() => splash.style.visibility = 'hidden', 800);
             }, 1000);
-
-            if(!localStorage.getItem('cv_gdpr')) {
-                document.getElementById('gdprBanner').style.display = 'flex';
-            }
-
-            initCalendar();
+            if(!localStorage.getItem('cv_gdpr')) document.getElementById('gdprBanner').style.display = 'flex';
             initCamera();
         }
-
-        function acceptGDPR() {
-            localStorage.setItem('cv_gdpr', 'true');
-            document.getElementById('gdprBanner').style.display = 'none';
-        }
-
+        function acceptGDPR() { localStorage.setItem('cv_gdpr', 'true'); document.getElementById('gdprBanner').style.display = 'none'; }
         async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
                 document.getElementById('cameraVideo').srcObject = stream;
             } catch(e) {}
         }
-
-        // Сканування
         function startDynamicScanning() {
-            const line = document.getElementById('scanLine');
-            const bg = document.getElementById('progressBg');
-            const fill = document.getElementById('progressFill');
-            line.classList.add('active');
-            bg.style.display = 'block';
-
-            let w = 0;
-            const timer = setInterval(() => {
-                w += 5;
-                fill.style.width = w + '%';
-                if(w >= 100) {
-                    clearInterval(timer);
-                    line.classList.remove('active');
-                    alert('Сканування завершено! Судинний тонус в нормі: 94%.');
-                }
-            }, 100);
+            document.getElementById('arLock').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('arLock').style.display = 'none';
+                alert('Аналіз успішний! Тонус: 94% (Норма). Векторні дані збережено.');
+            }, 3000);
         }
 
-        // Міні-гра Хрестики-нолики
-        let ticBoard = ['', '', '', '', '', '', '', '', ''];
+        // Хрестики-нолики
+        let ticBoard = ['','','','','','','','',''];
         let ticTurn = 'X';
-        function ticClick(idx) {
-            if(ticBoard[idx] === '') {
-                ticBoard[idx] = ticTurn;
-                renderTic();
-                ticTurn = ticTurn === 'X' ? 'О' : 'X';
-                document.getElementById('ticStatus').innerText = `Хід: ${ticTurn}`;
+        function ticClick(i) {
+            if(ticBoard[i]==='') {
+                ticBoard[i]=ticTurn;
+                document.querySelectorAll('.tic-cell')[i].innerText = ticTurn;
+                ticTurn = ticTurn==='X'?'O':'X';
             }
         }
-        function ticCell(idx) { ticClick(idx); }
-        function renderTic() {
-            const cells = document.querySelectorAll('.tic-cell');
-            cells.forEach((c, i) => c.innerText = ticBoard[i]);
-        }
-        function resetTicTac() {
-            ticBoard = ['', '', '', '', '', '', '', '', ''];
-            ticTurn = 'X';
-            renderTic();
-            document.getElementById('ticStatus').innerText = 'Ваш хід (X)';
-        }
-
-        // Емоційний вибір настрою («Любов у додатку»)
         function selectMood(emoji, text) {
-            document.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('selected'));
-            event.target.classList.add('selected');
-            document.getElementById('moodResponse').innerText = `💖 Система дбає про вас: ви обрали "${text}". Ми адаптували рекомендації та підібрали заспокійливий ритм дихання.`;
+            document.getElementById('moodResponse').innerText = `💖 Обрано статус "${text}". Система підібрала оптимальну частоту дихання.`;
         }
+        function switchTab(btn, id) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+        function switchTabByTabId(id) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        function confirmGoogleAuth() {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'flex';
+        }
+        function recheckWeather() { alert('Дані погоди та тиску оновлено!'); }
+        function exportGDPRData() { generateClinicianPDF(); }
+        function deleteAllGDPRData() { if(confirm('Видалити всі дані?')) { localStorage.clear(); location.reload(); } }
 
-        // Календар
-        function initCalendar() {
-            const grid = document.getElementById('calendarGridContainer');
-            let html = '';
-            for(let i=1; i<=28; i++) {
-                let scannedClass = (i % 3 === 0 || i === 15 || i === 22) ? 'scanned' : '';
-                html += `<div class="cal-day ${scannedClass}">${i}</div>`;
-            }
-            grid.innerHTML = html;
-        }
-
-        // Аудіо
-        function playFrequency(freqName) {
-            document.getElementById('audioPlayerStatus').innerText = `🎧 Відтворення біонаукової частоти: ${freqName}... Релаксуйте.`;
-        }
-        function loadCustomAudio(e) {
-            const file = e.target.files[0];
-            if(file) {
-                document.getElementById('audioPlayerStatus').innerText = `✅ Успішно завантажено трек: ${file.name}`;
-            }
-        }
-
-        // Завдання
-        function addNewTask() {
-            const name = document.getElementById('newTaskName').value;
-            if(!name) return;
-            const item = document.createElement('div');
-            item.className = 'task-item';
-            item.innerHTML = `<input type="checkbox"> <span>${name}</span>`;
-            document.getElementById('tasks').appendChild(item);
-            document.getElementById('newTaskName').value = '';
-        }
-
-        // Чат
         let currentChat = 'doctor';
-        let chats = {
-            doctor: [{sender:'ai', text:'Вітаю! Судинні показники в нормі.'}],
-            ai: [{sender:'ai', text:'Привіт! Я штучний інтелект CapillaryVision.'}],
-            mom: [{sender:'ai', text:'Донечко, у мене все добре!'}]
-        };
+        let chats = { doctor: [{sender:'ai', text:'Вітаю! Судинні показники в нормі.'}], ai: [{sender:'ai', text:'Привіт! Я ШІ CapillaryVision.'}] };
         function switchChat(key, el) {
             currentChat = key;
             document.querySelectorAll('.contact-item').forEach(i => i.classList.remove('active'));
@@ -556,32 +602,8 @@
             chats[currentChat].push({sender:'user', text:inp.value});
             inp.value = '';
             renderChat();
-            setTimeout(() => {
-                chats[currentChat].push({sender:'ai', text:'Отримано. Клінічні параметри стабільні.'});
-                renderChat();
-            }, 700);
+            setTimeout(() => { chats[currentChat].push({sender:'ai', text:'Отримано. Показники стабільні.'}); renderChat(); }, 700);
         }
-
-        function switchTab(btn, id) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-        }
-        function switchTabByTabId(id) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-        function confirmGoogleAuth() {
-            closeAuthModal();
-            document.getElementById('loginBtn').style.display = 'none';
-            document.getElementById('userProfile').style.display = 'flex';
-        }
-        function exportData() { alert('Дані експортовано у форматі JSON (GDPR).'); }
-        function clearAllData() { if(confirm('Видалити всі дані?')) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
