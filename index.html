@@ -87,10 +87,7 @@
         .btn { background: var(--primary); color: white; border: none; padding: 0.75rem 1.2rem; border-radius: 8px; font-size: 0.9rem; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn:hover { opacity: 0.9; }
 
-        /* Юридичний та етичний дисклеймер */
         .disclaimer-banner { background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text); }
-
-        /* GDPR Банер Згоди */
         .gdpr-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 2px solid var(--primary); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 9000; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); flex-wrap: wrap; gap: 1rem; }
         .gdpr-banner p { font-size: 0.85rem; color: var(--text-muted); max-width: 800px; }
 
@@ -126,9 +123,10 @@
         .msg.ai { background: var(--card-bg); border: 1px solid var(--border); align-self: flex-start; }
         .msg.user { background: var(--primary); color: white; align-self: flex-end; }
 
+        /* Стилі для нагород (активні та сірі заблоковані) */
         .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); opacity: 0.35; filter: grayscale(1); }
-        .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--success); }
+        .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); opacity: 0.4; filter: grayscale(100%); transition: 0.3s; }
+        .badge-item.unlocked { opacity: 1; filter: grayscale(0%); border-color: var(--success); }
 
         .fact-card { background: var(--bg); border-left: 3px solid var(--primary); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .audio-box { background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
@@ -149,10 +147,9 @@
         <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;" data-i18n="splash_sub">Medical Microcirculation Analytics</p>
     </div>
 
-    <!-- GDPR Банер Згоди -->
     <div class="gdpr-banner" id="gdprBanner" style="display: none;">
-        <p>🛡️ <strong>Захист персональних даних (GDPR Compliance):</strong> CapillaryVision зберігає ваші біометричні дані локально на вашому пристрої у зашифрованому вигляді. Ми не передаємо дані третім особам без вашої згоди.</p>
-        <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="acceptGDPR()">Зрозуміло, прийняти</button>
+        <p>🛡️ <strong data-i18n="gdpr_title">Захист персональних даних (GDPR Compliance):</strong> <span data-i18n="gdpr_text">CapillaryVision зберігає ваші біометричні дані локально у зашифрованому вигляді.</span></p>
+        <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="acceptGDPR()" data-i18n="gdpr_btn">Зрозуміло, прийняти</button>
     </div>
 
     <header>
@@ -183,9 +180,8 @@
         </sidebar>
 
         <div class="content-area">
-            <!-- Медичний Дисклеймер (Обов'язковий за стандартом) -->
-            <div class="disclaimer-banner">
-                ⚠️ <strong>Медичне застереження:</strong> Платформа CapillaryVision розроблена для превентивного самоконтролю та інформаційної оцінки тонусу мікроциркуляції. Результати не є остаточним діагнозом і не замінюють медичної консультації фахівця.
+            <div class="disclaimer-banner" data-i18n="disclaimer_text">
+                ⚠️ <strong>Медичне застереження:</strong> Платформа CapillaryVision розроблена для превентивного самоконтролю та інформаційної оцінки тонусу мікроциркуляції. Результати не є остаточним діагнозом.
             </div>
 
             <!-- Сканер -->
@@ -196,7 +192,7 @@
                 <div class="scanner-container" id="scanBox">
                     <video id="cameraVideo" autoplay playsinline muted></video>
                     <div class="target-reticle" id="reticle">
-                        <span style="font-size: 0.75rem; color: var(--primary); background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">10X OPTIC</span>
+                        <span style="font-size: 0.75rem; color: var(--primary); background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;" data-i18n="optic_badge">10X OPTIC</span>
                     </div>
                     <div class="scan-line" id="scanLine"></div>
                 </div>
@@ -284,13 +280,13 @@
                 <h2 data-i18n="chat_title">Клінічний месенджер</h2>
                 <div class="chat-layout">
                     <div class="chat-contacts">
-                        <div class="contact-item active" onclick="switchChat('doctor', this)">Лікар-кардіолог</div>
-                        <div class="contact-item" onclick="switchChat('ai', this)">Gemini ШІ Асистент</div>
-                        <div class="contact-item" onclick="switchChat('mom', this)">Мама</div>
+                        <div class="contact-item active" onclick="switchChat('doctor', this)" data-i18n="chat_doc">Лікар-кардіолог</div>
+                        <div class="contact-item" onclick="switchChat('ai', this)" data-i18n="chat_ai">Gemini ШІ Асистент</div>
+                        <div class="contact-item" onclick="switchChat('mom', this)" data-i18n="chat_mom">Мама</div>
                     </div>
                     <div class="chat-window">
                         <div class="chat-messages" id="chatMessages">
-                            <div class="msg ai">Вітаю, Анно! Ваші показники судинного тонусу стабільні.</div>
+                            <div class="msg ai" data-i18n="chat_welcome">Вітаю, Анно! Ваші показники судинного тонусу стабільні.</div>
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id="chatInput" class="input-field" style="flex:1;" placeholder="Введіть повідомлення...">
@@ -305,31 +301,42 @@
                 <h2 data-i18n="family_title">Сімейний моніторинг</h2>
                 <div class="card-grid" style="margin-top: 1rem;">
                     <div class="stat-card">
-                        <h3>Мама</h3>
-                        <div style="font-size: 1.1rem; font-weight: 700; margin: 0.3rem 0; color: var(--success);">Тонус: 94%</div>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">Сьогодні, 09:30</p>
+                        <h3 data-i18n="fam_mom">Мама</h3>
+                        <div style="font-size: 1.1rem; font-weight: 700; margin: 0.3rem 0; color: var(--success);" data-i18n="fam_mom_stat">Тонус: 94%</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);" data-i18n="fam_mom_time">Сьогодні, 09:30</p>
                     </div>
                     <div class="stat-card">
-                        <h3>Брат (Денис)</h3>
-                        <div style="font-size: 1.1rem; font-weight: 700; margin: 0.3rem 0; color: var(--primary);">Стрік: 5 днів 🔥</div>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">Учора</p>
+                        <h3 data-i18n="fam_bro">Брат (Денис)</h3>
+                        <div style="font-size: 1.1rem; font-weight: 700; margin: 0.3rem 0; color: var(--primary);" data-i18n="fam_bro_stat">Стрік: 5 днів 🔥</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);" data-i18n="fam_bro_time">Учора</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Нагороди -->
+            <!-- Нагороди (Сірі заблоковані + розблоковані) -->
             <div id="rewards" class="tab-content">
                 <h2 data-i18n="rewards_title">Досягнення платформи</h2>
+                <p style="color: var(--text-muted);" data-i18n="rewards_desc">Прогрес регулярного використання.</p>
                 <div class="badge-grid">
                     <div class="badge-item unlocked">
                         <div style="font-size: 1.8rem;">🔥</div>
-                        <h4 style="margin-top: 0.4rem; font-size: 0.9rem;">Старт серії</h4>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);">3 дні поспіль</p>
+                        <h4 style="margin-top: 0.4rem; font-size: 0.9rem;" data-i18n="b1_title">Старт серії</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);" data-i18n="b1_desc">3 дні поспіль</p>
                     </div>
                     <div class="badge-item unlocked">
                         <div style="font-size: 1.8rem;">🔬</div>
-                        <h4 style="margin-top: 0.4rem; font-size: 0.9rem;">Першопрохідець</h4>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);">Перший R&D скрін</p>
+                        <h4 style="margin-top: 0.4rem; font-size: 0.9rem;" data-i18n="b2_title">Першопрохідець</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);" data-i18n="b2_desc">Перший R&D скрін</p>
+                    </div>
+                    <div class="badge-item">
+                        <div style="font-size: 1.8rem;">🛡️</div>
+                        <h4 style="margin-top: 0.4rem; font-size: 0.9rem;" data-i18n="b3_title">Захист судин</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);" data-i18n="b3_desc">7 днів (Закрито)</p>
+                    </div>
+                    <div class="badge-item">
+                        <div style="font-size: 1.8rem;">🌟</div>
+                        <h4 style="margin-top: 0.4rem; font-size: 0.9rem;" data-i18n="b4_title">Майстер ЗОЖ</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);" data-i18n="b4_desc">14 днів (Закрито)</p>
                     </div>
                 </div>
             </div>
@@ -346,19 +353,19 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>Зріст (см)</label><input type="number" class="input-field" id="pHeight" placeholder="168" oninput="calculateBMI()"></div>
-                    <div class="form-group"><label>Маса (кг)</label><input type="number" class="input-field" id="pWeight" placeholder="58" oninput="calculateBMI()"></div>
+                    <div class="form-group"><label data-i18n="lbl_height">Зріст (см)</label><input type="number" class="input-field" id="pHeight" placeholder="168" oninput="calculateBMI()"></div>
+                    <div class="form-group"><label data-i18n="lbl_weight">Маса (кг)</label><input type="number" class="input-field" id="pWeight" placeholder="58" oninput="calculateBMI()"></div>
                 </div>
 
                 <div class="stat-card" style="margin-top: 1rem;">
-                    <h3>Індекс маси тіла (BMI)</h3>
+                    <h3 data-i18n="bmi_title">Індекс маси тіла (BMI)</h3>
                     <div class="value" id="valBMI" style="color: var(--success);">--</div>
                 </div>
 
                 <button class="btn" style="margin-top: 1rem;" onclick="saveProfileData()" data-i18n="btn_save">Зберегти дані</button>
             </div>
 
-            <!-- Налаштування та GDPR Інструменти -->
+            <!-- Налаштування -->
             <div id="settings" class="tab-content">
                 <h2 data-i18n="settings_title">Параметри системи & GDPR</h2>
 
@@ -374,27 +381,27 @@
                 <div class="form-group">
                     <label data-i18n="set_lang">Мова (10 мов світу)</label>
                     <select class="select-box" id="langSelector" onchange="changeLanguage(this.value)">
-                        <option value="uk">Українська</option>
-                        <option value="en">English</option>
-                        <option value="cs">Čeština</option>
-                        <option value="de">Deutsch</option>
-                        <option value="pl">Polski</option>
-                        <option value="sk">Slovenčina</option>
-                        <option value="fr">Français</option>
-                        <option value="it">Italiano</option>
-                        <option value="es">Español</option>
-                        <option value="ja">日本語</option>
+                        <option value="uk">🇺🇦 Українська</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="cs">🇨🇿 Čeština</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="pl">🇵🇱 Polski</option>
+                        <option value="sk">🇸🇰 Slovenčina</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="ja">🇯🇵 日本語</option>
                     </select>
                 </div>
 
                 <hr style="margin: 1.5rem 0; border-color: var(--border);">
 
-                <h3>🔒 Права користувача GDPR (Захист даних)</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Ви маєте повний контроль над своїми локальними біометричними даними.</p>
+                <h3 data-i18n="gdpr_section_title">🔒 Права користувача GDPR (Захист даних)</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;" data-i18n="gdpr_section_desc">Ви маєте повний контроль над своїми локальними біометричними даними.</p>
                 
                 <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="exportGDPRData()">📥 Завантажити мої дані (JSON)</button>
-                    <button class="btn" style="background: var(--accent);" onclick="deleteAllGDPRData()">🗑️ Видалити всі мої дані (Right to be Forgotten)</button>
+                    <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="exportGDPRData()" data-i18n="btn_export">📥 Завантажити мої дані (JSON)</button>
+                    <button class="btn" style="background: var(--accent);" onclick="deleteAllGDPRData()" data-i18n="btn_delete">🗑️ Видалити всі мої дані</button>
                 </div>
 
                 <hr style="margin: 1.5rem 0; border-color: var(--border);">
@@ -424,11 +431,200 @@
     </div>
 
     <script>
-        // Легке шифрування Base64 для localStorage (Захист даних)
+        // Повний словник для 10 мов світу
+        const i18n = {
+            uk: {
+                splash_sub: "Medical Microcirculation Analytics",
+                google_login: "Google Auth",
+                nav_scanner: "Сканування", nav_tree: "Діагностика судин", nav_habits: "Трекер звичок", nav_chat: "Клінічний чат", nav_family: "Сімейний моніторинг", nav_rewards: "Досягнення", nav_profile: "Профіль & Метрики", nav_settings: "Налаштування",
+                disclaimer_text: "⚠️ <strong>Медичне застереження:</strong> Платформа CapillaryVision розроблена для превентивного самоконтролю та інформаційної оцінки тонусу мікроциркуляції. Результати не є остаточним діагнозом.",
+                scan_title: "Мікроциркуляторний скринінг", scan_desc: "Дотримуйтесь клінічних умов перед запуском аналізу.", optic_badge: "10X OPTIC", btn_scan: "Запустити 30-с аналіз", btn_cam: "Увімкнути камеру",
+                val_title: "Контроль умов сканування (Валідація):", val_1: "Макролінза Slider-Clip надійно зафіксовавана на камері", val_2: "Палець стабільно розташований у фокусі адаптера", val_3: "Наявне стабільне зовнішнє освітлення без відблисків",
+                audio_title: "Аудіорелаксація (432 Гц)", audio_desc: "Стабілізація судинного тонусу.", btn_audio_on: "Увімкнути", btn_audio_off: "Зупинити",
+                fact_title: "Клінічний факт", fact_text: "Загальна протяжність капілярного русла в організмі людини перевищує 100 000 кілометрів.",
+                tree_title: "Морфологічний аналіз капілярів", vessel_age: "Судинний біо-вік", cap_tonus: "Тонус капілярів", spasm_level: "Рівень спазму", tree_svg_title: "Структурна схема капілярної сітки", tree_desc: "Нормокапіляри без ознак стазу чи аваскулярних зон.",
+                habits_title: "Трекер здоров'я судин", btn_add_habit: "Додати звичку",
+                chat_title: "Клінічний месенджер", chat_doc: "Лікар-кардіолог", chat_ai: "Gemini ШІ Асистент", chat_mom: "Мама", chat_welcome: "Вітаю, Анно! Ваші показники судинного тонусу стабільні.", btn_send: "Надіслати",
+                family_title: "Сімейний моніторинг", fam_mom: "Мама", fam_mom_stat: "Тонус: 94%", fam_mom_time: "Сьогодні, 09:30", fam_bro: "Брат (Денис)", fam_bro_stat: "Стрік: 5 днів 🔥", fam_bro_time: "Учора",
+                rewards_title: "Досягнення платформи", rewards_desc: "Прогрес регулярного використання.", b1_title: "Старт серії", b1_desc: "3 дні поспіль", b2_title: "Першопрохідець", b2_desc: "Перший R&D скрін", b3_title: "Захист судин", b3_desc: "7 днів (Закрито)", b4_title: "Майстер ЗОЖ", b4_desc: "14 днів (Закрито)",
+                profile_title: "Антропометрія та Профіль", lbl_height: "Зріст (см)", lbl_weight: "Маса (кг)", bmi_title: "Індекс маси тіла (BMI)", btn_save: "Зберегти дані",
+                settings_title: "Параметри системи & GDPR", set_theme: "Тема інтерфейсу", set_lang: "Мова (10 мов світу)", set_push: "Нагадування (Push)", btn_push: "Увімкнути нагадування",
+                gdpr_section_title: "🔒 Права користувача GDPR (Захист даних)", gdpr_section_desc: "Ви маєте повний контроль над своїми локальними біометричними даними.", btn_export: "📥 Завантажити мої дані (JSON)", btn_delete: "🗑️ Видалити всі мої дані",
+                sup_title: "Підтримка", btn_sup: "Надіслати звернення", btn_logout: "Вийти з акаунта",
+                modal_auth: "Авторизація", modal_auth_desc: "Увійдіть через Google профіль.", btn_google: "Google Account", btn_cancel: "Скасувати",
+                gdpr_title: "Захист персональних даних (GDPR Compliance):", gdpr_text: "CapillaryVision зберігає ваші біометричні дані локально у зашифрованому вигляді.", gdpr_btn: "Зрозуміло, прийняти"
+            },
+            en: {
+                splash_sub: "Medical Microcirculation Analytics",
+                google_login: "Google Auth",
+                nav_scanner: "Scanner", nav_tree: "Vascular Diagnostics", nav_habits: "Habits Tracker", nav_chat: "Clinical Chat", nav_family: "Family Monitoring", nav_rewards: "Achievements", nav_profile: "Profile & Metrics", nav_settings: "Settings",
+                disclaimer_text: "⚠️ <strong>Medical Disclaimer:</strong> CapillaryVision platform is designed for preventive self-control and informational assessment of microcirculation tone. Results are not a definitive diagnosis.",
+                scan_title: "Microcirculation Screening", scan_desc: "Follow clinical conditions before running analysis.", optic_badge: "10X OPTIC", btn_scan: "Run 30-sec Analysis", btn_cam: "Enable Camera",
+                val_title: "Scan Conditions Validation:", val_1: "Slider-Clip macro lens securely attached", val_2: "Finger stably positioned in adapter focus", val_3: "Stable external lighting without glare",
+                audio_title: "Audio Relaxation (432 Hz)", audio_desc: "Vascular tone stabilization.", btn_audio_on: "Turn On", btn_audio_off: "Stop",
+                fact_title: "Clinical Fact", fact_text: "Total length of human capillary bed exceeds 100,000 kilometers.",
+                tree_title: "Capillary Morphological Analysis", vessel_age: "Vascular Bio-Age", cap_tonus: "Capillary Tone", spasm_level: "Spasm Level", tree_svg_title: "Capillary Network Structural Scheme", tree_desc: "Normocapillaries without signs of stasis or avascular zones.",
+                habits_title: "Vascular Health Tracker", btn_add_habit: "Add Habit",
+                chat_title: "Clinical Messenger", chat_doc: "Cardiologist", chat_ai: "Gemini AI Assistant", chat_mom: "Mom", chat_welcome: "Hello Anna! Your vascular tone indicators are stable.", btn_send: "Send",
+                family_title: "Family Monitoring", fam_mom: "Mom", fam_mom_stat: "Tone: 94%", fam_mom_time: "Today, 09:30", fam_bro: "Brother (Denis)", fam_bro_stat: "Streak: 5 days 🔥", fam_bro_time: "Yesterday",
+                rewards_title: "Platform Achievements", rewards_desc: "Regular use progress.", b1_title: "Streak Start", b1_desc: "3 days in a row", b2_title: "Pioneer", b2_desc: "First R&D screen", b3_title: "Vessel Shield", b3_desc: "7 days (Closed)", b4_title: "Wellness Master", b4_desc: "14 days (Closed)",
+                profile_title: "Anthropometry & Profile", lbl_height: "Height (cm)", lbl_weight: "Weight (kg)", bmi_title: "Body Mass Index (BMI)", btn_save: "Save Data",
+                settings_title: "System Parameters & GDPR", set_theme: "Interface Theme", set_lang: "Language (10 languages)", set_push: "Reminders (Push)", btn_push: "Enable Reminders",
+                gdpr_section_title: "🔒 GDPR User Rights (Data Protection)", gdpr_section_desc: "You have full control over your local biometric data.", btn_export: "📥 Download My Data (JSON)", btn_delete: "🗑️ Delete All My Data",
+                sup_title: "Support", btn_sup: "Send Request", btn_logout: "Log Out",
+                modal_auth: "Authorization", modal_auth_desc: "Sign in via Google profile.", btn_google: "Google Account", btn_cancel: "Cancel",
+                gdpr_title: "Personal Data Protection (GDPR Compliance):", gdpr_text: "CapillaryVision stores your biometric data locally in encrypted form.", gdpr_btn: "Understood, Accept"
+            },
+            cs: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Skener", nav_tree: "Cévní diagnostika", nav_habits: "Sledování návyků", nav_chat: "Klinický chat", nav_family: "Rodinný monitoring", nav_rewards: "Úspěchy", nav_profile: "Profil", nav_settings: "Nastavení",
+                disclaimer_text: "⚠️ <strong>Lékařské upozornění:</strong> Platforma CapillaryVision je určena pro preventivní autokontrolu.",
+                scan_title: "Screening mikrocirkulace", scan_desc: "Dodržujte klinické podmínky.", optic_badge: "10X OPTIC", btn_scan: "Spustit 30s analýzu", btn_cam: "Zapnout kameru",
+                val_title: "Ověření podmínek:", val_1: "Makroobjektiv je upevněn", val_2: "Prst je ve ohnisku", val_3: "Stabilní osvětlení",
+                audio_title: "Audio relaxace", audio_desc: "Stabilizace tonusu.", btn_audio_on: "Zapnout", btn_audio_off: "Zastavit",
+                fact_title: "Klinický fakt", fact_text: "Délka kapilár přesahuje 100 000 km.",
+                tree_title: "Morfologická analýza", vessel_age: "Cévní bio-vek", cap_tonus: "Kapilární tonus", spasm_level: "Spasmus", tree_svg_title: "Schéma sítě", tree_desc: "Normální kapiláry.",
+                habits_title: "Návyky", btn_add_habit: "Přidat", chat_title: "Chat", chat_doc: "Lékař", chat_ai: "AI", chat_mom: "Máma", chat_welcome: "Vítejte!", btn_send: "Odeslat",
+                family_title: "Rodina", fam_mom: "Máma", fam_mom_stat: "Tonus: 94%", fam_mom_time: "Dnes", fam_bro: "Bratr", fam_bro_stat: "Série: 5 dní", fam_bro_time: "Včera",
+                rewards_title: "Úspěchy", rewards_desc: "Pokrok.", b1_title: "Start", b1_desc: "3 dny", b2_title: "Průkopník", b2_desc: "1. sken", b3_title: "Ochrana", b3_desc: "7 dní", b4_title: "Mistr", b4_desc: "14 dní",
+                profile_title: "Profil", lbl_height: "Výška (cm)", lbl_weight: "Váha (kg)", bmi_title: "BMI", btn_save: "Uložit",
+                settings_title: "Nastavení & GDPR", set_theme: "Motiv", set_lang: "Jazyk", set_push: "Připomenutí", btn_push: "Zapnout",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Plná kontrola dat.", btn_export: "Stáhnout data", btn_delete: "Smazat data",
+                sup_title: "Podpora", btn_sup: "Odeslat", btn_logout: "Odhlásit", modal_auth: "Autorizace", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Zrušit",
+                gdpr_title: "GDPR:", gdpr_text: "Data jsou šifrována lokálně.", gdpr_btn: "Přijmout"
+            },
+            de: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Scanner", nav_tree: "Gefäßdiagnostik", nav_habits: "Gewohnheiten", nav_chat: "Chat", nav_family: "Familie", nav_rewards: "Erfolge", nav_profile: "Profil", nav_settings: "Einstellungen",
+                disclaimer_text: "⚠️ <strong>Medizinischer Hinweis:</strong> Plattform für präventive Selbstanalyse.",
+                scan_title: "Mikrozirkulations-Screening", scan_desc: "Bedingungen beachten.", optic_badge: "10X OPTIC", btn_scan: "Analyse starten", btn_cam: "Kamera",
+                val_title: "Validierung:", val_1: "Linse befestigt", val_2: "Finger im Fokus", val_3: "Beleuchtung stabil",
+                audio_title: "Entspannung", audio_desc: "Stabilisierung.", btn_audio_on: "Ein", btn_audio_off: "Aus",
+                fact_title: "Fakt", fact_text: "Kapillarlänge übersteigt 100.000 km.",
+                tree_title: "Analyse", vessel_age: "Gefäß-Alter", cap_tonus: "Tonus", spasm_level: "Spasmus", tree_svg_title: "Schema", tree_desc: "Normale Kapillaren.",
+                habits_title: "Gewohnheiten", btn_add_habit: "Hinzufügen", chat_title: "Chat", chat_doc: "Arzt", chat_ai: "KI", chat_mom: "Mama", chat_welcome: "Hallo!", btn_send: "Senden",
+                family_title: "Familie", fam_mom: "Mama", fam_mom_stat: "Tonus: 94%", fam_mom_time: "Heute", fam_bro: "Bruder", fam_bro_stat: "Serie: 5 Tage", fam_bro_time: "Gestern",
+                rewards_title: "Erfolge", rewards_desc: "Fortschritt.", b1_title: "Start", b1_desc: "3 Tage", b2_title: "Pionier", b2_desc: "1. Scan", b3_title: "Schutz", b3_desc: "7 Tage", b4_title: "Meister", b4_desc: "14 Tage",
+                profile_title: "Profil", lbl_height: "Größe (cm)", lbl_weight: "Gewicht (kg)", bmi_title: "BMI", btn_save: "Speichern",
+                settings_title: "Einstellungen & GDPR", set_theme: "Theme", set_lang: "Sprache", set_push: "Erinnerung", btn_push: "Aktivieren",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Datenkontrolle.", btn_export: "Daten exportieren", btn_delete: "Daten löschen",
+                sup_title: "Support", btn_sup: "Senden", btn_logout: "Abmelden", modal_auth: "Anmelden", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Abbrechen",
+                gdpr_title: "GDPR:", gdpr_text: "Lokale Verschlüsselung.", gdpr_btn: "Akzeptieren"
+            },
+            pl: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Skaner", nav_tree: "Diagnostika", nav_habits: "Nawyki", nav_chat: "Czat", nav_family: "Rodzina", nav_rewards: "Nagrody", nav_profile: "Profil", nav_settings: "Ustawienia",
+                disclaimer_text: "⚠️ <strong>Uwaga medyczna:</strong> Platforma do profilaktyki.",
+                scan_title: "Skanowanie mikrokrążenia", scan_desc: "Przestrzegaj warunków.", optic_badge: "10X OPTIC", btn_scan: "Uruchom test", btn_cam: "Aparat",
+                val_title: "Walidacja:", val_1: "Soczewka zamocowana", val_2: "Palec w fokusie", val_3: "Światło stabilne",
+                audio_title: "Relaks", audio_desc: "Stabilizacja.", btn_audio_on: "Włącz", btn_audio_off: "Stop",
+                fact_title: "Fakt", fact_text: "Długość kapilar przekracza 100 000 km.",
+                tree_title: "Analiza", vessel_age: "Wiek naczyń", cap_tonus: "Tonus", spasm_level: "Skurcz", tree_svg_title: "Schemat", tree_desc: "Norma.",
+                habits_title: "Nawyki", btn_add_habit: "Dodaj", chat_title: "Czat", chat_doc: "Lekarz", chat_ai: "AI", chat_mom: "Mama", chat_welcome: "Witaj!", btn_send: "Wyślij",
+                family_title: "Rodzina", fam_mom: "Mama", fam_mom_stat: "Tonus: 94%", fam_mom_time: "Dziś", fam_bro: "Brat", fam_bro_stat: "Seria: 5 dni", fam_bro_time: "Wczoraj",
+                rewards_title: "Nagrody", rewards_desc: "Postęp.", b1_title: "Start", b1_desc: "3 dni", b2_title: "Pionier", b2_desc: "1. skan", b3_title: "Tarcza", b3_desc: "7 dni", b4_title: "Mistrz", b4_desc: "14 dni",
+                profile_title: "Profil", lbl_height: "Wzrost (cm)", lbl_weight: "Waga (kg)", bmi_title: "BMI", btn_save: "Zapisz",
+                settings_title: "Ustawienia & GDPR", set_theme: "Motyw", set_lang: "Język", set_push: "Powiadomienia", btn_push: "Włącz",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Kontrola danych.", btn_export: "Eksport", btn_delete: "Usuń",
+                sup_title: "Wsparcie", btn_sup: "Wyślij", btn_logout: "Wyloguj", modal_auth: "Logowanie", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Anuluj",
+                gdpr_title: "GDPR:", gdpr_text: "Dane szyfrowane lokalnie.", gdpr_btn: "Akceptuj"
+            },
+            sk: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Skener", nav_tree: "Diagnostika", nav_habits: "Návyky", nav_chat: "Chat", nav_family: "Rodina", nav_rewards: "Ocenenia", nav_profile: "Profil", nav_settings: "Nastavenia",
+                disclaimer_text: "⚠️ <strong>Upozornenie:</strong> Preventívna platforma.",
+                scan_title: "Screening", scan_desc: "Dodržujte podmienky.", optic_badge: "10X OPTIC", btn_scan: "Spustiť test", btn_cam: "Kamera",
+                val_title: "Overenie:", val_1: "Objektív upevnený", val_2: "Prst vo ohnisku", val_3: "Svetlo OK",
+                audio_title: "Relax", audio_desc: "Stabilizácia.", btn_audio_on: "Zapnúť", btn_audio_off: "Stop",
+                fact_title: "Fakt", fact_text: "Dĺžka kapilár presahuje 100 000 km.",
+                tree_title: "Analýza", vessel_age: "Cievny vek", cap_tonus: "Tonus", spasm_level: "Spazmus", tree_svg_title: "Schéma", tree_desc: "Norma.",
+                habits_title: "Návyky", btn_add_habit: "Pridať", chat_title: "Chat", chat_doc: "Lekár", chat_ai: "AI", chat_mom: "Mama", chat_welcome: "Vitajte!", btn_send: "Odoslať",
+                family_title: "Rodina", fam_mom: "Mama", fam_mom_stat: "Tonus: 94%", fam_mom_time: "Dnes", fam_bro: "Brat", fam_bro_stat: "Séria: 5 dní", fam_bro_time: "Včera",
+                rewards_title: "Ocenenia", rewards_desc: "Pokrok.", b1_title: "Štart", b1_desc: "3 dni", b2_title: "Pionier", b2_desc: "1. sken", b3_title: "Ochrana", b3_desc: "7 dní", b4_title: "Majster", b4_desc: "14 dní",
+                profile_title: "Profil", lbl_height: "Výška (cm)", lbl_weight: "Váha (kg)", bmi_title: "BMI", btn_save: "Uložiť",
+                settings_title: "Nastavenia & GDPR", set_theme: "Téma", set_lang: "Jazyk", set_push: "Upozornenia", btn_push: "Zapnúť",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Kontrola.", btn_export: "Exportovať", btn_delete: "Zmazať",
+                sup_title: "Podpora", btn_sup: "Odoslať", btn_logout: "Odhlásiť", modal_auth: "Prihlásenie", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Zrušiť",
+                gdpr_title: "GDPR:", gdpr_text: "Šifrované lokálne.", gdpr_btn: "Prijať"
+            },
+            fr: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Scanner", nav_tree: "Diagnostic", nav_habits: "Habitudes", nav_chat: "Chat", nav_family: "Famille", nav_rewards: "Prix", nav_profile: "Profil", nav_settings: "Paramètres",
+                disclaimer_text: "⚠️ <strong>Avis médical:</strong> Outil préventif.",
+                scan_title: "Dépistage", scan_desc: "Respectez les conditions.", optic_badge: "10X OPTIC", btn_scan: "Lancer", btn_cam: "Caméra",
+                val_title: "Validation:", val_1: "Lentille fixée", val_2: "Doigt stable", val_3: "Éclairage stable",
+                audio_title: "Relax", audio_desc: "Stabilisation.", btn_audio_on: "Activer", btn_audio_off: "Stop",
+                fact_title: "Fait", fact_text: "Longueur > 100 000 km.",
+                tree_title: "Analyse", vessel_age: "Âge vasculaire", cap_tonus: "Tonus", spasm_level: "Spasme", tree_svg_title: "Schéma", tree_desc: "Normal.",
+                habits_title: "Habitudes", btn_add_habit: "Ajouter", chat_title: "Chat", chat_doc: "Médecin", chat_ai: "IA", chat_mom: "Maman", chat_welcome: "Bonjour!", btn_send: "Envoyer",
+                family_title: "Famille", fam_mom: "Maman", fam_mom_stat: "Tonus: 94%", fam_mom_time: "Aujourd'hui", fam_bro: "Frère", fam_bro_stat: "Série: 5j", fam_bro_time: "Hier",
+                rewards_title: "Prix", rewards_desc: "Progrès.", b1_title: "Début", b1_desc: "3j", b2_title: "Pionnier", b2_desc: "1er scan", b3_title: "Bouclier", b3_desc: "7j", b4_title: "Maître", b4_desc: "14j",
+                profile_title: "Profil", lbl_height: "Taille (cm)", lbl_weight: "Poids (kg)", bmi_title: "IMC", btn_save: "Enregistrer",
+                settings_title: "Paramètres & GDPR", set_theme: "Thème", set_lang: "Langue", set_push: "Rappels", btn_push: "Activer",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Contrôle des données.", btn_export: "Exporter", btn_delete: "Supprimer",
+                sup_title: "Support", btn_sup: "Envoyer", btn_logout: "Déconnexion", modal_auth: "Connexion", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Annuler",
+                gdpr_title: "GDPR:", gdpr_text: "Chiffré localement.", gdpr_btn: "Accepter"
+            },
+            it: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Scanner", nav_tree: "Diagnostica", nav_habits: "Abitudini", nav_chat: "Chat", nav_family: "Famiglia", nav_rewards: "Premi", nav_profile: "Profilo", nav_settings: "Impostazioni",
+                disclaimer_text: "⚠️ <strong>Avviso medico:</strong> Strumento preventivo.",
+                scan_title: "Screening", scan_desc: "Seguire le condizioni.", optic_badge: "10X OPTIC", btn_scan: "Avvia", btn_cam: "Camera",
+                val_title: "Validazione:", val_1: "Lente fissata", val_2: "Dito stabile", val_3: "Luce stabile",
+                audio_title: "Relax", audio_desc: "Stabilizzazione.", btn_audio_on: "Attiva", btn_audio_off: "Stop",
+                fact_title: "Fatto", fact_text: "Lunghezza > 100.000 km.",
+                tree_title: "Analisi", vessel_age: "Età vascolare", cap_tonus: "Tono", spasm_level: "Spasmo", tree_svg_title: "Schema", tree_desc: "Normale.",
+                habits_title: "Abitudini", btn_add_habit: "Aggiungi", chat_title: "Chat", chat_doc: "Medico", chat_ai: "IA", chat_mom: "Mamma", chat_welcome: "Ciao!", btn_send: "Invia",
+                family_title: "Famiglia", fam_mom: "Mamma", fam_mom_stat: "Tono: 94%", fam_mom_time: "Oggi", fam_bro: "Fratello", fam_bro_stat: "Serie: 5g", fam_bro_time: "Ieri",
+                rewards_title: "Premi", rewards_desc: "Progresso.", b1_title: "Inizio", b1_desc: "3g", b2_title: "Pioniere", b2_desc: "1° scan", b3_title: "Scudo", b3_desc: "7g", b4_title: "Maestro", b4_desc: "14g",
+                profile_title: "Profilo", lbl_height: "Altezza (cm)", lbl_weight: "Peso (kg)", bmi_title: "BMI", btn_save: "Salva",
+                settings_title: "Impostazioni & GDPR", set_theme: "Tema", set_lang: "Lingua", set_push: "Promemoria", btn_push: "Attiva",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Controllo dati.", btn_export: "Esporta", btn_delete: "Elimina",
+                sup_title: "Supporto", btn_sup: "Invia", btn_logout: "Esci", modal_auth: "Accesso", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Annulla",
+                gdpr_title: "GDPR:", gdpr_text: "Cifrato localmente.", gdpr_btn: "Accetta"
+            },
+            es: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "Escáner", nav_tree: "Diagnóstico", nav_habits: "Hábitos", nav_chat: "Chat", nav_family: "Familia", nav_rewards: "Premios", nav_profile: "Perfil", nav_settings: "Ajustes",
+                disclaimer_text: "⚠️ <strong>Aviso médico:</strong> Herramienta preventiva.",
+                scan_title: "Tamizaje", scan_desc: "Cumpla las condiciones.", optic_badge: "10X OPTIC", btn_scan: "Iniciar", btn_cam: "Cámara",
+                val_title: "Validación:", val_1: "Lente asegurada", val_2: "Dito estable", val_3: "Luz estable",
+                audio_title: "Relax", audio_desc: "Estabilización.", btn_audio_on: "Activar", btn_audio_off: "Detener",
+                fact_title: "Dato", fact_text: "Longitud > 100 000 km.",
+                tree_title: "Análisis", vessel_age: "Edad vascular", cap_tonus: "Tono", spasm_level: "Espasmo", tree_svg_title: "Esquema", tree_desc: "Normal.",
+                habits_title: "Hábitos", btn_add_habit: "Añadir", chat_title: "Chat", chat_doc: "Médico", chat_ai: "IA", chat_mom: "Mamá", chat_welcome: "¡Hola!", btn_send: "Enviar",
+                family_title: "Familia", fam_mom: "Mamá", fam_mom_stat: "Tono: 94%", fam_mom_time: "Hoy", fam_bro: "Hermano", fam_bro_stat: "Racha: 5d", fam_bro_time: "Ayer",
+                rewards_title: "Premios", rewards_desc: "Progreso.", b1_title: "Inicio", b1_desc: "3d", b2_title: "Pionero", b2_desc: "1er scan", b3_title: "Escudo", b3_desc: "7d", b4_title: "Maestro", b4_desc: "14d",
+                profile_title: "Perfil", lbl_height: "Altura (cm)", lbl_weight: "Peso (kg)", bmi_title: "IMC", btn_save: "Guardar",
+                settings_title: "Ajustes & GDPR", set_theme: "Tema", set_lang: "Idioma", set_push: "Recordatorios", btn_push: "Activar",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "Control de datos.", btn_export: "Exportar", btn_delete: "Eliminar",
+                sup_title: "Soporte", btn_sup: "Enviar", btn_logout: "Salir", modal_auth: "Autorización", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Cancelar",
+                gdpr_title: "GDPR:", gdpr_text: "Cifrado localmente.", gdpr_btn: "Aceptar"
+            },
+            ja: {
+                splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
+                nav_scanner: "スキャナー", nav_tree: "血管診断", nav_habits: "習慣", nav_chat: "チャット", nav_family: "家族", nav_rewards: "実績", nav_profile: "プロフィール", nav_settings: "設定",
+                disclaimer_text: "⚠️ <strong>医療上のご注意:</strong> 予防的自己管理ツール。",
+                scan_title: "スクリーニング", scan_desc: "条件を確認してください。", optic_badge: "10X OPTIC", btn_scan: "分析開始", btn_cam: "カメラ",
+                val_title: "検証:", val_1: "レンズ固定", val_2: "指が安定", val_3: "照明安定",
+                audio_title: "リラックス", audio_desc: "安定化。", btn_audio_on: "オン", btn_audio_off: "停止",
+                fact_title: "事実", fact_text: "総延長10万km以上。",
+                tree_title: "分析", vessel_age: "血管年齢", cap_tonus: "緊張", spasm_level: "痙攣", tree_svg_title: "スキーム", tree_desc: "正常。",
+                habits_title: "習慣", btn_add_habit: "追加", chat_title: "チャット", chat_doc: "医師", chat_ai: "AI", chat_mom: "母", chat_welcome: "こんにちは！", btn_send: "送信",
+                family_title: "家族", fam_mom: "母", fam_mom_stat: "緊張: 94%", fam_mom_time: "今日", fam_bro: "弟", fam_bro_stat: "5日連続 🔥", fam_bro_time: "昨日",
+                rewards_title: "実績", rewards_desc: "進捗。", b1_title: "開始", b1_desc: "3日", b2_title: "パイオニア", b2_desc: "1回目", b3_title: "シールド", b3_desc: "7日", b4_title: "マスター", b4_desc: "14日",
+                profile_title: "プロフィール", lbl_height: "身長 (cm)", lbl_weight: "体重 (kg)", bmi_title: "BMI", btn_save: "保存",
+                settings_title: "設定 & GDPR", set_theme: "テーマ", set_lang: "言語", set_push: "通知", btn_push: "有効化",
+                gdpr_section_title: "🔒 GDPR", gdpr_section_desc: "データ管理。", btn_export: "エクスポート", btn_delete: "削除",
+                sup_title: "サポート", btn_sup: "送信", btn_logout: "ログアウト", modal_auth: "認証", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "キャンセル",
+                gdpr_title: "GDPR:", gdpr_text: "ローカル暗号化。", gdpr_btn: "同意する"
+            }
+        };
+
+        // Безпечне сховище
         function encryptData(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }
         function decryptData(str) { try { return JSON.parse(decodeURIComponent(escape(atob(str)))); } catch(e) { return null; } }
 
-        // Зчитування шифрованих даних
         let scanHistory = decryptData(localStorage.getItem('cv_enc_history')) || [];
         let userHabits = decryptData(localStorage.getItem('cv_enc_habits')) || [
             { id: 1, name: "🚫 Без кави / куріння", count: 5 },
@@ -451,7 +647,6 @@
                 setTimeout(() => splash.style.visibility = 'hidden', 800);
             }, 1200);
 
-            // Перевірка згоди GDPR
             if(!localStorage.getItem('cv_gdpr_accepted')) {
                 document.getElementById('gdprBanner').style.display = 'flex';
             }
@@ -468,13 +663,9 @@
             document.getElementById('gdprBanner').style.display = 'none';
         }
 
-        // Експорт даних за стандартом GDPR
         function exportGDPRData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
-                user: currentUser,
-                history: scanHistory,
-                habits: userHabits,
-                streak: userStreak
+                user: currentUser, history: scanHistory, habits: userHabits, streak: userStreak
             }));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
@@ -484,9 +675,8 @@
             downloadAnchor.remove();
         }
 
-        // Права користувача: Повне видалення даних
         function deleteAllGDPRData() {
-            if(confirm('Ви впевнені? Це невідворотно видалить всі ваші заміри та збережені дані відповідно до стандарту GDPR.')) {
+            if(confirm('Ви впевнені? Це невідворотно видалить всі ваші дані відповідно до стандарту GDPR.')) {
                 localStorage.clear();
                 location.reload();
             }
@@ -621,6 +811,45 @@
                 chatData[currentActiveChat].push({ sender: 'ai', text: reply });
                 renderChatMessages();
             }, 800);
+        }
+
+        // Функція перемикання мов для 10 мов світу
+        function changeLanguage(lang) {
+            const selected = i18n[lang] || i18n['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (selected[key]) {
+                    el.innerHTML = selected[key];
+                }
+            });
+        }
+
+        let isAudioPlaying = false;
+        function toggleAudio() {
+            const btn = document.getElementById('audioBtn');
+            isAudioPlaying = !isAudioPlaying;
+            btn.innerText = isAudioPlaying ? 'Зупинити' : 'Увімкнути';
+            btn.style.background = isAudioPlaying ? 'var(--accent)' : 'var(--primary)';
+        }
+
+        function calculateBMI() {
+            const h = parseFloat(document.getElementById('pHeight').value) / 100;
+            const w = parseFloat(document.getElementById('pWeight').value);
+            if(h > 0 && w > 0) {
+                const bmi = (w / (h * h)).toFixed(1);
+                document.getElementById('valBMI').innerText = `${bmi} (Норма)`;
+            }
+        }
+
+        function saveProfileData() {
+            const profile = {
+                mood: document.getElementById('pMood').value,
+                bio: document.getElementById('pBio').value,
+                height: document.getElementById('pHeight').value,
+                weight: document.getElementById('pWeight').value
+            };
+            localStorage.setItem('cv_profile', JSON.stringify(profile));
+            alert('Профіль успішно оновлено!');
         }
 
         function updateStreakUI() { document.getElementById('streakCounter').innerText = `${userStreak} days`; }
