@@ -87,49 +87,49 @@
         .btn:hover { opacity: 0.9; }
 
         .disclaimer-banner { background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text); }
+        
+        /* Банер GDPR та хмарного середовища */
         .gdpr-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 2px solid var(--primary); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 9000; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); flex-wrap: wrap; gap: 1rem; }
         .gdpr-banner p { font-size: 0.85rem; color: var(--text-muted); max-width: 800px; }
 
-        /* Сканер та Судоку */
+        /* Сканер, чек-бокси валідації та Судоку */
         .scanner-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
         @media (max-width: 768px) { .scanner-layout { grid-template-columns: 1fr; } }
         
-        .scanner-container { position: relative; width: 100%; height: 220px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin-bottom: 1rem; }
+        .scanner-container { position: relative; width: 100%; height: 200px; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); margin-bottom: 0.8rem; }
         #cameraVideo { width: 100%; height: 100%; object-fit: cover; }
-        .target-reticle { position: absolute; width: 90px; height: 90px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        .target-reticle { position: absolute; width: 80px; height: 80px; border: 2px dashed var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
         .scan-line { position: absolute; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 0; display: none; pointer-events: none; }
         .scan-line.active { display: block; animation: scan 2s infinite linear; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        .validation-box { background: var(--bg); border: 1px solid var(--border); padding: 0.8rem; border-radius: 8px; margin-bottom: 0.8rem; font-size: 0.82rem; }
+        .validation-item { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
+        .validation-item input { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
 
         /* Судоку міні-гра */
         .sudoku-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem; text-align: center; }
         .sudoku-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 160px; margin: 0.5rem auto; }
         .sudoku-cell { width: 36px; height: 36px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; text-align: center; font-weight: bold; font-size: 1rem; color: var(--primary); outline: none; }
 
-        /* Настрій */
         .mood-picker { background: var(--bg); border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 10px; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
         .mood-emojis { display: flex; gap: 0.6rem; font-size: 1.4rem; cursor: pointer; }
         .mood-emoji { padding: 4px 8px; border-radius: 8px; border: 1px solid transparent; }
         .mood-emoji:hover, .mood-emoji.selected { background: var(--card-bg); border-color: var(--primary); }
 
-        /* Трекер звичок із кружечками */
         .habit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .habit-card { background: var(--bg); padding: 1rem; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
         .habit-ring { width: 65px; height: 65px; border-radius: 50%; border: 4px solid var(--border); border-top-color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0.5rem auto; font-weight: 700; font-size: 1.1rem; color: var(--primary); }
 
-        /* Календар */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 1rem; text-align: center; }
         .cal-day { background: var(--bg); border: 1px solid var(--border); padding: 0.6rem 0.2rem; border-radius: 6px; font-size: 0.8rem; }
         .cal-day.scanned { background: rgba(16, 185, 129, 0.2); border-color: var(--success); color: var(--success); font-weight: bold; }
 
-        /* Завдання */
         .task-item { display: flex; align-items: center; gap: 0.8rem; background: var(--bg); padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.6rem; font-size: 0.9rem; }
         .task-item input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
 
-        /* Факти */
         .fact-card { background: var(--bg); border-left: 4px solid var(--primary); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
-        /* Нагороди */
         .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .badge-item { background: var(--bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border); opacity: 0.4; filter: grayscale(100%); transition: 0.3s; }
         .badge-item.unlocked { opacity: 1; filter: grayscale(0%); border-color: var(--success); }
@@ -161,9 +161,9 @@
         <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;" data-i18n="splash_sub">Medical Microcirculation Analytics</p>
     </div>
 
-    <!-- GDPR Згода -->
+    <!-- GDPR та хмарне середовище Банер -->
     <div class="gdpr-banner" id="gdprBanner" style="display: none;">
-        <p>🛡️ <strong data-i18n="gdpr_title">Захист даних (GDPR):</strong> <span data-i18n="gdpr_text">CapillaryVision зберігає ваші біометричні дані локально у зашифрованому вигляді.</span></p>
+        <p>🛡️ <strong data-i18n="gdpr_title">Захист даних (GDPR) & Локальне сховище:</strong> <span data-i18n="gdpr_text">CapillaryVision зберігає ваші біометричні дані локально на пристрої у зашифрованому вигляді та не передає їх на комерційні хмарні сервери без згоди.</span></p>
         <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="acceptGDPR()" data-i18n="gdpr_btn">Зрозуміло, прийняти</button>
     </div>
 
@@ -199,7 +199,7 @@
                 ⚠️ <strong>Медичне застереження:</strong> Платформа розроблена для превентивного самоконтролю тонусу мікроциркуляції. Результати не є остаточним діагнозом.
             </div>
 
-            <!-- 1. Сканування та Судоку -->
+            <!-- 1. Сканування, Чек-бокси валідації та Судоку -->
             <div id="scanner" class="tab-content active">
                 <h2 data-i18n="scan_title">Мікроциркуляторний скринінг</h2>
                 <p style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="scan_desc">Дотримуйтесь умов адаптера перед запуском аналізу.</p>
@@ -214,12 +214,19 @@
                             <div class="scan-line" id="scanLine"></div>
                         </div>
 
+                        <!-- Чек-бокси валідації умов перед скануванням -->
+                        <div class="validation-box">
+                            <div style="font-weight: 600; margin-bottom: 0.3rem; color: var(--primary);">Контроль умов сканування:</div>
+                            <div class="validation-item"><input type="checkbox" id="checkLens" onchange="checkValidation()"> <label for="checkLens">Макролінза Slider-Clip зафіксована</label></div>
+                            <div class="validation-item"><input type="checkbox" id="checkFinger" onchange="checkValidation()"> <label for="checkFinger">Палець стабільно у фокусі</label></div>
+                        </div>
+
                         <div class="progress-bar-bg" id="progressBg" style="width: 100%; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-bottom: 0.8rem; display:none; border: 1px solid var(--border);">
                             <div class="progress-bar-fill" id="progressFill" style="width: 0%; height: 100%; background: var(--primary);"></div>
                         </div>
 
                         <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-                            <button class="btn" id="scanBtn" onclick="startDynamicScanning()" data-i18n="btn_scan">Запустити 30-с аналіз</button>
+                            <button class="btn" id="scanBtn" onclick="startDynamicScanning()" disabled style="opacity: 0.5;" data-i18n="btn_scan">Запустити 30-с аналіз</button>
                             <button class="btn" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text);" onclick="initCamera()" data-i18n="btn_cam">Камера</button>
                         </div>
                     </div>
@@ -258,7 +265,7 @@
                     <div class="mood-emojis">
                         <span class="mood-emoji" onclick="selectMood('😌', 'Спокійно')">😌</span>
                         <span class="mood-emoji" onclick="selectMood('⚡', 'Енергійно')">⚡</span>
-                        <span class="mood-emoji" onclick="selectMood('🌪️', 'Ввтома/Стрес')">🌪️</span>
+                        <span class="mood-emoji" onclick="selectMood('🌪️', 'Втома/Стрес')">🌪️</span>
                         <span class="mood-emoji" onclick="selectMood('🌧️', 'Метеозалежність')">🌧️</span>
                     </div>
                 </div>
@@ -323,7 +330,7 @@
                 <div class="calendar-grid" id="calendarGridContainer"></div>
             </div>
 
-            <!-- 6. Аудіорелакс із реальними треками з телефона -->
+            <!-- 6. Аудіорелакс -->
             <div id="audio" class="tab-content">
                 <h2 data-i18n="audio_title">Аудіорелаксація (432 Гц)</h2>
                 <p style="color: var(--text-muted); font-size: 0.85rem;" data-i18n="audio_desc">Стабілізація судинного тонусу або відтворення вашої музики.</p>
@@ -340,7 +347,6 @@
                     <input type="file" class="input-field" accept="audio/*" onchange="playUserAudioFile(event)">
                 </div>
                 
-                <!-- Реальний програвач -->
                 <audio id="userAudioPlayer" controls style="width: 100%; margin-top: 0.8rem; display: none;"></audio>
                 <p id="audioFileName" style="font-size: 0.8rem; color: var(--success); margin-top: 0.4rem;"></p>
             </div>
@@ -383,7 +389,7 @@
                 </div>
             </div>
 
-            <!-- 9. Розширені Нагороди -->
+            <!-- 9. Нагороди -->
             <div id="rewards" class="tab-content">
                 <h2 data-i18n="rewards_title">Досягнення платформи</h2>
                 <div class="badge-grid">
@@ -415,7 +421,7 @@
                 </div>
             </div>
 
-            <!-- 10. Повноцінний Профіль із розрахунком ІМТ -->
+            <!-- 10. Профіль -->
             <div id="profile" class="tab-content">
                 <h2 data-i18n="profile_title">Антропометрія та Профіль</h2>
                 <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
@@ -439,7 +445,7 @@
                 <button class="btn" style="margin-top: 1rem;" onclick="saveProfileData()" data-i18n="btn_save">Зберегти дані</button>
             </div>
 
-            <!-- 11. Налаштування (Зміна тем та 10 мов) -->
+            <!-- 11. Налаштування -->
             <div id="settings" class="tab-content">
                 <h2 data-i18n="settings_title">Параметри системи & GDPR</h2>
 
@@ -491,7 +497,6 @@
     </div>
 
     <script>
-        // Словник перекладу на 10 мов
         const i18n = {
             uk: {
                 splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
@@ -504,7 +509,7 @@
                 audio_title: "Аудіорелаксація (432 Гц)", audio_desc: "Стабілізація судинного тонусу або відтворення вашої музики.", btn_audio_on: "Увімкнути 432 Гц", btn_audio_off: "Зупинити",
                 rewards_title: "Досягнення платформи", profile_title: "Антропометрія та Профіль", lbl_height: "Зріст (см)", lbl_weight: "Маса (кг)", bmi_title: "Індекс маси тіла (BMI)", btn_save: "Зберегти дані",
                 settings_title: "Параметри системи & GDPR", set_theme: "Тема інтерфейсу", set_lang: "Мова (10 мов світу)", gdpr_section_title: "🔒 Права користувача GDPR (Захист даних)", btn_export: "📥 Завантажити мої дані (JSON)", btn_delete: "🗑️ Видалити всі мої дані",
-                modal_auth: "Авторизація", modal_auth_desc: "Увійдіть через Google профіль.", btn_google: "Google Account", btn_cancel: "Скасувати", gdpr_title: "Захист даних (GDPR):", gdpr_text: "CapillaryVision зберігає ваші біометричні дані локально у зашифрованому вигляді.", gdpr_btn: "Зрозуміло, прийняти", btn_send: "Надіслати"
+                modal_auth: "Авторизація", modal_auth_desc: "Увійдіть через Google профіль.", btn_google: "Google Account", btn_cancel: "Скасувати", gdpr_title: "Захист даних (GDPR) & Локальне сховище:", gdpr_text: "CapillaryVision зберігає ваші біометричні дані локально на пристрої у зашифрованому вигляді та не передає їх на комерційні хмарні сервери без згоди.", gdpr_btn: "Зрозуміло, прийняти", btn_send: "Надіслати"
             },
             en: {
                 splash_sub: "Medical Microcirculation Analytics", google_login: "Google Auth",
@@ -517,19 +522,18 @@
                 audio_title: "Audio Relaxation (432 Hz)", audio_desc: "Vascular tone stabilization.", btn_audio_on: "Turn On 432 Hz", btn_audio_off: "Stop",
                 rewards_title: "Achievements", profile_title: "Anthropometry & Profile", lbl_height: "Height (cm)", lbl_weight: "Weight (kg)", bmi_title: "Body Mass Index (BMI)", btn_save: "Save Data",
                 settings_title: "Settings & GDPR", set_theme: "Theme", set_lang: "Language", gdpr_section_title: "🔒 GDPR User Rights", btn_export: "📥 Download Data", btn_delete: "🗑️ Delete Data",
-                modal_auth: "Authorization", modal_auth_desc: "Google sign in.", btn_google: "Google Account", btn_cancel: "Cancel", gdpr_title: "GDPR:", gdpr_text: "Data encrypted locally.", gdpr_btn: "Accept", btn_send: "Send"
+                modal_auth: "Authorization", modal_auth_desc: "Google sign in.", btn_google: "Google Account", btn_cancel: "Cancel", gdpr_title: "GDPR & Local Storage:", gdpr_text: "CapillaryVision stores biometric data locally on your device in encrypted form.", gdpr_btn: "Accept", btn_send: "Send"
             },
             cs: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Skener", nav_tree: "Diagnostika", nav_tasks: "Úkoly", nav_habits: "Návyky", nav_calendar: "Kalendář", nav_audio: "Audio", nav_chat: "Messenger", nav_impact: "Pokrok", nav_rewards: "Úspěchy", nav_profile: "Profil", nav_settings: "Nastavení", disclaimer_text: "⚠️ Preventivní nástroj.", scan_title: "Screening", scan_desc: "Podmínky.", optic_badge: "10X OPTIC", btn_scan: "Spustit", btn_cam: "Kamera", mood_title: "Jak se cítíte?", fact_title: "Fakt", fact_text: "Délka přesahuje 100 000 km.", tree_title: "Analýza", vessel_age: "Bio-věk", cap_tonus: "Tonus", spasm_level: "Spasmus", tasks_title: "Úkoly", habits_title: "Návyky", btn_add_habit: "Přidat", calendar_title: "Kalendář", audio_title: "Audio", audio_desc: "Relaxace.", btn_audio_on: "Zapnout", btn_audio_off: "Zastavit", rewards_title: "Úspěchy", profile_title: "Profil", lbl_height: "Výška", lbl_weight: "Váha", bmi_title: "BMI", btn_save: "Uložit", settings_title: "Nastavení & GDPR", set_theme: "Motiv", set_lang: "Jazyk", gdpr_section_title: "🔒 GDPR", btn_export: "Stáhnout", btn_delete: "Smazat", modal_auth: "Autorizace", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Zrušit", gdpr_title: "GDPR:", gdpr_text: "Lokální šifrování.", gdpr_btn: "Přijmout", btn_send: "Odeslat" },
             de: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Scanner", nav_tree: "Diagnostik", nav_tasks: "Aufgaben", nav_habits: "Gewohnheiten", nav_calendar: "Kalender", nav_audio: "Audio", nav_chat: "Messenger", nav_impact: "Fortschritt", nav_rewards: "Erfolge", nav_profile: "Profil", nav_settings: "Einstellungen", disclaimer_text: "⚠️ Präventives Tool.", scan_title: "Screening", scan_desc: "Bedingungen.", optic_badge: "10X OPTIC", btn_scan: "Starten", btn_cam: "Kamera", mood_title: "Wie fühlen Sie sich?", fact_title: "Fakt", fact_text: "Länge über 100.000 km.", tree_title: "Analyse", vessel_age: "Alter", cap_tonus: "Tonus", spasm_level: "Spasmus", tasks_title: "Aufgaben", habits_title: "Gewohnheiten", btn_add_habit: "Hinzufügen", calendar_title: "Kalender", audio_title: "Entspannung", audio_desc: "Stabilisierung.", btn_audio_on: "Ein", btn_audio_off: "Aus", rewards_title: "Erfolge", profile_title: "Profil", lbl_height: "Größe", lbl_weight: "Gewicht", bmi_title: "BMI", btn_save: "Speichern", settings_title: "Einstellungen & GDPR", set_theme: "Theme", set_lang: "Sprache", gdpr_section_title: "🔒 GDPR", btn_export: "Exportieren", btn_delete: "Löschen", modal_auth: "Anmelden", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Abbrechen", gdpr_title: "GDPR:", gdpr_text: "Verschlüsselt.", gdpr_btn: "Akzeptieren", btn_send: "Senden" },
             pl: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Skaner", nav_tree: "Diagnostyka", nav_tasks: "Zadania", nav_habits: "Nawyki", nav_calendar: "Kalendarz", nav_audio: "Audio", nav_chat: "Komunikator", nav_impact: "Postęp", nav_rewards: "Nagrody", nav_profile: "Profil", nav_settings: "Ustawienia", disclaimer_text: "⚠️ Narzędzie profilaktyczne.", scan_title: "Skanowanie", scan_desc: "Warunki.", optic_badge: "10X OPTIC", btn_scan: "Uruchom", btn_cam: "Aparat", mood_title: "Jak się czujesz?", fact_title: "Fakt", fact_text: "Długość > 100 000 km.", tree_title: "Analiza", vessel_age: "Wiek naczyń", cap_tonus: "Tonus", spasm_level: "Skurcz", tasks_title: "Zadania", habits_title: "Nawyki", btn_add_habit: "Dodaj", calendar_title: "Kalendarz", audio_title: "Relaks", audio_desc: "Stabilizacja.", btn_audio_on: "Włącz", btn_audio_off: "Stop", rewards_title: "Nagrody", profile_title: "Profil", lbl_height: "Wzrost", lbl_weight: "Waga", bmi_title: "BMI", btn_save: "Zapisz", settings_title: "Ustawienia & GDPR", set_theme: "Motyw", set_lang: "Język", gdpr_section_title: "🔒 GDPR", btn_export: "Eksport", btn_delete: "Usuń", modal_auth: "Logowanie", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Anuluj", gdpr_title: "GDPR:", gdpr_text: "Szyfrowane.", gdpr_btn: "Akceptuj", btn_send: "Wyślij" },
-            sk: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Skener", nav_tree: "Diagnostika", nav_tasks: "Úlohy", nav_habits: "Návyky", nav_calendar: "Kalendár", nav_audio: "Audio", nav_chat: "Messenger", nav_impact: "Pokrok", nav_rewards: "Ocenenia", nav_profile: "Profil", nav_settings: "Nastavenia", disclaimer_text: "⚠️ Preventívny nástroj.", scan_title: "Screening", scan_desc: "Podmienky.", optic_badge: "10X OPTIC", btn_scan: "Spustiť", btn_cam: "Kamera", mood_title: "Ako sa cítite?", fact_title: "Fakt", fact_text: "Dĺžka > 100 000 km.", tree_title: "Analýza", vessel_age: "Cievny vek", cap_tonus: "Tonus", spasm_level: "Spazmus", tasks_title: "Úlohy", habits_title: "Návyky", btn_add_habit: "Pridať", calendar_title: "Kalendár", audio_title: "Relax", audio_desc: "Stabilizácia.", btn_audio_on: "Zapnúť", btn_audio_off: "Stop", rewards_title: "Ocenenia", profile_title: "Profil", lbl_height: "Výška", lbl_weight: "Váha", bmi_title: "BMI", btn_save: "Uložiť", settings_title: "Nastavenia & GDPR", set_theme: "Téma", set_lang: "Jazyk", gdpr_section_title: "🔒 GDPR", btn_export: "Exportovať", btn_delete: "Zmazať", modal_auth: "Prihlásenie", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Zrušiť", gdpr_title: "GDPR:", gdpr_text: "Šifrované.", gdpr_btn: "Prijať", btn_send: "Odoslať" },
+            sk: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Skener", nav_tree: "Diagnostika", nav_tasks: "Úlohy", nav_habits: "Návyky", nav_calendar: "Kalendár", nav_audio: "Audio", nav_chat: "Messenger", nav_impact: "Pokrok", nav_rewards: "Ocenenia", nav_profile: "Profil", nav_settings: "Nastavenia", disclaimer_text: "⚠️ Preventívny nástroj.", scan_title: "Screening", scan_desc: "Podmienky.", optic_badge: "10X OPTIC", btn_scan: "Spustiť", btn_cam: "Kamera", mood_title: "Ako sa cítite?", fact_title: "Fakt", fact_text: "Dĺžka > 100 000 km.", tree_title: "Analýza", vessel_age: "Cievny vek", cap_tonus: "Tonus", spasm_level: "Spazmus", tasks_title: "Úlohy", habits_title: "Návyky", btn_add_habit: "Pridať", calendar_title: "Kalendár", audio_title: "Relax", audio_desc: "Stabilizácia.", btn_audio_on: "Zapnúť", btn_audio_off: "Stop", rewards_title: "Ocenenia", profile_title: "Profil", lbl_height: "Výška", lbl_weight: "Váha", bmi_title: "BMI", btn_save: "Uložiť", settings_title: "Nastavenia & GDPR", set_theme: "Téma", set_lang: "Jazyk", gdpr_section_title: "🔒 GDPR", btn_export: "Exportovať", btn_delete: "Zmazať", modal_auth: "Prihlásenie", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Zrušiť", gdpr_title: "GDPR:", gdpr_text: "Šifrované.", gdpr_btn: "Prijať", btn_send: "Odeslať" },
             fr: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Scanner", nav_tree: "Diagnostic", nav_tasks: "Tâches", nav_habits: "Habitudes", nav_calendar: "Calendrier", nav_audio: "Audio", nav_chat: "Messagerie", nav_impact: "Progrès", nav_rewards: "Prix", nav_profile: "Profil", nav_settings: "Paramètres", disclaimer_text: "⚠️ Outil préventif.", scan_title: "Dépistage", scan_desc: "Conditions.", optic_badge: "10X OPTIC", btn_scan: "Lancer", btn_cam: "Caméra", mood_title: "Comment vous sentez-vous?", fact_title: "Fait", fact_text: "Longueur > 100 000 km.", tree_title: "Analyse", vessel_age: "Âge", cap_tonus: "Tonus", spasm_level: "Spasme", tasks_title: "Tâches", habits_title: "Habitudes", btn_add_habit: "Ajouter", calendar_title: "Calendrier", audio_title: "Relax", audio_desc: "Stabilisation.", btn_audio_on: "Activer", btn_audio_off: "Stop", rewards_title: "Prix", profile_title: "Profil", lbl_height: "Taille", lbl_weight: "Poids", bmi_title: "IMC", btn_save: "Enregistrer", settings_title: "Paramètres & GDPR", set_theme: "Thème", set_lang: "Langue", gdpr_section_title: "🔒 GDPR", btn_export: "Exporter", btn_delete: "Supprimer", modal_auth: "Connexion", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Annuler", gdpr_title: "GDPR:", gdpr_text: "Chiffré.", gdpr_btn: "Accepter", btn_send: "Envoyer" },
             it: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Scanner", nav_tree: "Diagnostica", nav_tasks: "Compiti", nav_habits: "Abitudini", nav_calendar: "Calendario", nav_audio: "Audio", nav_chat: "Messaggi", nav_impact: "Progresso", nav_rewards: "Premi", nav_profile: "Profilo", nav_settings: "Impostazioni", disclaimer_text: "⚠️ Strumento preventivo.", scan_title: "Screening", scan_desc: "Condizioni.", optic_badge: "10X OPTIC", btn_scan: "Avvia", btn_cam: "Camera", mood_title: "Come ti senti?", fact_title: "Fatto", fact_text: "Lunghezza > 100.000 km.", tree_title: "Analisi", vessel_age: "Età vascolare", cap_tonus: "Tono", spasm_level: "Spasmo", tasks_title: "Compiti", habits_title: "Abitudini", btn_add_habit: "Aggiungi", calendar_title: "Calendario", audio_title: "Relax", audio_desc: "Stabilizzazione.", btn_audio_on: "Attiva", btn_audio_off: "Stop", rewards_title: "Premi", profile_title: "Profilo", lbl_height: "Altezza", lbl_weight: "Peso", bmi_title: "BMI", btn_save: "Salva", settings_title: "Impostazioni & GDPR", set_theme: "Tema", set_lang: "Lingua", gdpr_section_title: "🔒 GDPR", btn_export: "Esporta", btn_delete: "Elimina", modal_auth: "Accesso", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Annulla", gdpr_title: "GDPR:", gdpr_text: "Cifrato.", gdpr_btn: "Accetta", btn_send: "Invia" },
             es: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "Escáner", nav_tree: "Diagnóstico", nav_tasks: "Tareas", nav_habits: "Hábitos", nav_calendar: "Calendario", nav_audio: "Audio", nav_chat: "Mensajería", nav_impact: "Progreso", nav_rewards: "Premios", nav_profile: "Perfil", nav_settings: "Ajustes", disclaimer_text: "⚠️ Herramienta preventiva.", scan_title: "Tamizaje", scan_desc: "Condiciones.", optic_badge: "10X OPTIC", btn_scan: "Iniciar", btn_cam: "Cámara", mood_title: "¿Cómo te sientes?", fact_title: "Dato", fact_text: "Longitud > 100 000 km.", tree_title: "Análisis", vessel_age: "Edad vascular", cap_tonus: "Tono", spasm_level: "Espasmo", tasks_title: "Tareas", habits_title: "Hábitos", btn_add_habit: "Añadir", calendar_title: "Calendario", audio_title: "Relax", audio_desc: "Estabilización.", btn_audio_on: "Activar", btn_audio_off: "Detener", rewards_title: "Premios", profile_title: "Perfil", lbl_height: "Altura", lbl_weight: "Peso", bmi_title: "IMC", btn_save: "Guardar", settings_title: "Ajustes & GDPR", set_theme: "Tema", set_lang: "Idioma", gdpr_section_title: "🔒 GDPR", btn_export: "Exportar", btn_delete: "Eliminar", modal_auth: "Autorización", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "Cancelar", gdpr_title: "GDPR:", gdpr_text: "Cifrado.", gdpr_btn: "Aceptar", btn_send: "Enviar" },
             ja: { splash_sub: "Medical Analytics", google_login: "Google Auth", nav_scanner: "スキャナー", nav_tree: "血管診断", nav_tasks: "タスク", nav_habits: "習慣", nav_calendar: "カレンダー", nav_audio: "オーディオ", nav_chat: "メッセンジャー", nav_impact: "進捗", nav_rewards: "実績", nav_profile: "プロフィール", nav_settings: "設定", disclaimer_text: "⚠️ 予防的自己管理ツール。", scan_title: "スクリーニング", scan_desc: "条件。", optic_badge: "10X OPTIC", btn_scan: "分析開始", btn_cam: "カメラ", mood_title: "気分はどうですか？", fact_title: "事実", fact_text: "総延長10万km以上。", tree_title: "分析", vessel_age: "血管年齢", cap_tonus: "緊張", spasm_level: "痙攣", tasks_title: "タスク", habits_title: "習慣", btn_add_habit: "追加", calendar_title: "カレンダー", audio_title: "リラックス", audio_desc: "安定化。", btn_audio_on: "オン", btn_audio_off: "停止", rewards_title: "実績", profile_title: "プロフィール", lbl_height: "身長", lbl_weight: "体重", bmi_title: "BMI", btn_save: "保存", settings_title: "設定 & GDPR", set_theme: "テーマ", set_lang: "言語", gdpr_section_title: "🔒 GDPR", btn_export: "エクスポート", btn_delete: "削除", modal_auth: "認証", modal_auth_desc: "Google", btn_google: "Google", btn_cancel: "キャンセル", gdpr_title: "GDPR:", gdpr_text: "暗号化。", gdpr_btn: "同意する", btn_send: "送信" }
         };
 
-        // Зашифроване локальне сховище
         function encryptData(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }
         function decryptData(str) { try { return JSON.parse(decodeURIComponent(escape(atob(str)))); } catch(e) { return null; } }
 
@@ -547,6 +551,7 @@
                 setTimeout(() => splash.style.visibility = 'hidden', 800);
             }, 1000);
 
+            // Показуємо GDPR банер, якщо не прийнято
             if(!localStorage.getItem('cv_gdpr_accepted')) {
                 document.getElementById('gdprBanner').style.display = 'flex';
             }
@@ -556,6 +561,7 @@
             initCalendarUI();
             if(currentUser) showUserProfile(currentUser);
             initCamera();
+            checkValidation();
 
             const savedProfile = JSON.parse(localStorage.getItem('cv_profile') || '{}');
             if(savedProfile.height) document.getElementById('pHeight').value = savedProfile.height;
@@ -578,6 +584,16 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
                 document.getElementById('cameraVideo').srcObject = stream;
             } catch (err) {}
+        }
+
+        // Перевірка чек-боксів валідації перед скануванням
+        function checkValidation() {
+            const lens = document.getElementById('checkLens').checked;
+            const finger = document.getElementById('checkFinger').checked;
+            const btn = document.getElementById('scanBtn');
+            const isValid = lens && finger;
+            btn.disabled = !isValid;
+            btn.style.opacity = isValid ? '1' : '0.5';
         }
 
         function startDynamicScanning() {
@@ -612,7 +628,6 @@
             }, 50);
         }
 
-        // Перевірка Судоку
         function checkSudoku() {
             const s1 = document.getElementById('s1').value;
             const s2 = document.getElementById('s2').value;
@@ -635,7 +650,6 @@
             document.getElementById('predictiveText').innerHTML = `Прогноз через <strong>${months} місяців</strong>: зниження біо-віку до <strong>${calculatedAge} років</strong>`;
         }
 
-        // Звички
         function renderHabitsUI() {
             const container = document.getElementById('habitGridContainer');
             container.innerHTML = userHabits.map(h => `
@@ -670,7 +684,6 @@
             renderHabitsUI();
         }
 
-        // Завдання
         function addNewTask() {
             const name = document.getElementById('newTaskName').value;
             if(!name) return;
@@ -681,7 +694,6 @@
             document.getElementById('newTaskName').value = '';
         }
 
-        // Календар
         function initCalendarUI() {
             const grid = document.getElementById('calendarGridContainer');
             let html = '';
@@ -692,7 +704,6 @@
             grid.innerHTML = html;
         }
 
-        // Відтворення завантаженої музики
         function playUserAudioFile(event) {
             const file = event.target.files[0];
             if (file) {
@@ -713,14 +724,12 @@
             btn.style.background = isAudioPlaying ? 'var(--accent)' : 'var(--primary)';
         }
 
-        // Початкові дані
         function saveBaseline() {
             const val = document.getElementById('userBaseline').value;
             localStorage.setItem('cv_baseline', val);
-            document.getElementById('baselineSavedText').innerText = '✅ Початковий стан успішно збережено! Порівняйте його через 30 днів.';
+            document.getElementById('baselineSavedText').innerText = '✅ Початковий стан успішно збережено!';
         }
 
-        // Профіль & ІМТ
         function calculateBMI() {
             const h = parseFloat(document.getElementById('pHeight').value) / 100;
             const w = parseFloat(document.getElementById('pWeight').value);
@@ -741,7 +750,6 @@
             alert('Профіль оновлено!');
         }
 
-        // Перемикач мов
         function changeLanguage(lang) {
             const selected = i18n[lang] || i18n['en'];
             document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -752,7 +760,6 @@
 
         function changeTheme(themeName) { document.documentElement.setAttribute('data-theme', themeName); }
 
-        // Чат
         let currentActiveChat = 'doctor';
         let chatData = {
             doctor: [{ sender: 'ai', text: 'Вітаю, Анно! Ваші показники судинного тонусу стабільні.' }],
